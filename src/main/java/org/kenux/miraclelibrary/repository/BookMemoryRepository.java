@@ -2,6 +2,7 @@ package org.kenux.miraclelibrary.repository;
 
 
 import org.kenux.miraclelibrary.domain.Book;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,10 +25,13 @@ public class BookMemoryRepository implements BookRepository {
 
     @Override
     public Book save(Book book) {
-        final int id = books.size() + 1;
-        book.assignId(id);
+        book.assignId(getNextId());
         books.add(book);
         return book;
+    }
+
+    private Long getNextId() {
+        return (long) (books.size() + 1);
     }
 
     @Override

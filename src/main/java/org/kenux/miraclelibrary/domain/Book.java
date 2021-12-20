@@ -1,24 +1,31 @@
 package org.kenux.miraclelibrary.domain;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.kenux.miraclelibrary.domain.enums.BookStatus;
 
+
+@NoArgsConstructor
+@Getter
 public class Book {
 
-    private final String title;
-    private final String author;
-    private final String isbn;
-
-    private int id = 0;
+    private Long id;
+    private String title;
+    private String author;
+    private String isbn;
     private BookStatus status;
 
+    @Builder
     public Book(String title, String author, String isbn) {
         this.title = title;
         this.author = author;
         this.isbn = isbn;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
@@ -46,7 +53,7 @@ public class Book {
         this.status = status;
     }
 
-    public void assignId(int id) {
+    public void assignId(Long id) {
         this.id = id;
     }
 }
