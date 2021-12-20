@@ -4,13 +4,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.kenux.miraclelibrary.domain.Book;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class BookRepositoryTest {
+class BookMemoryRepositoryTest {
 
     private final BookRepository bookRepository = BookMemoryRepository.getInstance();
 
