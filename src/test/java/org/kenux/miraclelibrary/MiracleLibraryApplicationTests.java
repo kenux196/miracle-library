@@ -1,10 +1,10 @@
-package org.kenux.mirclelibrary;
+package org.kenux.miraclelibrary;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MirclelibraryApplicationTests {
+class MiracleLibraryApplicationTests {
 
 	@Test
 	void contextLoads() {

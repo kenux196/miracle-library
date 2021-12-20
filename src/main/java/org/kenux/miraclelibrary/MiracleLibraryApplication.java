@@ -1,13 +1,13 @@
-package org.kenux.mirclelibrary;
+package org.kenux.miraclelibrary;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class MirclelibraryApplication {
+public class MiracleLibraryApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MirclelibraryApplication.class, args);
+		SpringApplication.run(MiracleLibraryApplication.class, args);
 	}
 
 }
