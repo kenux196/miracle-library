@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class BookRepositoryTest {
 
-    private final BookRepository bookRepository = BookRepository.getInstance();
+    private final BookRepository bookRepository = BookMemoryRepository.getInstance();
 
     @BeforeEach
     void init() {
@@ -21,8 +21,8 @@ class BookRepositoryTest {
     @Test
     @DisplayName("책 저장소는 유일해야 한다.")
     void test_BookRepository_isUnique() {
-        final BookRepository bookRepository = BookRepository.getInstance();
-        final BookRepository bookRepository2 = BookRepository.getInstance();
+        final BookRepository bookRepository = BookMemoryRepository.getInstance();
+        final BookRepository bookRepository2 = BookMemoryRepository.getInstance();
 
         assertThat(bookRepository).isEqualTo(bookRepository2);
     }

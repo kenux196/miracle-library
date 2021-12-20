@@ -1,45 +1,16 @@
 package org.kenux.miraclelibrary.repository;
 
-
 import org.kenux.miraclelibrary.domain.Book;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class BookRepository {
-    private static BookRepository instance;
+public interface BookRepository {
 
-    private final List<Book> books = new ArrayList<>();
+    Book save(Book book);
 
-    private BookRepository() {
-    }
+    List<Book> findAll();
 
-    public static BookRepository getInstance() {
-        if (instance == null) {
-            instance = new BookRepository();
-        }
-        return instance;
-    }
+    List<Book> findAllByTitle(String title);
 
-    public Book save(Book book) {
-        final int id = books.size() + 1;
-        book.assignId(id);
-        books.add(book);
-        return book;
-    }
-
-    public List<Book> findAll() {
-        return books;
-    }
-
-    public List<Book> findAllByTitle(String title) {
-        return books.stream()
-                .filter(book -> book.getTitle().equals(title))
-                .collect(Collectors.toList());
-    }
-
-    public void clear() {
-        books.clear();
-    }
+    void clear();
 }
