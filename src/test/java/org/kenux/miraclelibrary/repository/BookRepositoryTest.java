@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.kenux.miraclelibrary.domain.Book;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -16,15 +17,6 @@ class BookRepositoryTest {
     @BeforeEach
     void init() {
         bookRepository.clear();
-    }
-
-    @Test
-    @DisplayName("책 저장소는 유일해야 한다.")
-    void test_BookRepository_isUnique() {
-        final BookRepository bookRepository = BookMemoryRepository.getInstance();
-        final BookRepository bookRepository2 = BookMemoryRepository.getInstance();
-
-        assertThat(bookRepository).isEqualTo(bookRepository2);
     }
 
     @Test
@@ -66,8 +58,11 @@ class BookRepositoryTest {
     @Test
     void test_보관된_책은_고유한_아이디를_가져야_한다() {
         final Book book = new Book("title", "author", "isbn");
-        Book savedBook = bookRepository.save(book);
+        Book savedBook1 = bookRepository.save(book);
+        final Book book2 = new Book("title", "author", "isbn");
+        Book savedBook2 = bookRepository.save(book2);
 
-        assertThat(savedBook.getId()).isEqualTo(1);
+        assertThat(savedBook1.getId()).isEqualTo(1);
+        assertThat(savedBook2.getId()).isEqualTo(2);
     }
 }
