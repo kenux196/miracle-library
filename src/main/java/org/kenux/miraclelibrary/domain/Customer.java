@@ -1,5 +1,6 @@
 package org.kenux.miraclelibrary.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
@@ -10,6 +11,7 @@ public class Customer {
     private String email;
     private String password;
 
+    @Builder
     public Customer(String name, String email, String password) {
         this.name = name;
         this.email = email;
