@@ -1,26 +1,33 @@
 package org.kenux.miraclelibrary.domain;
 
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "librarian")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class Librarian {
-    private final String id;
-    private final String name;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private String id;
+
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @Column(name = "password", nullable = false)
     private String password;
 
+    @Builder
     public Librarian(String id, String name, String password) {
         this.id = id;
         this.name = name;
         this.password = password;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     public void changePassword(String password) {

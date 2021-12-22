@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:h2:tcp://localhost/~/h2dbs/miracle-planner
+    url: jdbc:h2:tcp://localhost/~/h2dbs/miracle-library
     username: sa
     password:
     driver-class-name: org.h2.Driver

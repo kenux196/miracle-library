@@ -6,16 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class CustomerMemoryRepository implements CustomerRepository {
+public class CustomerMemoryRepository {
 
     List<Customer> customers = new ArrayList<>();
 
-    @Override
     public void clear() {
         customers.clear();
     }
 
-    @Override
     public Customer save(Customer customer) {
         customer.assignId(getNextId());
         customers.add(customer);
@@ -26,24 +24,20 @@ public class CustomerMemoryRepository implements CustomerRepository {
         return (long) (customers.size() + 1);
     }
 
-    @Override
     public List<Customer> findAll() {
         return customers;
     }
 
-    @Override
     public Optional<Customer> findById(Long id) {
         return customers.stream().filter(customer -> customer.getId().equals(id)).findFirst();
     }
 
-    @Override
     public Optional<Customer> findByName(String name) {
         return customers.stream()
                 .filter(customer -> customer.getName().equals(name))
                 .findFirst();
     }
 
-    @Override
     public boolean existsByEmail(String email) {
         return customers.stream()
                 .anyMatch(customer -> customer.getEmail().equals(email));

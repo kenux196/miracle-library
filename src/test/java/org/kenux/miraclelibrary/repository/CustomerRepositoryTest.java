@@ -1,6 +1,5 @@
 package org.kenux.miraclelibrary.repository;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,11 +8,11 @@ import org.kenux.miraclelibrary.domain.Customer;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class CustomerMemoryRepositoryTest {
 
-    CustomerRepository customerRepository = new CustomerMemoryRepository();
+    CustomerMemoryRepository customerRepository = new CustomerMemoryRepository();
 
     @BeforeEach
     void init() {
