@@ -29,19 +29,23 @@ public class Book {
     @Column(name = "isbn", nullable = false)
     private String isbn;
 
+    @Column(name = "amount")
+    private Integer amount;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private BookStatus status;
 
     @Builder
-    public Book(String title, String author, String isbn) {
+    public Book(String title, String author, String isbn, Integer amount) {
         this.title = title;
         this.author = author;
         this.isbn = isbn;
+        this.amount = amount;
     }
 
     public boolean isAvailableForRental() {
-        return status == BookStatus.AVAILABLE_FOR_RENTAL;
+        return amount > 0;
     }
 
     public void changeStatus(BookStatus status) {
@@ -50,5 +54,17 @@ public class Book {
 
     public void assignId(Long id) {
         this.id = id;
+    }
+
+    public void addAmount(int amount) {
+        this.amount += amount;
+    }
+
+    public void rented() {
+        amount--;
+    }
+
+    public void returned() {
+        amount++;
     }
 }
