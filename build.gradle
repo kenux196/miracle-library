@@ -1,6 +1,6 @@
 buildscript {
 	ext {
-		queryDslVersion = "4.4.0"
+		queryDslVersion = "5.0.0"
 	}
 }
 
@@ -22,6 +22,7 @@ configurations {
 
 repositories {
 	mavenCentral()
+	gradlePluginPortal()
 }
 
 dependencies {
