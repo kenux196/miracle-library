@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class CustomerTest {
 
     @Test
-    @DisplayName("고객은 id, 이름, password, email 을 가진다.")
+    @DisplayName("고객은 id, name, password, email 을 가진다.")
     void test_CustomerBasic() {
         final Customer customer = new Customer("name", "email", "password");
 
@@ -35,5 +35,15 @@ class CustomerTest {
         customer.changeEmail("changedEmail");
 
         assertThat(customer.getEmail()).isEqualTo("changedEmail");
+    }
+
+    @Test
+    @DisplayName("고객은 이름을 변경할 수 있다.")
+    void test_changeName() {
+        final Customer customer = new Customer("name", "name@email.com", "password");
+
+        customer.changeName("changedName");
+
+        assertThat(customer.getName()).isEqualTo("changedName");
     }
 }

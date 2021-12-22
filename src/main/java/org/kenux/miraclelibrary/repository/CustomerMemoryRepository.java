@@ -42,4 +42,10 @@ public class CustomerMemoryRepository implements CustomerRepository {
                 .filter(customer -> customer.getName().equals(name))
                 .findFirst();
     }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return customers.stream()
+                .anyMatch(customer -> customer.getEmail().equals(email));
+    }
 }

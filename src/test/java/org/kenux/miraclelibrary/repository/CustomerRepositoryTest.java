@@ -31,6 +31,19 @@ class CustomerMemoryRepositoryTest {
     }
 
     @Test
+    @DisplayName("고객 이메일이 존재하는지 검사한다.")
+    void test_existEmail() {
+        Customer customer = new Customer("name", "test@test.com", "password");
+        Customer savedCustomer = customerRepository.save(customer);
+
+        boolean result = customerRepository.existsByEmail("test@test.com");
+        assertThat(result).isTrue();
+
+        result = customerRepository.existsByEmail("test1@test.com");
+        assertThat(result).isFalse();
+    }
+
+    @Test
     @DisplayName("전체 고객을 조회할 수 있다.")
     void test_findAll() {
         Customer customer = new Customer("customer1", "customer1@test.com", "password");

@@ -7,7 +7,7 @@ import lombok.Getter;
 public class Customer {
 
     private Long id;
-    private final String name;
+    private String name;
     private String email;
     private String password;
 
@@ -28,5 +28,9 @@ public class Customer {
 
     public void changeEmail(String email) {
         this.email = email;
+    }
+
+    public void changeName(String name) {
+        this.name = name;
     }
 }

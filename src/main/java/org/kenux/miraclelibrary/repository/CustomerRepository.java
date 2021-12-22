@@ -18,4 +18,6 @@ public interface CustomerRepository {
     Optional<Customer> findById(Long id);
 
     Optional<Customer> findByName(String customer1);
+
+    boolean existsByEmail(String email);
 }
