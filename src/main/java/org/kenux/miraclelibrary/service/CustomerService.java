@@ -24,6 +24,10 @@ public class CustomerService {
             throw new CustomException(EMAIL_DUPLICATION);
         }
 
+        if (customerJoinDto.getPassword().length() < 8) {
+            throw new CustomException(PASSWORD_SHORT);
+        }
+
         Customer customer = Customer.builder()
                 .name(customerJoinDto.getName())
                 .email(customerJoinDto.getEmail())
