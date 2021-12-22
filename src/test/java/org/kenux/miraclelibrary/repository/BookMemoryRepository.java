@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class BookMemoryRepository implements BookRepository {
+public class BookMemoryRepository {
     private static BookMemoryRepository instance;
 
     private final List<Book> books = new ArrayList<>();
@@ -23,7 +23,6 @@ public class BookMemoryRepository implements BookRepository {
         return instance;
     }
 
-    @Override
     public Book save(Book book) {
         book.assignId(getNextId());
         books.add(book);
@@ -34,19 +33,16 @@ public class BookMemoryRepository implements BookRepository {
         return (long) (books.size() + 1);
     }
 
-    @Override
     public List<Book> findAll() {
         return books;
     }
 
-    @Override
     public List<Book> findAllByTitle(String title) {
         return books.stream()
                 .filter(book -> book.getTitle().equals(title))
                 .collect(Collectors.toList());
     }
 
-    @Override
     public void clear() {
         books.clear();
     }

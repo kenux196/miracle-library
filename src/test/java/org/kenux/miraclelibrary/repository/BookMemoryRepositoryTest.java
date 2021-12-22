@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class BookMemoryRepositoryTest {
 
-    private final BookRepository bookRepository = BookMemoryRepository.getInstance();
+    private final BookMemoryRepository bookRepository = BookMemoryRepository.getInstance();
 
     @BeforeEach
     void init() {
