@@ -8,9 +8,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = HelloController.class)
 class HelloControllerTest {
@@ -26,8 +26,7 @@ class HelloControllerTest {
 
         mockMvc.perform(request)
                 .andExpect(status().isOk())
-                .andDo(print())
-                .andExpect(view().name("hello"))
-                .andExpect(model().attribute("name", is("kenux")));
+                .andExpect(content().string("hello"))
+                .andDo(print());
     }
 }
