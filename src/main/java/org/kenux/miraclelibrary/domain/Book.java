@@ -52,10 +52,6 @@ public class Book {
         this.status = status;
     }
 
-    public void assignId(Long id) {
-        this.id = id;
-    }
-
     public void addAmount(int amount) {
         this.amount += amount;
     }
@@ -66,5 +62,27 @@ public class Book {
 
     public void returned() {
         amount++;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Book book = (Book) o;
+
+        if (!id.equals(book.id)) return false;
+        if (!title.equals(book.title)) return false;
+        if (!author.equals(book.author)) return false;
+        return isbn.equals(book.isbn);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id.hashCode();
+        result = 31 * result + title.hashCode();
+        result = 31 * result + author.hashCode();
+        result = 31 * result + isbn.hashCode();
+        return result;
     }
 }
