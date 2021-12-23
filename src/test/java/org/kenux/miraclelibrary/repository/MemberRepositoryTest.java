@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class MemberRepositoryTest {
 
     @Autowired
-    private CustomerRepository customerRepository;
+    private MemberRepository memberRepository;
 
     @Test
     @DisplayName("고객 정보 저장 테스트")
@@ -31,7 +31,7 @@ class MemberRepositoryTest {
                 .memberRole(MemberRole.CUSTOMER)
                 .build();;
 
-        Member saved = customerRepository.save(member);
+        Member saved = memberRepository.save(member);
 
         assertThat(member.getId()).isNotNull();
         assertThat(saved.getId()).isEqualTo(member.getId());
@@ -46,12 +46,12 @@ class MemberRepositoryTest {
                 .password("password")
                 .memberRole(MemberRole.CUSTOMER)
                 .build();;
-        customerRepository.save(member);
+        memberRepository.save(member);
 
-        boolean result = customerRepository.existsByEmail("customer1@test.com");
+        boolean result = memberRepository.existsByEmail("customer1@test.com");
         assertThat(result).isTrue();
 
-        result = customerRepository.existsByEmail("test1@test.com");
+        result = memberRepository.existsByEmail("test1@test.com");
         assertThat(result).isFalse();
     }
 
@@ -64,7 +64,7 @@ class MemberRepositoryTest {
                 .password("password")
                 .memberRole(MemberRole.CUSTOMER)
                 .build();;
-        customerRepository.save(member);
+        memberRepository.save(member);
 
         member = Member.builder()
                 .name("customer2")
@@ -72,9 +72,9 @@ class MemberRepositoryTest {
                 .password("password")
                 .memberRole(MemberRole.CUSTOMER)
                 .build();;
-        customerRepository.save(member);
+        memberRepository.save(member);
 
-        List<Member> members = customerRepository.findAll();
+        List<Member> members = memberRepository.findAll();
 
         assertThat(members).hasSize(2);
     }
@@ -88,9 +88,9 @@ class MemberRepositoryTest {
                 .password("password")
                 .memberRole(MemberRole.CUSTOMER)
                 .build();;
-        Member saved = customerRepository.save(member);
+        Member saved = memberRepository.save(member);
 
-        Optional<Member> found = customerRepository.findById(saved.getId());
+        Optional<Member> found = memberRepository.findById(saved.getId());
 
         assertThat(found).isNotEmpty();
         assertThat(found.get().getId()).isEqualTo(saved.getId());
@@ -105,9 +105,9 @@ class MemberRepositoryTest {
                 .password("password")
                 .memberRole(MemberRole.CUSTOMER)
                 .build();;
-        customerRepository.save(member);
+        memberRepository.save(member);
 
-        Optional<Member> found = customerRepository.findByName("customer1");
+        Optional<Member> found = memberRepository.findByName("customer1");
 
         assertThat(found).isNotEmpty();
         assertThat(found.get().getName()).isEqualTo("customer1");

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.kenux.miraclelibrary.domain.Member;
 import org.kenux.miraclelibrary.exception.CustomException;
 import org.kenux.miraclelibrary.exception.ErrorCode;
-import org.kenux.miraclelibrary.repository.CustomerRepository;
+import org.kenux.miraclelibrary.repository.MemberRepository;
 import org.kenux.miraclelibrary.rest.dto.CustomerJoinDto;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -25,10 +25,10 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class MemberServiceTest {
+class CustomerServiceTest {
 
     @Mock
-    private CustomerRepository customerRepository;
+    private MemberRepository memberRepository;
 
     @InjectMocks
     private CustomerService customerService;
@@ -43,7 +43,7 @@ class MemberServiceTest {
                 .password("password")
                 .build();;
         member.assignId(1L);
-        when(customerRepository.save(any())).thenReturn(member);
+        when(memberRepository.save(any())).thenReturn(member);
 
         // when
         CustomerJoinDto customerJoinDto = CustomerJoinDto.builder()
@@ -66,7 +66,7 @@ class MemberServiceTest {
                 .email("customer1@test.com")
                 .password("password")
                 .build();
-        given(customerRepository.existsByEmail(any())).willReturn(true);
+        given(memberRepository.existsByEmail(any())).willReturn(true);
 
         // when then
         assertThatThrownBy(() -> customerService.join(customerJoinDto))
@@ -106,7 +106,7 @@ class MemberServiceTest {
                     .build());
         }
 
-        when(customerRepository.findAll()).thenReturn(members);
+        when(memberRepository.findAll()).thenReturn(members);
 
         // when
         List<Member> memberList = customerService.getAllCustomer();
@@ -125,7 +125,7 @@ class MemberServiceTest {
                 .password("password")
                 .build();
         member.assignId(1L);
-        when(customerRepository.findByName(any())).thenReturn(Optional.of(member));
+        when(memberRepository.findByName(any())).thenReturn(Optional.of(member));
 
         // when
         Optional<Member> result = customerService.getCustomerByName("customer1");
@@ -145,7 +145,7 @@ class MemberServiceTest {
                 .password("password")
                 .build();
         member.assignId(1L);
-        when(customerRepository.findById(any())).thenReturn(Optional.of(member));
+        when(memberRepository.findById(any())).thenReturn(Optional.of(member));
 
         // when
         Optional<Member> result = customerService.getCustomer(1L);
