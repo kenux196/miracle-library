@@ -20,8 +20,8 @@ class BookMemoryRepositoryTest {
 
     @Test
     @DisplayName("새로운 책은 책 저장소에 정보가 저장된다.")
-    void test_BookRepository_hasBookData() {
-        final Book book = new Book("title", "author", "isbn", 3);
+    void test_BookRepository_saveBookData() {
+        final Book book = createBook();
         bookRepository.save(book);
 
         List<Book> books = bookRepository.findAll();
@@ -32,7 +32,7 @@ class BookMemoryRepositoryTest {
     @Test
     @DisplayName("제목으로 책을 검색할 수 있어야 한다.")
     void test_BookRepository_findByTitle() {
-        final Book book = new Book("title", "author", "isbn", 3);
+        final Book book = createBook();
         bookRepository.save(book);
 
         List<Book> books = bookRepository.findAllByTitle("title");
@@ -40,4 +40,9 @@ class BookMemoryRepositoryTest {
         assertThat(books).isNotEmpty();
         assertThat(books.get(0).getTitle()).isEqualTo("title");
     }
+
+    private Book createBook() {
+        return new Book("title", "author", "isbn", 3);
+    }
+
 }

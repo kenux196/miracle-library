@@ -24,8 +24,7 @@ class BookRepositoryTest {
     @Test
     @DisplayName("책 정보는 저장되어야 한다.")
     void test_BookRepository_hasBookData() {
-        final Book book = new Book("title", "author", "isbn", 3);
-        book.changeStatus(BookStatus.AVAILABLE_FOR_RENTAL);
+        final Book book = createBook();
         bookRepository.save(book);
 
         List<Book> books = bookRepository.findAll();
@@ -36,11 +35,18 @@ class BookRepositoryTest {
     @Test
     @DisplayName("제목으로 책을 검색할 수 있어야 한다.")
     void test_BookRepository_findByTitle() {
-        final Book book = new Book("title", "author", "isbn", 3);
-        book.changeStatus(BookStatus.AVAILABLE_FOR_RENTAL);
+        final Book book = createBook();
         bookRepository.save(book);
 
-        Optional<Book> found = bookRepository.findByTitle("title");
+        Optional<Book> found = bookRepository.findByTitle("ti");
+
+        assertThat(found).isNotEmpty();
+        assertThat(found.get().getTitle()).isEqualTo("title");
+        assertThat(found.get().getAuthor()).isEqualTo("author");
+        assertThat(found.get().getIsbn()).isEqualTo("isbn");
+        assertThat(found.get().getAmount()).isEqualTo(3);
+
+        found = bookRepository.findByTitle("it");
 
         assertThat(found).isNotEmpty();
         assertThat(found.get().getTitle()).isEqualTo("title");
@@ -49,7 +55,53 @@ class BookRepositoryTest {
         assertThat(found.get().getAmount()).isEqualTo(3);
     }
 
-    // TODO : 저자, isbn을 통한 검색 테스트   - sky 2021/12/23
+    @Test
+    @DisplayName("저자를 통해 책을 검색할 수 있다.")
+    void test_BookRepository_findByAuthor() {
+        // given
+        Book book = createBook();
+        bookRepository.save(book);
 
-    // TODO : 제목의 일부만으로 검색 테스트   - sky 2021/12/23
+        // when
+        Optional<Book> found = bookRepository.findByAuthor("author");
+
+        // then
+        assertThat(found).isNotEmpty();
+        assertThat(found.get().getAuthor()).isEqualTo("author");
+    }
+
+    @Test
+    @DisplayName("isbn 을 통해 책을 검색할 수 있다.")
+    void test_BookRepository_findByIsbn() {
+        // given
+        Book book = createBook();
+        bookRepository.save(book);
+
+        // when
+        Optional<Book> found = bookRepository.findByIsbn("isbn");
+
+        // then
+        assertThat(found).isNotEmpty();
+        assertThat(found.get().getIsbn()).isEqualTo("isbn");
+    }
+
+    @Test
+    @DisplayName("제목과 저자를 통해 책을 검색할 수 있다.")
+    void test_BookRepository_searchBookWithTitleAndAuthor() {
+        // given
+        Book book = createBook();
+        bookRepository.save(book);
+
+        // when
+        final List<Book> foundBooks = bookRepository.findAllByTitleAndAuthor("ti", "author");
+
+        // then
+        assertThat(foundBooks).isNotEmpty();
+    }
+
+    private Book createBook() {
+        Book book = new Book("title", "author", "isbn", 3);
+        book.changeStatus(BookStatus.AVAILABLE_FOR_RENTAL);
+        return book;
+    }
 }
