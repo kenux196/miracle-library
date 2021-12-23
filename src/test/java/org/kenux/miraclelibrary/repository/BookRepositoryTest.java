@@ -39,20 +39,16 @@ class BookRepositoryTest {
         bookRepository.save(book);
 
         Optional<Book> found = bookRepository.findByTitle("ti");
-
         assertThat(found).isNotEmpty();
         assertThat(found.get().getTitle()).isEqualTo("title");
         assertThat(found.get().getAuthor()).isEqualTo("author");
         assertThat(found.get().getIsbn()).isEqualTo("isbn");
-        assertThat(found.get().getAmount()).isEqualTo(3);
 
         found = bookRepository.findByTitle("it");
-
         assertThat(found).isNotEmpty();
         assertThat(found.get().getTitle()).isEqualTo("title");
         assertThat(found.get().getAuthor()).isEqualTo("author");
         assertThat(found.get().getIsbn()).isEqualTo("isbn");
-        assertThat(found.get().getAmount()).isEqualTo(3);
     }
 
     @Test
@@ -100,7 +96,11 @@ class BookRepositoryTest {
     }
 
     private Book createBook() {
-        Book book = new Book("title", "author", "isbn", 3);
+        Book book = Book.builder()
+                .title("title")
+                .author("author")
+                .isbn("isbn")
+                .build();
         book.changeStatus(BookStatus.AVAILABLE_FOR_RENTAL);
         return book;
     }

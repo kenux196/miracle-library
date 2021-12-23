@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import org.kenux.miraclelibrary.domain.enums.BookStatus;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 @Entity
@@ -29,39 +31,33 @@ public class Book {
     @Column(name = "isbn", nullable = false)
     private String isbn;
 
-    @Column(name = "amount")
-    private Integer amount;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private BookStatus status;
 
+    private LocalDate rentalStartDate;
+
+    private LocalDate rentalEndDate;
+
     @Builder
-    public Book(String title, String author, String isbn, Integer amount) {
+    public Book(String title, String author, String isbn) {
         this.title = title;
         this.author = author;
         this.isbn = isbn;
-        this.amount = amount;
     }
 
     public boolean isAvailableForRental() {
-        return amount > 0;
+        return status.equals(BookStatus.AVAILABLE_FOR_RENTAL);
     }
 
     public void changeStatus(BookStatus status) {
         this.status = status;
     }
 
-    public void addAmount(int amount) {
-        this.amount += amount;
-    }
-
-    public void rented() {
-        amount--;
-    }
-
-    public void returned() {
-        amount++;
+    public void beRented(LocalDate startDate) {
+        rentalStartDate = startDate;
+        rentalEndDate = startDate.plusWeeks(2);
+        status = BookStatus.RENTED;
     }
 
     @Override
@@ -85,4 +81,5 @@ public class Book {
         result = 31 * result + isbn.hashCode();
         return result;
     }
+
 }

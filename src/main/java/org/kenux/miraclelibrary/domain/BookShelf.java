@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Entity
-@Table(name = "book_rental")
+@Table(name = "member_bookshelf")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class BookShelf {
@@ -24,7 +24,6 @@ public class BookShelf {
     private Member member;
 
     @OneToMany
-    @JoinColumn(name = "book_id")
     private List<Book> bookList = new ArrayList<>();
 
     public void addBook(Book book) {
