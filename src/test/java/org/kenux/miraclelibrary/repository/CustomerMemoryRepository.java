@@ -1,6 +1,6 @@
 package org.kenux.miraclelibrary.repository;
 
-import org.kenux.miraclelibrary.domain.Customer;
+import org.kenux.miraclelibrary.domain.Member;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,38 +8,38 @@ import java.util.Optional;
 
 public class CustomerMemoryRepository {
 
-    List<Customer> customers = new ArrayList<>();
+    List<Member> members = new ArrayList<>();
 
     public void clear() {
-        customers.clear();
+        members.clear();
     }
 
-    public Customer save(Customer customer) {
-        customer.assignId(getNextId());
-        customers.add(customer);
-        return customer;
+    public Member save(Member member) {
+        member.assignId(getNextId());
+        members.add(member);
+        return member;
     }
 
     private Long getNextId() {
-        return (long) (customers.size() + 1);
+        return (long) (members.size() + 1);
     }
 
-    public List<Customer> findAll() {
-        return customers;
+    public List<Member> findAll() {
+        return members;
     }
 
-    public Optional<Customer> findById(Long id) {
-        return customers.stream().filter(customer -> customer.getId().equals(id)).findFirst();
+    public Optional<Member> findById(Long id) {
+        return members.stream().filter(customer -> customer.getId().equals(id)).findFirst();
     }
 
-    public Optional<Customer> findByName(String name) {
-        return customers.stream()
+    public Optional<Member> findByName(String name) {
+        return members.stream()
                 .filter(customer -> customer.getName().equals(name))
                 .findFirst();
     }
 
     public boolean existsByEmail(String email) {
-        return customers.stream()
+        return members.stream()
                 .anyMatch(customer -> customer.getEmail().equals(email));
     }
 }
