@@ -18,18 +18,6 @@ public class LibrarianManagementService {
 
     private final MemberRepository memberRepository;
 
-    public List<Member> getAllCustomer() {
-        return memberRepository.findAll();
-    }
-
-    public Optional<Member> getCustomerByName(String name) {
-        return memberRepository.findByName(name);
-    }
-
-    public Optional<Member> getCustomer(Long id) {
-        return memberRepository.findById(id);
-    }
-
     public Member addLibrarian(LibrarianAddDto librarianAddDto) {
         if (memberRepository.existsByEmail(librarianAddDto.getEmail())) {
             throw new CustomException(EMAIL_DUPLICATION);

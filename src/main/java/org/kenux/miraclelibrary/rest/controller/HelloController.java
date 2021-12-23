@@ -1,4 +1,4 @@
-package org.kenux.miraclelibrary.controller.web;
+package org.kenux.miraclelibrary.rest.controller;
 
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
