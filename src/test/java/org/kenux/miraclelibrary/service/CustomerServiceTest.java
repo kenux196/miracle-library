@@ -7,7 +7,7 @@ import org.kenux.miraclelibrary.domain.Member;
 import org.kenux.miraclelibrary.exception.CustomException;
 import org.kenux.miraclelibrary.exception.ErrorCode;
 import org.kenux.miraclelibrary.repository.MemberRepository;
-import org.kenux.miraclelibrary.rest.dto.CustomerJoinDto;
+import org.kenux.miraclelibrary.rest.dto.MemberJoinDto;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -46,12 +46,12 @@ class CustomerServiceTest {
         when(memberRepository.save(any())).thenReturn(member);
 
         // when
-        CustomerJoinDto customerJoinDto = CustomerJoinDto.builder()
+        MemberJoinDto memberJoinDto = MemberJoinDto.builder()
                 .name("customer1")
                 .email("customer1@test.com")
                 .password("password")
                 .build();
-        Member saved = customerService.join(customerJoinDto);
+        Member saved = customerService.join(memberJoinDto);
 
         // then
         assertThat(saved.getId()).isEqualTo(1);
@@ -61,7 +61,7 @@ class CustomerServiceTest {
     @DisplayName("회원 가입시 이메일 중복인 경우, exception 발생")
     void test_duplicateEmail() {
         // given
-        CustomerJoinDto customerJoinDto = CustomerJoinDto.builder()
+        MemberJoinDto memberJoinDto = MemberJoinDto.builder()
                 .name("customer1")
                 .email("customer1@test.com")
                 .password("password")
@@ -69,7 +69,7 @@ class CustomerServiceTest {
         given(memberRepository.existsByEmail(any())).willReturn(true);
 
         // when then
-        assertThatThrownBy(() -> customerService.join(customerJoinDto))
+        assertThatThrownBy(() -> customerService.join(memberJoinDto))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(EMAIL_DUPLICATION.getMessage());
     }
@@ -78,14 +78,14 @@ class CustomerServiceTest {
     @DisplayName("회원 패스워드 검증 - 길이가 8자보다 작으면 예외 발생")
     void test_validatePassword() {
         // given
-        CustomerJoinDto customerJoinDto = CustomerJoinDto.builder()
+        MemberJoinDto memberJoinDto = MemberJoinDto.builder()
                 .name("customer1")
                 .email("customer1@test.com")
                 .password("pass")
                 .build();
 
         // when then
-        assertThatThrownBy(() -> customerService.join(customerJoinDto))
+        assertThatThrownBy(() -> customerService.join(memberJoinDto))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.PASSWORD_SHORT.getMessage());
     }
