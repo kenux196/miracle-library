@@ -31,33 +31,14 @@ public class Book {
     @Column(name = "isbn", nullable = false)
     private String isbn;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
-    private BookStatus status;
-
-    private LocalDate rentalStartDate;
-
-    private LocalDate rentalEndDate;
+    private LocalDate createdDate;
 
     @Builder
-    public Book(String title, String author, String isbn) {
+    public Book(String title, String author, String isbn, LocalDate createdDate) {
         this.title = title;
         this.author = author;
         this.isbn = isbn;
-    }
-
-    public boolean isAvailableForRental() {
-        return status.equals(BookStatus.AVAILABLE_FOR_RENTAL);
-    }
-
-    public void changeStatus(BookStatus status) {
-        this.status = status;
-    }
-
-    public void beRented(LocalDate startDate) {
-        rentalStartDate = startDate;
-        rentalEndDate = startDate.plusWeeks(2);
-        status = BookStatus.RENTED;
+        this.createdDate = createdDate;
     }
 
     @Override
