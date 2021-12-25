@@ -15,13 +15,13 @@ public class BookRental {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "book_id")
-    private Book book;
-
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @OneToOne
+    @JoinColumn(name = "book_id")
+    private Book book;
 
     private LocalDate rentalStartDate;
 
@@ -29,9 +29,9 @@ public class BookRental {
     private LocalDate returnDate;
 
     @Builder
-    public BookRental(Book book, Member member, LocalDate rentalStartDate) {
-        this.book = book;
+    public BookRental(Member member, Book book, LocalDate rentalStartDate) {
         this.member = member;
+        this.book = book;
         this.rentalStartDate = rentalStartDate;
     }
 
