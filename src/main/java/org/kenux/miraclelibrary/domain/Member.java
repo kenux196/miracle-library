@@ -24,8 +24,9 @@ public class Member {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "password", nullable = false)
-    private String password;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "member_password_id")
+    private MemberPassword password;
 
     @Column(name = "member_role", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -35,7 +36,7 @@ public class Member {
     public Member(String name, String email, String password, MemberRole memberRole) {
         this.name = name;
         this.email = email;
-        this.password = password;
+        this.password = new MemberPassword(password);
         this.memberRole = memberRole;
     }
 
@@ -44,7 +45,7 @@ public class Member {
     }
 
     public void changePassword(String password) {
-        this.password = password;
+        this.password.change(password);
     }
 
     public void changeEmail(String email) {
@@ -53,5 +54,9 @@ public class Member {
 
     public void changeName(String name) {
         this.name = name;
+    }
+
+    public String getPassword() {
+        return this.password.getPassword();
     }
 }
