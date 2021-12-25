@@ -11,15 +11,18 @@ import org.kenux.miraclelibrary.repository.BookRentalRepository;
 import org.kenux.miraclelibrary.repository.BookRepository;
 import org.kenux.miraclelibrary.repository.MemberRepository;
 import org.kenux.miraclelibrary.rest.dto.RequestBookRental;
+import org.kenux.miraclelibrary.rest.dto.RequestBookReturn;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -46,6 +49,7 @@ class BookRentalServiceTest {
         BookRental bookRental = BookRental.builder()
                 .member(getMember())
                 .book(getBook1())
+                .rentalStartDate(LocalDateTime.of(2021, 12, 25, 13, 00, 00))
                 .build();
 
         when(memberRepository.findById(any())).thenReturn(Optional.of(getMember()));
@@ -61,7 +65,29 @@ class BookRentalServiceTest {
         // then
         assertThat(saved.getBook().getId()).isEqualTo(bookId);
         assertThat(saved.getMember().getId()).isEqualTo(memberId);
+        assertThat(saved.getRentalStartDate()).isEqualTo(bookRental.getRentalStartDate());
+    }
 
+    @Test
+    @DisplayName("멤버는 책을 반납한다.")
+    void test_bookReturn() throws Exception {
+//        // given
+//        BookRental bookRental = BookRental.builder()
+//                .member(getMember())
+//                .book(getBook1())
+//                .rentalStartDate(LocalDateTime.of(2021, 1, 1, 13, 00, 00))
+//                .build();
+//        LocalDateTime returnDate = LocalDateTime.of(2021, 1, 10, 11, 00, 00);
+//        bookRental.setReturnDate(returnDate);
+//        when(bookRentalRepository.save(any())).thenReturn(bookRental);
+//        when(bookRentalRepository.findAllByBookId(any())).thenReturn(List.of(bookRental));
+//
+//        // when
+//        RequestBookReturn requestBookReturn = new RequestBookReturn(1L, "title");
+//        BookRental result = bookRentalService.returnBook(requestBookReturn);
+//
+//        // then
+//        assertThat(result.getReturnDate()).isEqualTo(returnDate);
     }
 
     private Member getMember() {
