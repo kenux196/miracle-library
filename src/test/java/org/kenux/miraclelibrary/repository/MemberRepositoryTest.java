@@ -113,4 +113,25 @@ class MemberRepositoryTest {
         assertThat(found.get().getName()).isEqualTo("customer1");
     }
 
+    @Test
+    @DisplayName("멤버를 통해서 멤버의 비밀번호를 확인한다.")
+    void test_password() {
+        // given
+        Member member = Member.builder()
+                .name("customer1")
+                .email("customer1@test.com")
+                .password("password")
+                .memberRole(MemberRole.CUSTOMER)
+                .build();;
+        memberRepository.save(member);
+
+        // when
+        Optional<Member> found = memberRepository.findByName("customer1");
+
+        // then
+        assertThat(found).isNotEmpty();
+        assertThat(found.get().getPassword()).isEqualTo("password");
+
+    }
+
 }
