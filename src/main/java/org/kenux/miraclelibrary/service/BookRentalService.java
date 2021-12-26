@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.kenux.miraclelibrary.domain.Book;
 import org.kenux.miraclelibrary.domain.BookRental;
 import org.kenux.miraclelibrary.domain.Member;
+import org.kenux.miraclelibrary.exception.CustomException;
+import org.kenux.miraclelibrary.exception.ErrorCode;
 import org.kenux.miraclelibrary.repository.BookRentalRepository;
 import org.kenux.miraclelibrary.repository.BookRepository;
 import org.kenux.miraclelibrary.repository.MemberRepository;
@@ -27,7 +29,14 @@ public class BookRentalService {
 
     public BookRental rentalBook(RequestBookRental requestBookRental) {
         Optional<Member> member = memberRepository.findById(requestBookRental.getMemberId());
+        if (member.isEmpty()) {
+            throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
+        }
+
         Optional<Book> book = bookRepository.findById(requestBookRental.getBookId());
+        if (book.isEmpty()) {
+            throw new CustomException(ErrorCode.BOOK_NOT_FOUND);
+        }
 
         BookRental bookRental = BookRental.builder()
                 .member(member.get())
@@ -46,11 +55,11 @@ public class BookRentalService {
                 .collect(Collectors.toList());
 
         if (found.isEmpty()) {
-            throw new RuntimeException("도서 대출 정보 없음");
+            throw new CustomException(ErrorCode.RENTAL_INFO_NOT_FOUND);
         }
 
         if (found.size() > 1) {
-            throw new RuntimeException("동일한 대출 정보가 있음.");
+            throw new CustomException(ErrorCode.RENTAL_INFO_DUPLICATION);
         }
 
         BookRental bookRental = found.get(0);

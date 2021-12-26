@@ -7,6 +7,8 @@ import org.kenux.miraclelibrary.domain.Book;
 import org.kenux.miraclelibrary.domain.BookRental;
 import org.kenux.miraclelibrary.domain.Member;
 import org.kenux.miraclelibrary.domain.enums.MemberRole;
+import org.kenux.miraclelibrary.exception.CustomException;
+import org.kenux.miraclelibrary.exception.ErrorCode;
 import org.kenux.miraclelibrary.repository.BookRentalRepository;
 import org.kenux.miraclelibrary.repository.BookRepository;
 import org.kenux.miraclelibrary.repository.MemberRepository;
@@ -19,11 +21,11 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -66,6 +68,40 @@ class BookRentalServiceTest {
         assertThat(saved.getBook().getId()).isEqualTo(bookId);
         assertThat(saved.getMember().getId()).isEqualTo(memberId);
         assertThat(saved.getRentalStartDate()).isEqualTo(bookRental.getRentalStartDate());
+    }
+
+    @Test
+    @DisplayName("도서 대출 시, 회원 정보가 조회되지 않으면 예외 발생")
+    void test_memberNotFound_whenRentBook() throws Exception {
+        // given
+        when(memberRepository.findById(any())).thenReturn(Optional.empty());
+
+        // when
+        Long memberId = 1L;
+        Long bookId = 1L;
+        RequestBookRental requestBookRental = new RequestBookRental(memberId, bookId);
+
+        assertThatThrownBy(() -> bookRentalService.rentalBook(requestBookRental))
+                .isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.MEMBER_NOT_FOUND.getMessage());
+    }
+
+    @Test
+    @DisplayName("도서 대출 시, 책 정보가 조회되지 않으면 예외 발생")
+    void test_bookNotFound_whenRentBook() throws Exception {
+        // given
+        when(bookRepository.findById(any())).thenReturn(Optional.empty());
+        when(memberRepository.findById(any())).thenReturn(Optional.of(getMember()));
+
+        // when
+        Long memberId = 1L;
+        Long bookId = 1L;
+        RequestBookRental requestBookRental = new RequestBookRental(memberId, bookId);
+
+        // then
+        assertThatThrownBy(() -> bookRentalService.rentalBook(requestBookRental))
+                .isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.BOOK_NOT_FOUND.getMessage());
     }
 
     @Test
