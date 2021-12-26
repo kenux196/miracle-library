@@ -71,23 +71,21 @@ class BookRentalServiceTest {
     @Test
     @DisplayName("멤버는 책을 반납한다.")
     void test_bookReturn() throws Exception {
-//        // given
-//        BookRental bookRental = BookRental.builder()
-//                .member(getMember())
-//                .book(getBook1())
-//                .rentalStartDate(LocalDateTime.of(2021, 1, 1, 13, 00, 00))
-//                .build();
-//        LocalDateTime returnDate = LocalDateTime.of(2021, 1, 10, 11, 00, 00);
-//        bookRental.setReturnDate(returnDate);
-//        when(bookRentalRepository.save(any())).thenReturn(bookRental);
-//        when(bookRentalRepository.findAllByBookId(any())).thenReturn(List.of(bookRental));
-//
-//        // when
-//        RequestBookReturn requestBookReturn = new RequestBookReturn(1L, "title");
-//        BookRental result = bookRentalService.returnBook(requestBookReturn);
-//
-//        // then
-//        assertThat(result.getReturnDate()).isEqualTo(returnDate);
+        // given
+        BookRental bookRental = BookRental.builder()
+                .member(getMember())
+                .book(getBook1())
+                .rentalStartDate(LocalDateTime.of(2021, 1, 1, 13, 00, 00))
+                .build();
+        when(bookRentalRepository.save(any())).thenReturn(bookRental);
+        when(bookRentalRepository.findAllByBookId(any())).thenReturn(List.of(bookRental));
+
+        // when
+        RequestBookReturn requestBookReturn = new RequestBookReturn(1L, "title");
+        BookRental result = bookRentalService.returnBook(requestBookReturn);
+
+        // then
+        assertThat(result.getReturnDate()).isNotNull();
     }
 
     private Member getMember() {

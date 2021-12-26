@@ -53,6 +53,8 @@ public class BookRentalService {
             throw new RuntimeException("동일한 대출 정보가 있음.");
         }
 
-        return found.get(0);
+        BookRental bookRental = found.get(0);
+        bookRental.setReturnDate(LocalDateTime.now());
+        return bookRentalRepository.save(bookRental);
     }
 }
