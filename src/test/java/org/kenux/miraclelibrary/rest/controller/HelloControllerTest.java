@@ -1,4 +1,4 @@
-package org.kenux.miraclelibrary.controller.web;
+package org.kenux.miraclelibrary.rest.controller;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
