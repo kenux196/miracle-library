@@ -12,9 +12,9 @@ import java.util.Optional;
 public interface BookRepository extends JpaRepository<Book, Long>, BookCustomRepository {
 
     @Query("select b from Book b where b.title like %:title%")
-    Optional<Book> findByTitle(@Param("title") String title);
+    List<Book> findAllByTitle(@Param("title") String title);
 
-    Optional<Book> findByAuthor(String author);
+    List<Book> findAllByAuthor(String author);
 
-    Optional<Book> findByIsbn(String isbn);
+    List<Book> findAllByIsbn(String isbn);
 }

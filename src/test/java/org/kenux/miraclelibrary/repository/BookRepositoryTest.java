@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.kenux.miraclelibrary.config.JpaTestConfig;
 import org.kenux.miraclelibrary.domain.Book;
+import org.kenux.miraclelibrary.domain.enums.BookStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
@@ -38,17 +39,14 @@ class BookRepositoryTest {
         final Book book = createBook();
         bookRepository.save(book);
 
-        Optional<Book> found = bookRepository.findByTitle("ti");
+        List<Book> found = bookRepository.findAllByTitle("title");
         assertThat(found).isNotEmpty();
-        assertThat(found.get().getTitle()).isEqualTo("title");
-        assertThat(found.get().getAuthor()).isEqualTo("author");
-        assertThat(found.get().getIsbn()).isEqualTo("isbn");
 
-        found = bookRepository.findByTitle("it");
+        found = bookRepository.findAllByTitle("ti");
         assertThat(found).isNotEmpty();
-        assertThat(found.get().getTitle()).isEqualTo("title");
-        assertThat(found.get().getAuthor()).isEqualTo("author");
-        assertThat(found.get().getIsbn()).isEqualTo("isbn");
+
+        found = bookRepository.findAllByTitle("it");
+        assertThat(found).isNotEmpty();
     }
 
     @Test
@@ -59,11 +57,10 @@ class BookRepositoryTest {
         bookRepository.save(book);
 
         // when
-        Optional<Book> found = bookRepository.findByAuthor("author");
+        List<Book> found = bookRepository.findAllByAuthor("author");
 
         // then
         assertThat(found).isNotEmpty();
-        assertThat(found.get().getAuthor()).isEqualTo("author");
     }
 
     @Test
@@ -74,11 +71,10 @@ class BookRepositoryTest {
         bookRepository.save(book);
 
         // when
-        Optional<Book> found = bookRepository.findByIsbn("isbn");
+        List<Book> found = bookRepository.findAllByIsbn("isbn");
 
         // then
         assertThat(found).isNotEmpty();
-        assertThat(found.get().getIsbn()).isEqualTo("isbn");
     }
 
     @Test
@@ -102,6 +98,7 @@ class BookRepositoryTest {
                 .isbn("isbn")
                 .createdDate(LocalDate.now())
                 .build();
+        book.changeStatus(BookStatus.AVAILABLE);
         return book;
     }
 }
