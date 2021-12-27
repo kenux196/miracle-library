@@ -4,8 +4,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.kenux.miraclelibrary.domain.enums.BookStatus;
 
-import java.time.LocalDate;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 class BookTest {
@@ -19,6 +17,19 @@ class BookTest {
         assertThat(book.getAuthor()).isEqualTo("저자");
         assertThat(book.getIsbn()).isEqualTo("isbn");
     }
+
+    @Test
+    @DisplayName("책은 대여 가능, 대여중, 파기됨 상태를 변경할 수 있다.")
+    void test_Book_changeStatus() throws Exception {
+        Book book = createBook();
+        book.changeStatus(BookStatus.AVAILABLE);
+        assertThat(book.getStatus()).isEqualTo(BookStatus.AVAILABLE);
+
+
+        book.changeStatus(BookStatus.RENTED);
+        assertThat(book.getStatus()).isEqualTo(BookStatus.RENTED);
+    }
+
 
     private Book createBook() {
         return Book.builder()

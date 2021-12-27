@@ -31,6 +31,10 @@ public class Book {
     @Column(name = "isbn", nullable = false)
     private String isbn;
 
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private BookStatus status;
+
     private LocalDate createdDate;
 
     @Builder
@@ -39,6 +43,10 @@ public class Book {
         this.author = author;
         this.isbn = isbn;
         this.createdDate = createdDate;
+    }
+
+    public void changeStatus(BookStatus status) {
+        this.status = status;
     }
 
     @Override
@@ -62,5 +70,4 @@ public class Book {
         result = 31 * result + isbn.hashCode();
         return result;
     }
-
 }
