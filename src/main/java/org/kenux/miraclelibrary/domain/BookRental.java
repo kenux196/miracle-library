@@ -17,9 +17,6 @@ public class BookRental {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "rent_number", unique = true, updatable = false, nullable = false)
-    private String rentNumber;
-
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
@@ -38,12 +35,6 @@ public class BookRental {
         this.member = member;
         this.book = book;
         this.rentalStartDate = rentalStartDate;
-        generateRentNumber(rentalStartDate);
-    }
-
-    private void generateRentNumber(LocalDateTime rentalStartDate) {
-        rentNumber = "R-" + book.getId() + "-";
-        rentNumber += String.valueOf(rentalStartDate.toEpochSecond(ZoneOffset.UTC));
     }
 
     public LocalDate getRentalEndDate() {

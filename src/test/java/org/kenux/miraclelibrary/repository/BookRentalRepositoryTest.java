@@ -52,27 +52,7 @@ class BookRentalRepositoryTest {
     }
 
     @Test
-    @DisplayName("멤버가 책을 반납하면, 정보가 갱신되어야 한다.")
-    void test_bookReturn() throws Exception {
-        // given
-        Member member = getMember();
-        Book book = getBook();
-        LocalDateTime rentalDate = LocalDateTime.of(2021, 1, 1, 13, 00, 00);
-        BookRental bookRental = new BookRental(member, book, rentalDate);
-        bookRentalRepository.save(bookRental);
-
-        // when
-        LocalDateTime returnDate = LocalDateTime.of(2021, 1, 19, 11, 00, 00);
-        bookRental.setReturnDate(returnDate);
-        BookRental save = bookRentalRepository.save(bookRental);
-
-        // then
-        assertThat(save.getReturnDate()).isNotNull();
-        assertThat(save.getReturnDate()).isEqualTo(returnDate);
-    }
-
-    @Test
-    @DisplayName("대여 정보는 멤버로 조회할 수 있다.")
+    @DisplayName("멤버를 통한 대여 정보 검색")
     void test_findAllByMember() {
         // given
         Member member = getMember();
@@ -89,7 +69,7 @@ class BookRentalRepositoryTest {
     }
 
     @Test
-    @DisplayName("대여 정보는 책으로 검색할 수 있다.")
+    @DisplayName("책을 통한 대여 정보 검색")
     void test_findAllByBook() throws Exception {
         // given
         Member member = getMember();

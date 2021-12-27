@@ -26,7 +26,6 @@ class BookRentalTest {
         assertThat(bookRental.getBook()).isNotNull();
         assertThat(bookRental.getMember()).isNotNull();
         assertThat(bookRental.getRentalStartDate()).isNotNull();
-        assertThat(bookRental.getRentNumber()).isNotNull();
     }
 
     @Test
@@ -61,27 +60,6 @@ class BookRentalTest {
 
         // then
         assertThat(bookRental.getReturnDate()).isEqualTo(returnDate);
-    }
-
-    @Test
-    @DisplayName("책이 대여가 되면, 대여 번호를 생성한다.")
-    void test_rentalNumber() throws Exception {
-        // given
-        Book book = new Book("title", "author", "isbn", LocalDate.now());
-        ReflectionTestUtils.setField(book, "id", 1L);
-        LocalDateTime startDate = LocalDateTime.of(2021, 1, 10, 11, 00, 00);
-        BookRental bookRental = BookRental.builder()
-                .book(book)
-                .rentalStartDate(startDate)
-                .build();
-
-        // when
-        String rentNumber = bookRental.getRentNumber();
-
-        // then
-        String expectRentNumber = "R-" + book.getId() + "-" + startDate.toEpochSecond(ZoneOffset.UTC);
-        assertThat(rentNumber).isEqualTo(expectRentNumber);
-
     }
 
     @Test
