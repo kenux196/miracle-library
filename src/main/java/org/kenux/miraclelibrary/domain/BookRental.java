@@ -1,13 +1,10 @@
 package org.kenux.miraclelibrary.domain;
 
 import lombok.*;
-import org.kenux.miraclelibrary.domain.enums.BookStatus;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "book_rental")
@@ -23,33 +20,45 @@ public class BookRental {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "bookRental")
-    private List<Book> books = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "book_id")
+    private Book book;
 
-    private LocalDateTime rentalStartDate;
+    private LocalDateTime startDate;
+
+    private LocalDateTime endDate;
 
     @Setter
     private LocalDateTime returnDate;
 
     @Builder
-    public BookRental(Member member, List<Book> books, LocalDateTime rentalStartDate) {
+    public BookRental(Member member, Book book, LocalDateTime startDate) {
         this.member = member;
-        this.rentalStartDate = rentalStartDate;
-        addBooks(books);
+        this.book = book;
+        this.startDate = startDate;
+        this.endDate = startDate.plusWeeks(2);
     }
 
-    public void addBooks(List<Book> books) {
-        books.forEach(book -> {
-            book.changeStatus(BookStatus.RENTED);
-            book.changeBookRental(this);
-        });
-    }
-
-    public LocalDate getRentalEndDate() {
-        return rentalStartDate.plusWeeks(2).toLocalDate();
+    public LocalDate getEndDate() {
+        return endDate.toLocalDate();
     }
 
     public boolean isOverDue(LocalDate today) {
-        return today.isAfter(rentalStartDate.plusWeeks(2).toLocalDate());
+        return today.isAfter(getEndDate());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        BookRental that = (BookRental) o;
+
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 }

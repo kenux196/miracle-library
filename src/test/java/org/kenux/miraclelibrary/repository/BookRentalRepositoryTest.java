@@ -12,7 +12,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,23 +31,24 @@ class BookRentalRepositoryTest {
 
     @Test
     @DisplayName("책 대여 정보 저장")
-    void test_bookRental() throws Exception {
+    void test_saveBookRental() throws Exception {
         // given
         Member member = getMember();
-        List<Book> books = Collections.singletonList(getBook());
-        LocalDateTime rentalDate = LocalDateTime.of(2021, 1, 1, 13, 00, 00);
-        BookRental bookRental = new BookRental(member, books, rentalDate);
+        Book book = getBook();
+        LocalDateTime rentalDate = LocalDateTime.of(2021, 1, 1, 13, 0, 0);
+        BookRental bookRental = new BookRental(member, book, rentalDate);
 
         // when
         BookRental save = bookRentalRepository.save(bookRental);
 
         // then
         assertThat(save.getId()).isNotNull();
-        assertThat(save.getBooks()).isNotEmpty();
+        assertThat(save.getBook()).isNotNull();
+        assertThat(save.getBook().getId()).isEqualTo(book.getId());
         assertThat(save.getMember().getId()).isEqualTo(member.getId());
-        assertThat(save.getRentalStartDate()).isEqualTo(rentalDate);
+        assertThat(save.getStartDate()).isEqualTo(rentalDate);
         assertThat(save.getReturnDate()).isNull();
-        assertThat(save.getRentalEndDate()).isNotNull();
+        assertThat(save.getEndDate()).isNotNull();
     }
 
     @Test
@@ -56,9 +56,9 @@ class BookRentalRepositoryTest {
     void test_findAllByMember() {
         // given
         Member member = getMember();
-        List<Book> books = Collections.singletonList(getBook());
+        Book book = getBook();
         LocalDateTime rentalDate = LocalDateTime.of(2021, 1, 1, 13, 00, 00);
-        BookRental bookRental = new BookRental(member, books, rentalDate);
+        BookRental bookRental = new BookRental(member, book, rentalDate);
         bookRentalRepository.save(bookRental);
 
         // when
@@ -74,18 +74,16 @@ class BookRentalRepositoryTest {
         // given
         Member member = getMember();
         Book book = getBook();
-        bookRepository.save(book);
-        List<Book> books = Collections.singletonList(book);
-        LocalDateTime rentalDate = LocalDateTime.of(2021, 1, 1, 13, 00, 00);
+        LocalDateTime rentalDate = LocalDateTime.of(2021, 1, 1, 13, 0, 0);
         BookRental bookRental = BookRental.builder()
                 .member(member)
-                .books(books)
-                .rentalStartDate(rentalDate)
+                .book(book)
+                .startDate(rentalDate)
                 .build();
         bookRentalRepository.save(bookRental);
 
         // when
-        List<BookRental> bookRentals = bookRentalRepository.findAllByBook(books.get(0).getId());
+        List<BookRental> bookRentals = bookRentalRepository.findAllByBookId(book.getId());
 
         // then
         assertThat(bookRentals).isNotEmpty();

@@ -28,28 +28,31 @@ public class BookRentalService {
     private final BookRepository bookRepository;
     private final BookRentalRepository bookRentalRepository;
 
-    public BookRental rentBooks(RequestBookRental requestBookRental) {
+    public List<BookRental> rentBooks(RequestBookRental requestBookRental) {
         Optional<Member> member = memberRepository.findById(requestBookRental.getMemberId());
         if (member.isEmpty()) {
             throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
         }
 
-        List<Book> bookList = new ArrayList<>();
+        List<BookRental> bookRentals = new ArrayList<>();
         requestBookRental.getBookIds().forEach(id -> {
             Optional<Book> book = bookRepository.findById(id);
             if (book.isEmpty()) {
                 throw new CustomException(ErrorCode.BOOK_NOT_FOUND);
             }
             book.get().changeStatus(BookStatus.RENTED);
-            bookList.add(book.get());
+            bookRepository.save(book.get());
+
+            BookRental bookRental = BookRental.builder()
+                    .member(member.get())
+                    .book(book.get())
+                    .startDate(LocalDateTime.now())
+                    .build();
+            BookRental save = bookRentalRepository.save(bookRental);
+            bookRentals.add(save);
         });
 
-        BookRental bookRental = BookRental.builder()
-                .member(member.get())
-                .books(bookList)
-                .rentalStartDate(LocalDateTime.now())
-                .build();
-        return bookRentalRepository.save(bookRental);
+        return bookRentals;
     }
 
     public BookRental returnBook(RequestBookReturn requestBookReturn) {
@@ -58,7 +61,7 @@ public class BookRentalService {
             throw new CustomException(ErrorCode.BOOK_NOT_FOUND);
         }
 
-        List<BookRental> bookRentalList = bookRentalRepository.findAllByBook(book.get().getId());
+        List<BookRental> bookRentalList = bookRentalRepository.findAllByBookId(book.get().getId());
 
         List<BookRental> found = bookRentalList.stream()
                 .filter(bookRental -> bookRental.getReturnDate() == null)

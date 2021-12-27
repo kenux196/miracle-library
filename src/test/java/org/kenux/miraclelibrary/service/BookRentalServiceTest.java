@@ -56,24 +56,22 @@ class BookRentalServiceTest {
 
         BookRental bookRental = BookRental.builder()
                 .member(member)
-                .books(Collections.singletonList(book))
-                .rentalStartDate(LocalDateTime.of(2021, 12, 25, 13, 00, 00))
+                .book(book)
+                .startDate(LocalDateTime.of(2021, 12, 25, 13, 0, 0))
                 .build();
+        ReflectionTestUtils.setField(bookRental, "id", 1L);
 
-        given(memberRepository.findById(any())).willReturn(Optional.of(getMember()));
-        given(bookRepository.findById(any())).willReturn(Optional.of(getBook()));
+        given(memberRepository.findById(any())).willReturn(Optional.of(member));
+        given(bookRepository.findById(any())).willReturn(Optional.of(book));
         given(bookRentalRepository.save(any())).willReturn(bookRental);
 
         // when
         RequestBookRental requestBookRental = new RequestBookRental(member.getId(), Collections.singletonList(book.getId()));
-        BookRental saved = bookRentalService.rentBooks(requestBookRental);
+        List<BookRental> saved = bookRentalService.rentBooks(requestBookRental);
 
         // then
-        assertThat(saved.getBooks()).isNotEmpty();
-        assertThat(saved.getBooks()).contains(book);
-        assertThat(saved.getBooks().get(0).getStatus()).isEqualTo(BookStatus.RENTED);
-        assertThat(saved.getMember().getId()).isEqualTo(member.getId());
-        assertThat(saved.getRentalStartDate()).isEqualTo(bookRental.getRentalStartDate());
+        assertThat(saved).isNotEmpty();
+        assertThat(saved.get(0).getBook().getStatus()).isEqualTo(BookStatus.RENTED);
     }
 
     @Test
@@ -117,12 +115,12 @@ class BookRentalServiceTest {
         Book book = getBook();
         BookRental bookRental = BookRental.builder()
                 .member(getMember())
-                .books(Collections.singletonList(book))
-                .rentalStartDate(LocalDateTime.of(2021, 1, 1, 13, 00, 00))
+                .book(book)
+                .startDate(LocalDateTime.of(2021, 1, 1, 13, 0, 0))
                 .build();
         given(bookRepository.findById(any())).willReturn(Optional.of(book));
         given(bookRentalRepository.save(any())).willReturn(bookRental);
-        given(bookRentalRepository.findAllByBook(any())).willReturn(List.of(bookRental));
+        given(bookRentalRepository.findAllByBookId(any())).willReturn(List.of(bookRental));
 
         // when
         RequestBookReturn requestBookReturn = new RequestBookReturn(book.getId(), "title");

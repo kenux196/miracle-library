@@ -37,10 +37,6 @@ public class Book {
 
     private LocalDate createdDate;
 
-    @ManyToOne
-    @JoinColumn(name = "book_rental_id")
-    private BookRental bookRental;
-
     @Builder
     public Book(String title, String author, String isbn, LocalDate createdDate) {
         this.title = title;
@@ -53,12 +49,6 @@ public class Book {
         this.status = status;
     }
 
-    public void changeBookRental(BookRental bookRental) {
-        this.bookRental = bookRental;
-        if (!bookRental.getBooks().contains(this)) {
-            bookRental.getBooks().add(this);
-        }
-    }
 
     @Override
     public boolean equals(Object o) {
