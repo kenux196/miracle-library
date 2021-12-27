@@ -8,6 +8,7 @@ plugins {
 	id 'org.springframework.boot' version '2.6.1'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+	id 'jacoco'
 }
 
 group = 'org.kenux'
@@ -54,4 +55,17 @@ sourceSets {
 
 test {
 	useJUnitPlatform()
+}
+
+jacocoTestReport {
+	dependsOn test // tests are required to run before generating the report
+
+	afterEvaluate {
+		classDirectories.setFrom(files(classDirectories.files.collect {
+			fileTree(dir: it, exclude: [
+//					"com/myintroduce/web/dto/*",
+					"**/Q*.class"
+			])
+		}))
+	}
 }
