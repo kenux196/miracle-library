@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.kenux.miraclelibrary.domain.Book;
 import org.kenux.miraclelibrary.domain.BookRental;
 import org.kenux.miraclelibrary.domain.Member;
+import org.kenux.miraclelibrary.domain.enums.BookStatus;
 import org.kenux.miraclelibrary.exception.CustomException;
 import org.kenux.miraclelibrary.exception.ErrorCode;
 import org.kenux.miraclelibrary.repository.BookRentalRepository;
@@ -13,7 +14,6 @@ import org.kenux.miraclelibrary.rest.dto.RequestBookRental;
 import org.kenux.miraclelibrary.rest.dto.RequestBookReturn;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,7 @@ public class BookRentalService {
     private final BookRepository bookRepository;
     private final BookRentalRepository bookRentalRepository;
 
-    public BookRental rentalBook(RequestBookRental requestBookRental) {
+    public BookRental rentBooks(RequestBookRental requestBookRental) {
         Optional<Member> member = memberRepository.findById(requestBookRental.getMemberId());
         if (member.isEmpty()) {
             throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
@@ -40,6 +40,7 @@ public class BookRentalService {
             if (book.isEmpty()) {
                 throw new CustomException(ErrorCode.BOOK_NOT_FOUND);
             }
+            book.get().changeStatus(BookStatus.RENTED);
             bookList.add(book.get());
         });
 

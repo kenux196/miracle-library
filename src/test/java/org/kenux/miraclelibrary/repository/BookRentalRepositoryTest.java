@@ -79,9 +79,9 @@ class BookRentalRepositoryTest {
         LocalDateTime rentalDate = LocalDateTime.of(2021, 1, 1, 13, 00, 00);
         BookRental bookRental = BookRental.builder()
                 .member(member)
+                .books(books)
                 .rentalStartDate(rentalDate)
                 .build();
-        bookRental.addBook(book);
         bookRentalRepository.save(bookRental);
 
         // when

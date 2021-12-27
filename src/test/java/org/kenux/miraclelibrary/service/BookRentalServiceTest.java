@@ -6,6 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.kenux.miraclelibrary.domain.Book;
 import org.kenux.miraclelibrary.domain.BookRental;
 import org.kenux.miraclelibrary.domain.Member;
+import org.kenux.miraclelibrary.domain.enums.BookStatus;
 import org.kenux.miraclelibrary.domain.enums.MemberRole;
 import org.kenux.miraclelibrary.exception.CustomException;
 import org.kenux.miraclelibrary.exception.ErrorCode;
@@ -50,25 +51,28 @@ class BookRentalServiceTest {
     @DisplayName("멤버는 책을 대여한다.")
     void test_BookRentalService_rentalBook() throws Exception {
         // given
+        final Member member = getMember();
+        final Book book = getBook();
+
         BookRental bookRental = BookRental.builder()
-                .member(getMember())
-                .books(Collections.singletonList(getBook1()))
+                .member(member)
+                .books(Collections.singletonList(book))
                 .rentalStartDate(LocalDateTime.of(2021, 12, 25, 13, 00, 00))
                 .build();
 
-        when(memberRepository.findById(any())).thenReturn(Optional.of(getMember()));
-        when(bookRepository.findById(any())).thenReturn(Optional.of(getBook1()));
-        when(bookRentalRepository.save(any())).thenReturn(bookRental);
+        given(memberRepository.findById(any())).willReturn(Optional.of(getMember()));
+        given(bookRepository.findById(any())).willReturn(Optional.of(getBook()));
+        given(bookRentalRepository.save(any())).willReturn(bookRental);
 
         // when
-        Long memberId = 1L;
-        Long bookId = 1L;
-        RequestBookRental requestBookRental = new RequestBookRental(memberId, Collections.singletonList(bookId));
-        BookRental saved = bookRentalService.rentalBook(requestBookRental);
+        RequestBookRental requestBookRental = new RequestBookRental(member.getId(), Collections.singletonList(book.getId()));
+        BookRental saved = bookRentalService.rentBooks(requestBookRental);
 
         // then
         assertThat(saved.getBooks()).isNotEmpty();
-        assertThat(saved.getMember().getId()).isEqualTo(memberId);
+        assertThat(saved.getBooks()).contains(book);
+        assertThat(saved.getBooks().get(0).getStatus()).isEqualTo(BookStatus.RENTED);
+        assertThat(saved.getMember().getId()).isEqualTo(member.getId());
         assertThat(saved.getRentalStartDate()).isEqualTo(bookRental.getRentalStartDate());
     }
 
@@ -83,7 +87,7 @@ class BookRentalServiceTest {
         Long bookId = 1L;
         RequestBookRental requestBookRental = new RequestBookRental(memberId, Collections.singletonList(bookId));
 
-        assertThatThrownBy(() -> bookRentalService.rentalBook(requestBookRental))
+        assertThatThrownBy(() -> bookRentalService.rentBooks(requestBookRental))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.MEMBER_NOT_FOUND.getMessage());
     }
@@ -101,7 +105,7 @@ class BookRentalServiceTest {
         RequestBookRental requestBookRental = new RequestBookRental(memberId, Collections.singletonList(bookId));
 
         // then
-        assertThatThrownBy(() -> bookRentalService.rentalBook(requestBookRental))
+        assertThatThrownBy(() -> bookRentalService.rentBooks(requestBookRental))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.BOOK_NOT_FOUND.getMessage());
     }
@@ -110,7 +114,7 @@ class BookRentalServiceTest {
     @DisplayName("멤버는 책을 반납한다.")
     void test_bookReturn() throws Exception {
         // given
-        Book book = getBook1();
+        Book book = getBook();
         BookRental bookRental = BookRental.builder()
                 .member(getMember())
                 .books(Collections.singletonList(book))
@@ -134,8 +138,9 @@ class BookRentalServiceTest {
         return member;
     }
 
-    private Book getBook1() {
+    private Book getBook() {
         Book book = new Book("title", "author", "isbn", LocalDate.of(2020, 12, 20));
+        book.changeStatus(BookStatus.AVAILABLE);
         ReflectionTestUtils.setField(book, "id", 1L);
         return book;
     }

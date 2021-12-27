@@ -1,11 +1,11 @@
 package org.kenux.miraclelibrary.domain;
 
 import lombok.*;
+import org.kenux.miraclelibrary.domain.enums.BookStatus;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,16 +34,15 @@ public class BookRental {
     @Builder
     public BookRental(Member member, List<Book> books, LocalDateTime rentalStartDate) {
         this.member = member;
-        this.books = books;
         this.rentalStartDate = rentalStartDate;
+        addBooks(books);
     }
 
-    public void addBook(Book book) {
-        if (books == null) {
-            books = new ArrayList<>();
-        }
-        books.add(book);
-        book.changeBookRental(this);
+    public void addBooks(List<Book> books) {
+        books.forEach(book -> {
+            book.changeStatus(BookStatus.RENTED);
+            book.changeBookRental(this);
+        });
     }
 
     public LocalDate getRentalEndDate() {

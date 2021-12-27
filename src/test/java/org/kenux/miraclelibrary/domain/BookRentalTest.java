@@ -41,6 +41,7 @@ class BookRentalTest {
                     .author("author" + i)
                     .isbn("isbn" + i)
                     .build();
+            ReflectionTestUtils.setField(book, "id", (long) i);
             books.add(book);
         }
         Member member = Member.builder().build();
