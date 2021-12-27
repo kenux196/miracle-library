@@ -3,9 +3,11 @@ package org.kenux.miraclelibrary.rest.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.List;
+
 @AllArgsConstructor
 @Getter
 public class RequestBookRental {
     private Long memberId;
-    private Long bookId;
+    private List<Long> bookIds;
 }

@@ -7,6 +7,10 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -14,16 +18,40 @@ class BookRentalTest {
 
     @Test
     @DisplayName("도서 대출 정보에는 책, 멤버, 대출시작일, 대출번호가 포함된다.")
-    void test_bookRental_hasBook() throws Exception {
-        Book book = Book.builder().build();
+    void test_bookRental_Basic() throws Exception {
         Member member = Member.builder().build();
         BookRental bookRental = BookRental.builder()
-                .book(book)
+                .books(Collections.singletonList(new Book()))
                 .member(member)
                 .rentalStartDate(LocalDateTime.now())
                 .build();
 
-        assertThat(bookRental.getBook()).isNotNull();
+        assertThat(bookRental.getBooks()).isNotEmpty();
+        assertThat(bookRental.getMember()).isNotNull();
+        assertThat(bookRental.getRentalStartDate()).isNotNull();
+    }
+
+    @Test
+    @DisplayName("도서 대출 정보에는 책은 여러 권이 포함될 수 있다.")
+    void test_bookRental_hasBooks() throws Exception {
+        List<Book> books = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            Book book = Book.builder()
+                    .title("title" + i)
+                    .author("author" + i)
+                    .isbn("isbn" + i)
+                    .build();
+            books.add(book);
+        }
+        Member member = Member.builder().build();
+
+        BookRental bookRental = BookRental.builder()
+                .books(books)
+                .member(member)
+                .rentalStartDate(LocalDateTime.now())
+                .build();
+
+        assertThat(bookRental.getBooks()).isNotEmpty();
         assertThat(bookRental.getMember()).isNotNull();
         assertThat(bookRental.getRentalStartDate()).isNotNull();
     }
@@ -34,7 +62,7 @@ class BookRentalTest {
         // given
         LocalDateTime startDate = LocalDateTime.of(2021, 1, 1, 13, 00, 00);
         BookRental bookRental = BookRental.builder()
-                .book(new Book())
+                .books(Collections.singletonList(new Book()))
                 .rentalStartDate(startDate)
                 .build();
 
@@ -52,7 +80,7 @@ class BookRentalTest {
         LocalDateTime returnDate = LocalDateTime.of(2021, 1, 10, 11, 00, 00);
         BookRental bookRental = BookRental.builder()
                 .rentalStartDate(LocalDateTime.now())
-                .book(new Book())
+                .books(Collections.singletonList(new Book()))
                 .build();
 
         // when
@@ -69,7 +97,7 @@ class BookRentalTest {
         LocalDateTime rentalStartDate = LocalDateTime.of(2021, 1, 10, 11, 00, 00);
         BookRental bookRental = BookRental.builder()
                 .rentalStartDate(rentalStartDate)
-                .book(new Book())
+                .books(Collections.singletonList(new Book()))
                 .build();
 
         assertThat(bookRental.isOverDue(rentalStartDate.plusWeeks(1).toLocalDate())).isFalse();

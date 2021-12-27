@@ -21,12 +21,14 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -50,7 +52,7 @@ class BookRentalServiceTest {
         // given
         BookRental bookRental = BookRental.builder()
                 .member(getMember())
-                .book(getBook1())
+                .books(Collections.singletonList(getBook1()))
                 .rentalStartDate(LocalDateTime.of(2021, 12, 25, 13, 00, 00))
                 .build();
 
@@ -61,11 +63,11 @@ class BookRentalServiceTest {
         // when
         Long memberId = 1L;
         Long bookId = 1L;
-        RequestBookRental requestBookRental = new RequestBookRental(memberId, bookId);
+        RequestBookRental requestBookRental = new RequestBookRental(memberId, Collections.singletonList(bookId));
         BookRental saved = bookRentalService.rentalBook(requestBookRental);
 
         // then
-        assertThat(saved.getBook().getId()).isEqualTo(bookId);
+        assertThat(saved.getBooks()).isNotEmpty();
         assertThat(saved.getMember().getId()).isEqualTo(memberId);
         assertThat(saved.getRentalStartDate()).isEqualTo(bookRental.getRentalStartDate());
     }
@@ -79,7 +81,7 @@ class BookRentalServiceTest {
         // when
         Long memberId = 1L;
         Long bookId = 1L;
-        RequestBookRental requestBookRental = new RequestBookRental(memberId, bookId);
+        RequestBookRental requestBookRental = new RequestBookRental(memberId, Collections.singletonList(bookId));
 
         assertThatThrownBy(() -> bookRentalService.rentalBook(requestBookRental))
                 .isInstanceOf(CustomException.class)
@@ -96,7 +98,7 @@ class BookRentalServiceTest {
         // when
         Long memberId = 1L;
         Long bookId = 1L;
-        RequestBookRental requestBookRental = new RequestBookRental(memberId, bookId);
+        RequestBookRental requestBookRental = new RequestBookRental(memberId, Collections.singletonList(bookId));
 
         // then
         assertThatThrownBy(() -> bookRentalService.rentalBook(requestBookRental))
@@ -108,16 +110,18 @@ class BookRentalServiceTest {
     @DisplayName("멤버는 책을 반납한다.")
     void test_bookReturn() throws Exception {
         // given
+        Book book = getBook1();
         BookRental bookRental = BookRental.builder()
                 .member(getMember())
-                .book(getBook1())
+                .books(Collections.singletonList(book))
                 .rentalStartDate(LocalDateTime.of(2021, 1, 1, 13, 00, 00))
                 .build();
-        when(bookRentalRepository.save(any())).thenReturn(bookRental);
-        when(bookRentalRepository.findAllByBookId(any())).thenReturn(List.of(bookRental));
+        given(bookRepository.findById(any())).willReturn(Optional.of(book));
+        given(bookRentalRepository.save(any())).willReturn(bookRental);
+        given(bookRentalRepository.findAllByBook(any())).willReturn(List.of(bookRental));
 
         // when
-        RequestBookReturn requestBookReturn = new RequestBookReturn(1L, "title");
+        RequestBookReturn requestBookReturn = new RequestBookReturn(book.getId(), "title");
         BookRental result = bookRentalService.returnBook(requestBookReturn);
 
         // then

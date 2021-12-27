@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,17 +35,16 @@ class BookRentalRepositoryTest {
     void test_bookRental() throws Exception {
         // given
         Member member = getMember();
-        Book book = getBook();
+        List<Book> books = Collections.singletonList(getBook());
         LocalDateTime rentalDate = LocalDateTime.of(2021, 1, 1, 13, 00, 00);
+        BookRental bookRental = new BookRental(member, books, rentalDate);
 
         // when
-        BookRental bookRental = new BookRental(member, book, rentalDate);
         BookRental save = bookRentalRepository.save(bookRental);
 
         // then
         assertThat(save.getId()).isNotNull();
-        assertThat(save.getBook()).isEqualTo(book);
-        assertThat(save.getBook().getId()).isEqualTo(book.getId());
+        assertThat(save.getBooks()).isNotEmpty();
         assertThat(save.getMember().getId()).isEqualTo(member.getId());
         assertThat(save.getRentalStartDate()).isEqualTo(rentalDate);
         assertThat(save.getReturnDate()).isNull();
@@ -56,9 +56,9 @@ class BookRentalRepositoryTest {
     void test_findAllByMember() {
         // given
         Member member = getMember();
-        Book book = getBook();
+        List<Book> books = Collections.singletonList(getBook());
         LocalDateTime rentalDate = LocalDateTime.of(2021, 1, 1, 13, 00, 00);
-        BookRental bookRental = new BookRental(member, book, rentalDate);
+        BookRental bookRental = new BookRental(member, books, rentalDate);
         bookRentalRepository.save(bookRental);
 
         // when
@@ -74,44 +74,22 @@ class BookRentalRepositoryTest {
         // given
         Member member = getMember();
         Book book = getBook();
+        bookRepository.save(book);
+        List<Book> books = Collections.singletonList(book);
         LocalDateTime rentalDate = LocalDateTime.of(2021, 1, 1, 13, 00, 00);
-        BookRental bookRental = new BookRental(member, book, rentalDate);
+        BookRental bookRental = BookRental.builder()
+                .member(member)
+                .rentalStartDate(rentalDate)
+                .build();
+        bookRental.addBook(book);
         bookRentalRepository.save(bookRental);
 
         // when
-        List<BookRental> bookRentals = bookRentalRepository.findAllByBookId(book.getId());
+        List<BookRental> bookRentals = bookRentalRepository.findAllByBook(books.get(0).getId());
 
         // then
         assertThat(bookRentals).isNotEmpty();
     }
-
-    @Test
-    @DisplayName("멤버는 여러 권의 책을 대여할 수 있다.")
-    void test_rent_severalBooks() throws Exception {
-        // given
-        for (int i = 0; i < 3; i++) {
-            Book book = Book.builder()
-                    .title("title" + i)
-                    .author("author" + i)
-                    .isbn("isbn" + i)
-                    .build();
-            bookRepository.save(book);
-        }
-        List<Book> bookList = bookRepository.findAll();
-        Member member = getMember();
-        bookList.forEach(book -> {
-            LocalDateTime rentalDate = LocalDateTime.of(2021, 1, 1, 13, 00, 00);
-            BookRental bookRental = new BookRental(member, book, rentalDate);
-            bookRentalRepository.save(bookRental);
-        });
-
-        // when
-        List<BookRental> rentalBooks = bookRentalRepository.findAllByMemberId(member.getId());
-
-        // then
-        assertThat(rentalBooks).hasSize(3);
-    }
-
 
     private Member getMember() {
         Member member = Member.builder()

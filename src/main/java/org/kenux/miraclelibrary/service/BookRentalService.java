@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -33,22 +34,30 @@ public class BookRentalService {
             throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
         }
 
-        Optional<Book> book = bookRepository.findById(requestBookRental.getBookId());
-        if (book.isEmpty()) {
-            throw new CustomException(ErrorCode.BOOK_NOT_FOUND);
-        }
+        List<Book> bookList = new ArrayList<>();
+        requestBookRental.getBookIds().forEach(id -> {
+            Optional<Book> book = bookRepository.findById(id);
+            if (book.isEmpty()) {
+                throw new CustomException(ErrorCode.BOOK_NOT_FOUND);
+            }
+            bookList.add(book.get());
+        });
 
         BookRental bookRental = BookRental.builder()
                 .member(member.get())
-                .book(book.get())
+                .books(bookList)
                 .rentalStartDate(LocalDateTime.now())
                 .build();
         return bookRentalRepository.save(bookRental);
     }
 
     public BookRental returnBook(RequestBookReturn requestBookReturn) {
-        List<BookRental> bookRentalList =
-                bookRentalRepository.findAllByBookId(requestBookReturn.getBookId());
+        final Optional<Book> book = bookRepository.findById(requestBookReturn.getBookId());
+        if (book.isEmpty()) {
+            throw new CustomException(ErrorCode.BOOK_NOT_FOUND);
+        }
+
+        List<BookRental> bookRentalList = bookRentalRepository.findAllByBook(book.get().getId());
 
         List<BookRental> found = bookRentalList.stream()
                 .filter(bookRental -> bookRental.getReturnDate() == null)

@@ -6,6 +6,8 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "book_rental")
@@ -21,9 +23,8 @@ public class BookRental {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToOne
-    @JoinColumn(name = "book_id")
-    private Book book;
+    @OneToMany(mappedBy = "bookRental")
+    private List<Book> books = new ArrayList<>();
 
     private LocalDateTime rentalStartDate;
 
@@ -31,10 +32,18 @@ public class BookRental {
     private LocalDateTime returnDate;
 
     @Builder
-    public BookRental(Member member, Book book, LocalDateTime rentalStartDate) {
+    public BookRental(Member member, List<Book> books, LocalDateTime rentalStartDate) {
         this.member = member;
-        this.book = book;
+        this.books = books;
         this.rentalStartDate = rentalStartDate;
+    }
+
+    public void addBook(Book book) {
+        if (books == null) {
+            books = new ArrayList<>();
+        }
+        books.add(book);
+        book.changeBookRental(this);
     }
 
     public LocalDate getRentalEndDate() {
