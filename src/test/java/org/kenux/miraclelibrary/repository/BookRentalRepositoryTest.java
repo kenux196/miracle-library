@@ -99,7 +99,7 @@ class BookRentalRepositoryTest {
         bookRentalRepository.save(bookRental);
 
         // when
-        List<BookRental> bookRentals = bookRentalRepository.findAllByBookId(1L);
+        List<BookRental> bookRentals = bookRentalRepository.findAllByBookId(book.getId());
 
         // then
         assertThat(bookRentals).isNotEmpty();
