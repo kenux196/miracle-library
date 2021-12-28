@@ -12,7 +12,7 @@ class BookRentInfoTest {
 
     @Test
     @DisplayName("도서 대출 정보에는 책, 멤버, 대출시작일 포함된다.")
-    void test_bookRental_Basic() throws Exception {
+    void test_create_bookRentInfo() throws Exception {
         Member member = Member.builder().build();
         BookRentInfo bookRentInfo = BookRentInfo.builder()
                 .book(new Book())
@@ -27,9 +27,9 @@ class BookRentInfoTest {
 
     @Test
     @DisplayName("대출 시작 날짜를 기준으로 반납일이 계산되어야 한다.")
-    void test_bookRental_getRentalEndDate() throws Exception {
+    void test_calculate_rentEndDate() throws Exception {
         // given
-        LocalDateTime startDate = LocalDateTime.of(2021, 1, 1, 13, 00, 00);
+        LocalDateTime startDate = LocalDateTime.of(2021, 1, 1, 13, 0, 0);
         BookRentInfo bookRentInfo = BookRentInfo.builder()
                 .book(new Book())
                 .startDate(startDate)
@@ -44,9 +44,9 @@ class BookRentInfoTest {
 
     @Test
     @DisplayName("도서 대출 정보에는 책이 반납된 날짜가 있어야 한다.")
-    void test_bookRental_getReturnDate() throws Exception {
+    void test_setReturnDate() throws Exception {
         // given
-        LocalDateTime returnDate = LocalDateTime.of(2021, 1, 10, 11, 00, 00);
+        LocalDateTime returnDate = LocalDateTime.of(2021, 1, 10, 11, 0, 0);
         BookRentInfo bookRentInfo = BookRentInfo.builder()
                 .startDate(LocalDateTime.now())
                 .book(new Book())
@@ -61,9 +61,9 @@ class BookRentInfoTest {
 
     @Test
     @DisplayName("도서 대출 정보를 통해 연체 상태를 알 수 있다.")
-    void test_bookRental_isOverDue() {
+    void test_isOverDue() {
         // given
-        LocalDateTime rentalStartDate = LocalDateTime.of(2021, 1, 10, 11, 00, 00);
+        LocalDateTime rentalStartDate = LocalDateTime.of(2021, 1, 10, 11, 0, 0);
         BookRentInfo bookRentInfo = BookRentInfo.builder()
                 .startDate(rentalStartDate)
                 .book(new Book())

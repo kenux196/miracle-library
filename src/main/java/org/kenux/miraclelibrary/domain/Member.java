@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.kenux.miraclelibrary.domain.enums.MemberRole;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "member")
@@ -31,6 +32,10 @@ public class Member {
     @Column(name = "member_role", nullable = false)
     @Enumerated(EnumType.STRING)
     private MemberRole memberRole;
+
+    private LocalDateTime createdDate;
+
+    private LocalDateTime updatedDate;
 
     @Builder
     public Member(String name, String email, String password, MemberRole memberRole) {
