@@ -113,6 +113,7 @@ class BookRentalServiceTest {
     void test_bookReturn() throws Exception {
         // given
         Book book = getBook();
+        book.changeStatus(BookStatus.RENTED);
         BookRental bookRental = BookRental.builder()
                 .member(getMember())
                 .book(book)
@@ -128,6 +129,7 @@ class BookRentalServiceTest {
 
         // then
         assertThat(result.getReturnDate()).isNotNull();
+        assertThat(result.getBook().getStatus()).isEqualTo(BookStatus.AVAILABLE);
     }
 
     private Member getMember() {

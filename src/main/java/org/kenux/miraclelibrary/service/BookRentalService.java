@@ -77,6 +77,7 @@ public class BookRentalService {
 
         BookRental bookRental = found.get(0);
         bookRental.setReturnDate(LocalDateTime.now());
+        book.get().changeStatus(BookStatus.AVAILABLE);
         return bookRentalRepository.save(bookRental);
     }
 }
