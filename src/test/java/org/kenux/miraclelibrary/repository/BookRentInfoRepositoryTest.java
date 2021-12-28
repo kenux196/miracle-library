@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class BookRentInfoRepositoryTest {
 
     @Autowired
-    BookRentalRepository bookRentalRepository;
+    BookRentInfoRepository bookRentInfoRepository;
 
     @Autowired
     MemberRepository memberRepository;
@@ -39,7 +39,7 @@ class BookRentInfoRepositoryTest {
         BookRentInfo bookRentInfo = new BookRentInfo(member, book, rentalDate);
 
         // when
-        BookRentInfo save = bookRentalRepository.save(bookRentInfo);
+        BookRentInfo save = bookRentInfoRepository.save(bookRentInfo);
 
         // then
         assertThat(save.getId()).isNotNull();
@@ -59,10 +59,10 @@ class BookRentInfoRepositoryTest {
         Book book = getBook();
         LocalDateTime rentalDate = LocalDateTime.of(2021, 1, 1, 13, 00, 00);
         BookRentInfo bookRentInfo = new BookRentInfo(member, book, rentalDate);
-        bookRentalRepository.save(bookRentInfo);
+        bookRentInfoRepository.save(bookRentInfo);
 
         // when
-        List<BookRentInfo> bookRentInfos = bookRentalRepository.findAllByMemberId(member.getId());
+        List<BookRentInfo> bookRentInfos = bookRentInfoRepository.findAllByMemberId(member.getId());
 
         // then
         assertThat(bookRentInfos).isNotEmpty();
@@ -80,10 +80,10 @@ class BookRentInfoRepositoryTest {
                 .book(book)
                 .startDate(rentalDate)
                 .build();
-        bookRentalRepository.save(bookRentInfo);
+        bookRentInfoRepository.save(bookRentInfo);
 
         // when
-        List<BookRentInfo> bookRentInfos = bookRentalRepository.findAllByBookId(book.getId());
+        List<BookRentInfo> bookRentInfos = bookRentInfoRepository.findAllByBookId(book.getId());
 
         // then
         assertThat(bookRentInfos).isNotEmpty();

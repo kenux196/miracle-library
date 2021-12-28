@@ -10,7 +10,7 @@ import org.kenux.miraclelibrary.domain.enums.BookStatus;
 import org.kenux.miraclelibrary.domain.enums.MemberRole;
 import org.kenux.miraclelibrary.exception.CustomException;
 import org.kenux.miraclelibrary.exception.ErrorCode;
-import org.kenux.miraclelibrary.repository.BookRentalRepository;
+import org.kenux.miraclelibrary.repository.BookRentInfoRepository;
 import org.kenux.miraclelibrary.repository.BookRepository;
 import org.kenux.miraclelibrary.repository.MemberRepository;
 import org.kenux.miraclelibrary.rest.dto.RequestBookRental;
@@ -42,7 +42,7 @@ class BookRentInfoServiceTest {
     BookRepository bookRepository;
 
     @Mock
-    BookRentalRepository bookRentalRepository;
+    BookRentInfoRepository bookRentInfoRepository;
 
     @InjectMocks
     BookRentalService bookRentalService;
@@ -63,7 +63,7 @@ class BookRentInfoServiceTest {
 
         given(memberRepository.findById(any())).willReturn(Optional.of(member));
         given(bookRepository.findById(any())).willReturn(Optional.of(book));
-        given(bookRentalRepository.save(any())).willReturn(bookRentInfo);
+        given(bookRentInfoRepository.save(any())).willReturn(bookRentInfo);
 
         // when
         RequestBookRental requestBookRental = new RequestBookRental(member.getId(), Collections.singletonList(book.getId()));
@@ -120,8 +120,8 @@ class BookRentInfoServiceTest {
                 .startDate(LocalDateTime.of(2021, 1, 1, 13, 0, 0))
                 .build();
         given(bookRepository.findById(any())).willReturn(Optional.of(book));
-        given(bookRentalRepository.save(any())).willReturn(bookRentInfo);
-        given(bookRentalRepository.findAllByBookId(any())).willReturn(List.of(bookRentInfo));
+        given(bookRentInfoRepository.save(any())).willReturn(bookRentInfo);
+        given(bookRentInfoRepository.findAllByBookId(any())).willReturn(List.of(bookRentInfo));
 
         // when
         RequestBookReturn requestBookReturn = new RequestBookReturn(book.getId(), "title");

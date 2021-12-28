@@ -7,7 +7,7 @@ import org.kenux.miraclelibrary.domain.Member;
 import org.kenux.miraclelibrary.domain.enums.BookStatus;
 import org.kenux.miraclelibrary.exception.CustomException;
 import org.kenux.miraclelibrary.exception.ErrorCode;
-import org.kenux.miraclelibrary.repository.BookRentalRepository;
+import org.kenux.miraclelibrary.repository.BookRentInfoRepository;
 import org.kenux.miraclelibrary.repository.BookRepository;
 import org.kenux.miraclelibrary.repository.MemberRepository;
 import org.kenux.miraclelibrary.rest.dto.RequestBookRental;
@@ -26,7 +26,7 @@ public class BookRentalService {
 
     private final MemberRepository memberRepository;
     private final BookRepository bookRepository;
-    private final BookRentalRepository bookRentalRepository;
+    private final BookRentInfoRepository bookRentInfoRepository;
 
     public List<BookRentInfo> rentBooks(RequestBookRental requestBookRental) {
         Optional<Member> member = memberRepository.findById(requestBookRental.getMemberId());
@@ -48,7 +48,7 @@ public class BookRentalService {
                     .book(book.get())
                     .startDate(LocalDateTime.now())
                     .build();
-            BookRentInfo save = bookRentalRepository.save(bookRentInfo);
+            BookRentInfo save = bookRentInfoRepository.save(bookRentInfo);
             bookRentInfos.add(save);
         });
 
@@ -61,7 +61,7 @@ public class BookRentalService {
             throw new CustomException(ErrorCode.BOOK_NOT_FOUND);
         }
 
-        List<BookRentInfo> bookRentInfoList = bookRentalRepository.findAllByBookId(book.get().getId());
+        List<BookRentInfo> bookRentInfoList = bookRentInfoRepository.findAllByBookId(book.get().getId());
 
         List<BookRentInfo> found = bookRentInfoList.stream()
                 .filter(bookRental -> bookRental.getReturnDate() == null)
@@ -78,6 +78,6 @@ public class BookRentalService {
         BookRentInfo bookRentInfo = found.get(0);
         bookRentInfo.setReturnDate(LocalDateTime.now());
         book.get().changeStatus(BookStatus.AVAILABLE);
-        return bookRentalRepository.save(bookRentInfo);
+        return bookRentInfoRepository.save(bookRentInfo);
     }
 }

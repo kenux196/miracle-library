@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface BookRentalRepository extends JpaRepository<BookRentInfo, Long> {
+public interface BookRentInfoRepository extends JpaRepository<BookRentInfo, Long> {
 
     List<BookRentInfo> findAllByMemberId(Long memberId);
 
