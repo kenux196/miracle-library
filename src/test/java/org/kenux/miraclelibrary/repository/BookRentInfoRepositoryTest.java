@@ -4,7 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.kenux.miraclelibrary.config.JpaTestConfig;
 import org.kenux.miraclelibrary.domain.Book;
-import org.kenux.miraclelibrary.domain.BookRental;
+import org.kenux.miraclelibrary.domain.BookRentInfo;
 import org.kenux.miraclelibrary.domain.Member;
 import org.kenux.miraclelibrary.domain.enums.MemberRole;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @Import(JpaTestConfig.class)
-class BookRentalRepositoryTest {
+class BookRentInfoRepositoryTest {
 
     @Autowired
     BookRentalRepository bookRentalRepository;
@@ -36,10 +36,10 @@ class BookRentalRepositoryTest {
         Member member = getMember();
         Book book = getBook();
         LocalDateTime rentalDate = LocalDateTime.of(2021, 1, 1, 13, 0, 0);
-        BookRental bookRental = new BookRental(member, book, rentalDate);
+        BookRentInfo bookRentInfo = new BookRentInfo(member, book, rentalDate);
 
         // when
-        BookRental save = bookRentalRepository.save(bookRental);
+        BookRentInfo save = bookRentalRepository.save(bookRentInfo);
 
         // then
         assertThat(save.getId()).isNotNull();
@@ -58,14 +58,14 @@ class BookRentalRepositoryTest {
         Member member = getMember();
         Book book = getBook();
         LocalDateTime rentalDate = LocalDateTime.of(2021, 1, 1, 13, 00, 00);
-        BookRental bookRental = new BookRental(member, book, rentalDate);
-        bookRentalRepository.save(bookRental);
+        BookRentInfo bookRentInfo = new BookRentInfo(member, book, rentalDate);
+        bookRentalRepository.save(bookRentInfo);
 
         // when
-        List<BookRental> bookRentals = bookRentalRepository.findAllByMemberId(member.getId());
+        List<BookRentInfo> bookRentInfos = bookRentalRepository.findAllByMemberId(member.getId());
 
         // then
-        assertThat(bookRentals).isNotEmpty();
+        assertThat(bookRentInfos).isNotEmpty();
     }
 
     @Test
@@ -75,18 +75,18 @@ class BookRentalRepositoryTest {
         Member member = getMember();
         Book book = getBook();
         LocalDateTime rentalDate = LocalDateTime.of(2021, 1, 1, 13, 0, 0);
-        BookRental bookRental = BookRental.builder()
+        BookRentInfo bookRentInfo = BookRentInfo.builder()
                 .member(member)
                 .book(book)
                 .startDate(rentalDate)
                 .build();
-        bookRentalRepository.save(bookRental);
+        bookRentalRepository.save(bookRentInfo);
 
         // when
-        List<BookRental> bookRentals = bookRentalRepository.findAllByBookId(book.getId());
+        List<BookRentInfo> bookRentInfos = bookRentalRepository.findAllByBookId(book.getId());
 
         // then
-        assertThat(bookRentals).isNotEmpty();
+        assertThat(bookRentInfos).isNotEmpty();
     }
 
     private Member getMember() {

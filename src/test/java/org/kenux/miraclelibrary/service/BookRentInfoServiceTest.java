@@ -4,7 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kenux.miraclelibrary.domain.Book;
-import org.kenux.miraclelibrary.domain.BookRental;
+import org.kenux.miraclelibrary.domain.BookRentInfo;
 import org.kenux.miraclelibrary.domain.Member;
 import org.kenux.miraclelibrary.domain.enums.BookStatus;
 import org.kenux.miraclelibrary.domain.enums.MemberRole;
@@ -33,7 +33,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class BookRentalServiceTest {
+class BookRentInfoServiceTest {
 
     @Mock
     MemberRepository memberRepository;
@@ -54,20 +54,20 @@ class BookRentalServiceTest {
         final Member member = getMember();
         final Book book = getBook();
 
-        BookRental bookRental = BookRental.builder()
+        BookRentInfo bookRentInfo = BookRentInfo.builder()
                 .member(member)
                 .book(book)
                 .startDate(LocalDateTime.of(2021, 12, 25, 13, 0, 0))
                 .build();
-        ReflectionTestUtils.setField(bookRental, "id", 1L);
+        ReflectionTestUtils.setField(bookRentInfo, "id", 1L);
 
         given(memberRepository.findById(any())).willReturn(Optional.of(member));
         given(bookRepository.findById(any())).willReturn(Optional.of(book));
-        given(bookRentalRepository.save(any())).willReturn(bookRental);
+        given(bookRentalRepository.save(any())).willReturn(bookRentInfo);
 
         // when
         RequestBookRental requestBookRental = new RequestBookRental(member.getId(), Collections.singletonList(book.getId()));
-        List<BookRental> saved = bookRentalService.rentBooks(requestBookRental);
+        List<BookRentInfo> saved = bookRentalService.rentBooks(requestBookRental);
 
         // then
         assertThat(saved).isNotEmpty();
@@ -114,18 +114,18 @@ class BookRentalServiceTest {
         // given
         Book book = getBook();
         book.changeStatus(BookStatus.RENTED);
-        BookRental bookRental = BookRental.builder()
+        BookRentInfo bookRentInfo = BookRentInfo.builder()
                 .member(getMember())
                 .book(book)
                 .startDate(LocalDateTime.of(2021, 1, 1, 13, 0, 0))
                 .build();
         given(bookRepository.findById(any())).willReturn(Optional.of(book));
-        given(bookRentalRepository.save(any())).willReturn(bookRental);
-        given(bookRentalRepository.findAllByBookId(any())).willReturn(List.of(bookRental));
+        given(bookRentalRepository.save(any())).willReturn(bookRentInfo);
+        given(bookRentalRepository.findAllByBookId(any())).willReturn(List.of(bookRentInfo));
 
         // when
         RequestBookReturn requestBookReturn = new RequestBookReturn(book.getId(), "title");
-        BookRental result = bookRentalService.returnBook(requestBookReturn);
+        BookRentInfo result = bookRentalService.returnBook(requestBookReturn);
 
         // then
         assertThat(result.getReturnDate()).isNotNull();

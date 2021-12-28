@@ -5,25 +5,24 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class BookRentalTest {
+class BookRentInfoTest {
 
     @Test
     @DisplayName("도서 대출 정보에는 책, 멤버, 대출시작일 포함된다.")
     void test_bookRental_Basic() throws Exception {
         Member member = Member.builder().build();
-        BookRental bookRental = BookRental.builder()
+        BookRentInfo bookRentInfo = BookRentInfo.builder()
                 .book(new Book())
                 .member(member)
                 .startDate(LocalDateTime.now())
                 .build();
 
-        assertThat(bookRental.getBook()).isNotNull();
-        assertThat(bookRental.getMember()).isNotNull();
-        assertThat(bookRental.getStartDate()).isNotNull();
+        assertThat(bookRentInfo.getBook()).isNotNull();
+        assertThat(bookRentInfo.getMember()).isNotNull();
+        assertThat(bookRentInfo.getStartDate()).isNotNull();
     }
 
     @Test
@@ -31,13 +30,13 @@ class BookRentalTest {
     void test_bookRental_getRentalEndDate() throws Exception {
         // given
         LocalDateTime startDate = LocalDateTime.of(2021, 1, 1, 13, 00, 00);
-        BookRental bookRental = BookRental.builder()
+        BookRentInfo bookRentInfo = BookRentInfo.builder()
                 .book(new Book())
                 .startDate(startDate)
                 .build();
 
         // when
-        LocalDate returnDate = bookRental.getEndDate();
+        LocalDate returnDate = bookRentInfo.getEndDate();
 
         // then
         assertThat(returnDate).isEqualTo(startDate.plusWeeks(2).toLocalDate());
@@ -48,16 +47,16 @@ class BookRentalTest {
     void test_bookRental_getReturnDate() throws Exception {
         // given
         LocalDateTime returnDate = LocalDateTime.of(2021, 1, 10, 11, 00, 00);
-        BookRental bookRental = BookRental.builder()
+        BookRentInfo bookRentInfo = BookRentInfo.builder()
                 .startDate(LocalDateTime.now())
                 .book(new Book())
                 .build();
 
         // when
-        bookRental.setReturnDate(returnDate);
+        bookRentInfo.setReturnDate(returnDate);
 
         // then
-        assertThat(bookRental.getReturnDate()).isEqualTo(returnDate);
+        assertThat(bookRentInfo.getReturnDate()).isEqualTo(returnDate);
     }
 
     @Test
@@ -65,14 +64,14 @@ class BookRentalTest {
     void test_bookRental_isOverDue() {
         // given
         LocalDateTime rentalStartDate = LocalDateTime.of(2021, 1, 10, 11, 00, 00);
-        BookRental bookRental = BookRental.builder()
+        BookRentInfo bookRentInfo = BookRentInfo.builder()
                 .startDate(rentalStartDate)
                 .book(new Book())
                 .build();
 
-        assertThat(bookRental.isOverDue(rentalStartDate.plusWeeks(1).toLocalDate())).isFalse();
-        assertThat(bookRental.isOverDue(rentalStartDate.plusWeeks(2).toLocalDate())).isFalse();
-        assertThat(bookRental.isOverDue(rentalStartDate.plusWeeks(3).toLocalDate())).isTrue();
+        assertThat(bookRentInfo.isOverDue(rentalStartDate.plusWeeks(1).toLocalDate())).isFalse();
+        assertThat(bookRentInfo.isOverDue(rentalStartDate.plusWeeks(2).toLocalDate())).isFalse();
+        assertThat(bookRentInfo.isOverDue(rentalStartDate.plusWeeks(3).toLocalDate())).isTrue();
     }
 
 }

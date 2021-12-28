@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Table(name = "book_rental")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class BookRental {
+public class BookRentInfo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +32,7 @@ public class BookRental {
     private LocalDateTime returnDate;
 
     @Builder
-    public BookRental(Member member, Book book, LocalDateTime startDate) {
+    public BookRentInfo(Member member, Book book, LocalDateTime startDate) {
         this.member = member;
         this.book = book;
         this.startDate = startDate;
@@ -52,7 +52,7 @@ public class BookRental {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        BookRental that = (BookRental) o;
+        BookRentInfo that = (BookRentInfo) o;
 
         return id.equals(that.id);
     }

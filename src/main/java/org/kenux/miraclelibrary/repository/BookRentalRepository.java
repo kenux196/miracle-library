@@ -1,13 +1,13 @@
 package org.kenux.miraclelibrary.repository;
 
-import org.kenux.miraclelibrary.domain.BookRental;
+import org.kenux.miraclelibrary.domain.BookRentInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface BookRentalRepository extends JpaRepository<BookRental, Long> {
+public interface BookRentalRepository extends JpaRepository<BookRentInfo, Long> {
 
-    List<BookRental> findAllByMemberId(Long memberId);
+    List<BookRentInfo> findAllByMemberId(Long memberId);
 
-    List<BookRental> findAllByBookId(Long bookId);
+    List<BookRentInfo> findAllByBookId(Long bookId);
 }
