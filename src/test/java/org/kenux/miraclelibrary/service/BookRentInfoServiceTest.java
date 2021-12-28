@@ -45,7 +45,7 @@ class BookRentInfoServiceTest {
     BookRentInfoRepository bookRentInfoRepository;
 
     @InjectMocks
-    BookRentalService bookRentalService;
+    BookRentInfoService bookRentInfoService;
 
     @Test
     @DisplayName("멤버는 책을 대여한다.")
@@ -67,7 +67,7 @@ class BookRentInfoServiceTest {
 
         // when
         RequestBookRental requestBookRental = new RequestBookRental(member.getId(), Collections.singletonList(book.getId()));
-        List<BookRentInfo> saved = bookRentalService.rentBooks(requestBookRental);
+        List<BookRentInfo> saved = bookRentInfoService.rentBooks(requestBookRental);
 
         // then
         assertThat(saved).isNotEmpty();
@@ -85,7 +85,7 @@ class BookRentInfoServiceTest {
         Long bookId = 1L;
         RequestBookRental requestBookRental = new RequestBookRental(memberId, Collections.singletonList(bookId));
 
-        assertThatThrownBy(() -> bookRentalService.rentBooks(requestBookRental))
+        assertThatThrownBy(() -> bookRentInfoService.rentBooks(requestBookRental))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.MEMBER_NOT_FOUND.getMessage());
     }
@@ -103,7 +103,7 @@ class BookRentInfoServiceTest {
         RequestBookRental requestBookRental = new RequestBookRental(memberId, Collections.singletonList(bookId));
 
         // then
-        assertThatThrownBy(() -> bookRentalService.rentBooks(requestBookRental))
+        assertThatThrownBy(() -> bookRentInfoService.rentBooks(requestBookRental))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.BOOK_NOT_FOUND.getMessage());
     }
@@ -125,7 +125,7 @@ class BookRentInfoServiceTest {
 
         // when
         RequestBookReturn requestBookReturn = new RequestBookReturn(book.getId(), "title");
-        BookRentInfo result = bookRentalService.returnBook(requestBookReturn);
+        BookRentInfo result = bookRentInfoService.returnBook(requestBookReturn);
 
         // then
         assertThat(result.getReturnDate()).isNotNull();
