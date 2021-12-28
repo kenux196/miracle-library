@@ -73,8 +73,8 @@ class BookServiceTest {
     }
 
     @Test
-    @DisplayName("책을 파기(삭제)한다.")
-    void test_deleteBook() throws Exception {
+    @DisplayName("검색한 책의 대출 가능 여부를 확인할 수 있어야 한다.")
+    void test_isAvailableRent() throws Exception {
         // given
 
         // when
