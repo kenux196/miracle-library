@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.kenux.miraclelibrary.config.JpaTestConfig;
 import org.kenux.miraclelibrary.domain.Book;
+import org.kenux.miraclelibrary.domain.enums.BookStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
@@ -53,6 +54,7 @@ class BookRepositoryTest {
                 .author("author")
                 .isbn("isbn")
                 .createDate(LocalDate.now())
+                .status(BookStatus.AVAILABLE)
                 .build();
     }
 }

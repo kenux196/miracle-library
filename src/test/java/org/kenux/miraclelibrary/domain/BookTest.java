@@ -21,6 +21,16 @@ class BookTest {
         assertThat(book.getCreateDate()).isEqualTo(createDate());
     }
 
+    @Test
+    @DisplayName("책은 대출 가능 여부에 대한 상태를 변경할 수 있다.")
+    void test_changeStatus() {
+        Book book = createBook();
+
+        book.changeStatus(BookStatus.AVAILABLE);
+
+        assertThat(book.getStatus()).isEqualTo(BookStatus.AVAILABLE);
+    }
+
     private Book createBook() {
         return Book.builder()
                 .title("제목")

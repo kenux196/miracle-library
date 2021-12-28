@@ -1,6 +1,7 @@
 package org.kenux.miraclelibrary.domain;
 
 import lombok.*;
+import org.kenux.miraclelibrary.domain.enums.BookStatus;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -17,15 +18,17 @@ public class BookRentInfo {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     @ManyToOne
-    @JoinColumn(name = "book_id")
+    @JoinColumn(name = "book_id", nullable = false)
     private Book book;
 
+    @Column(name = "start_date", nullable = false)
     private LocalDateTime startDate;
 
+    @Column(name = "end_date", nullable = false)
     private LocalDateTime endDate;
 
     @Setter

@@ -29,6 +29,10 @@ public class Book {
     @Column(name = "isbn", nullable = false)
     private String isbn;
 
+    @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private BookStatus status;
+
     private LocalDate createDate;
 
     @Override
@@ -51,5 +55,9 @@ public class Book {
         result = 31 * result + author.hashCode();
         result = 31 * result + isbn.hashCode();
         return result;
+    }
+
+    public void changeStatus(BookStatus status) {
+        this.status = status;
     }
 }

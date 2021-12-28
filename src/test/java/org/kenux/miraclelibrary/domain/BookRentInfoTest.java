@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class BookRentInfoTest {
 
     @Test
-    @DisplayName("도서 대출 정보에는 책, 멤버, 대출시작일 포함된다.")
+    @DisplayName("도서 대출 정보가 생성되면 책, 회원, 대출시작일, 대출 종료일을 가져야 한다.")
     void test_create_bookRentInfo() throws Exception {
         Member member = Member.builder().build();
         BookRentInfo bookRentInfo = BookRentInfo.builder()

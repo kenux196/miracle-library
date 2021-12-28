@@ -6,11 +6,13 @@ import org.kenux.miraclelibrary.config.JpaTestConfig;
 import org.kenux.miraclelibrary.domain.Book;
 import org.kenux.miraclelibrary.domain.BookRentInfo;
 import org.kenux.miraclelibrary.domain.Member;
+import org.kenux.miraclelibrary.domain.enums.BookStatus;
 import org.kenux.miraclelibrary.domain.enums.MemberRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -104,6 +106,8 @@ class BookRentInfoRepositoryTest {
                 .title("title")
                 .author("author")
                 .isbn("isbn")
+                .status(BookStatus.AVAILABLE)
+                .createDate(LocalDate.of(2021, 1, 1))
                 .build();
         return bookRepository.save(book);
     }
