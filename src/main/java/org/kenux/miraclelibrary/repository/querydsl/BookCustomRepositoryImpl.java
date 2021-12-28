@@ -16,9 +16,9 @@ public class BookCustomRepositoryImpl implements BookCustomRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<Book> findAllByTitleAndAuthor(String title, String author) {
+    public List<Book> findAllByKeyword(String keyword) {
         return jpaQueryFactory.selectFrom(book)
-                .where(book.title.contains(title).and(book.author.eq(author)))
+                .where(book.title.contains(keyword).or(book.author.contains(keyword)))
                 .fetch();
     }
 }

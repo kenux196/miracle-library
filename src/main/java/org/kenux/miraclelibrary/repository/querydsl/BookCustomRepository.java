@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface BookCustomRepository {
 
-    List<Book> findAllByTitleAndAuthor(String title, String author);
+    List<Book> findAllByKeyword(String keyword);
 }

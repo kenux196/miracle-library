@@ -13,6 +13,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.Collections;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -43,33 +45,17 @@ class BookServiceTest {
     }
 
     @Test
-    @DisplayName("제목으로 책을 검색한다.")
+    @DisplayName("제목 혹은 저자에 해당하는 키워드를 통해 책을 검색한다.")
     void test_searchBookByTitle() throws Exception {
         // given
         Book book = createBookForTest();
+        given(bookRepository.findAllByKeyword(any())).willReturn(Collections.singletonList(book));
 
         // when
+        List<Book> books = bookService.searchBook("title");
 
         // then
-    }
-
-    @Test
-    @DisplayName("작가로 책을 검색한다.")
-    void test_searchBookByAuthor() throws Exception {
-        // given
-
-        // when
-
-        // then
-    }
-
-    @Test
-    @DisplayName("제목 혹은 작가로 책을 검색한다.")
-    void test_searchBookByTitleOrAuthor() throws Exception {
-        // given
-        // when
-
-        // then
+        assertThat(books).isNotEmpty();
     }
 
     @Test
