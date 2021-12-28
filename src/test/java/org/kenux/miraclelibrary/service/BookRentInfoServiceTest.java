@@ -71,7 +71,6 @@ class BookRentInfoServiceTest {
 
         // then
         assertThat(saved).isNotEmpty();
-        assertThat(saved.get(0).getBook().getStatus()).isEqualTo(BookStatus.RENTED);
     }
 
     @Test
@@ -113,7 +112,6 @@ class BookRentInfoServiceTest {
     void test_bookReturn() throws Exception {
         // given
         Book book = getBook();
-        book.changeStatus(BookStatus.RENTED);
         BookRentInfo bookRentInfo = BookRentInfo.builder()
                 .member(getMember())
                 .book(book)
@@ -129,7 +127,6 @@ class BookRentInfoServiceTest {
 
         // then
         assertThat(result.getReturnDate()).isNotNull();
-        assertThat(result.getBook().getStatus()).isEqualTo(BookStatus.AVAILABLE);
     }
 
     private Member getMember() {
@@ -139,10 +136,13 @@ class BookRentInfoServiceTest {
     }
 
     private Book getBook() {
-        Book book = new Book("title", "author", "isbn", LocalDate.of(2020, 12, 20));
-        book.changeStatus(BookStatus.AVAILABLE);
-        ReflectionTestUtils.setField(book, "id", 1L);
-        return book;
+        return Book.builder()
+                .id(1L)
+                .title("title")
+                .author("author")
+                .isbn("isbn")
+                .createDate(LocalDate.of(2020, 12, 20))
+                .build();
     }
 
 }

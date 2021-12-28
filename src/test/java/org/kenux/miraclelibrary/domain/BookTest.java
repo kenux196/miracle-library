@@ -18,18 +18,7 @@ class BookTest {
         assertThat(book.getTitle()).isEqualTo("제목");
         assertThat(book.getAuthor()).isEqualTo("저자");
         assertThat(book.getIsbn()).isEqualTo("isbn");
-        assertThat(book.getCreatedDate()).isEqualTo(createDate());
-    }
-
-    @Test
-    @DisplayName("책은 대여 가능, 대여중, 파기됨 상태를 변경할 수 있다.")
-    void test_change_bookStatus() throws Exception {
-        Book book = createBook();
-        book.changeStatus(BookStatus.AVAILABLE);
-        assertThat(book.getStatus()).isEqualTo(BookStatus.AVAILABLE);
-
-        book.changeStatus(BookStatus.RENTED);
-        assertThat(book.getStatus()).isEqualTo(BookStatus.RENTED);
+        assertThat(book.getCreateDate()).isEqualTo(createDate());
     }
 
     private Book createBook() {
@@ -37,7 +26,7 @@ class BookTest {
                 .title("제목")
                 .author("저자")
                 .isbn("isbn")
-                .createdDate(createDate())
+                .createDate(createDate())
                 .build();
     }
 

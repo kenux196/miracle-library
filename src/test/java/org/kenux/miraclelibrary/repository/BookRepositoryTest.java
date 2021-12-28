@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Import;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -92,13 +91,11 @@ class BookRepositoryTest {
     }
 
     private Book createBook() {
-        Book book = Book.builder()
+        return Book.builder()
                 .title("title")
                 .author("author")
                 .isbn("isbn")
-                .createdDate(LocalDate.now())
+                .createDate(LocalDate.now())
                 .build();
-        book.changeStatus(BookStatus.AVAILABLE);
-        return book;
     }
 }

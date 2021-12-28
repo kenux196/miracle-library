@@ -1,20 +1,18 @@
 package org.kenux.miraclelibrary.domain;
 
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.kenux.miraclelibrary.domain.enums.BookStatus;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 
 @Entity
 @Table(name = "book")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 @Getter
 public class Book {
 
@@ -31,23 +29,7 @@ public class Book {
     @Column(name = "isbn", nullable = false)
     private String isbn;
 
-    @Column(name = "status")
-    @Enumerated(EnumType.STRING)
-    private BookStatus status;
-
-    private LocalDate createdDate;
-
-    @Builder
-    public Book(String title, String author, String isbn, LocalDate createdDate) {
-        this.title = title;
-        this.author = author;
-        this.isbn = isbn;
-        this.createdDate = createdDate;
-    }
-
-    public void changeStatus(BookStatus status) {
-        this.status = status;
-    }
+    private LocalDate createDate;
 
     @Override
     public boolean equals(Object o) {

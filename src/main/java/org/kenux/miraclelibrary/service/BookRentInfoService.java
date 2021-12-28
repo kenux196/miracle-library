@@ -40,7 +40,6 @@ public class BookRentInfoService {
             if (book.isEmpty()) {
                 throw new CustomException(ErrorCode.BOOK_NOT_FOUND);
             }
-            book.get().changeStatus(BookStatus.RENTED);
             bookRepository.save(book.get());
 
             BookRentInfo bookRentInfo = BookRentInfo.builder()
@@ -77,7 +76,6 @@ public class BookRentInfoService {
 
         BookRentInfo bookRentInfo = found.get(0);
         bookRentInfo.setReturnDate(LocalDateTime.now());
-        book.get().changeStatus(BookStatus.AVAILABLE);
         return bookRentInfoRepository.save(bookRentInfo);
     }
 }
