@@ -5,8 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kenux.miraclelibrary.domain.Book;
 import org.kenux.miraclelibrary.domain.enums.BookStatus;
-import org.kenux.miraclelibrary.exception.CustomException;
-import org.kenux.miraclelibrary.exception.ErrorCode;
 import org.kenux.miraclelibrary.repository.BookRepository;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -16,7 +14,6 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -62,10 +59,15 @@ class BookServiceTest {
     @DisplayName("검색한 책의 대출 가능 여부를 확인할 수 있어야 한다.")
     void test_isAvailableRent() throws Exception {
         // given
+        Book book = createBookForTest();
+        book.changeStatus(BookStatus.RENTED);
+        given(bookRepository.findAllByKeyword(any())).willReturn(Collections.singletonList(book));
 
         // when
+        List<Book> books = bookService.searchBook("title");
 
         // then
+        assertThat(books.get(0).getStatus()).isEqualTo(BookStatus.RENTED);
     }
 
     private Book createBookForTest() {
@@ -74,6 +76,7 @@ class BookServiceTest {
                 .title("title")
                 .author("author")
                 .isbn("isbn")
+                .status(BookStatus.AVAILABLE)
                 .createDate(LocalDate.of(2021, 1, 1))
                 .build();
     }

@@ -1,4 +1,4 @@
-package org.kenux.miraclelibrary.service;
+package org.kenux.miraclelibrary.rest.dto;
 
 import lombok.Builder;
 import lombok.Data;

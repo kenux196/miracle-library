@@ -59,7 +59,7 @@ class BookRentInfoRepositoryTest {
         // given
         Member member = getMember();
         Book book = getBook();
-        LocalDateTime rentalDate = LocalDateTime.of(2021, 1, 1, 13, 00, 00);
+        LocalDateTime rentalDate = LocalDateTime.of(2021, 1, 1, 13, 0, 0);
         BookRentInfo bookRentInfo = new BookRentInfo(member, book, rentalDate);
         bookRentInfoRepository.save(bookRentInfo);
 
