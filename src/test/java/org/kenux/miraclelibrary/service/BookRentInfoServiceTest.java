@@ -1,5 +1,6 @@
 package org.kenux.miraclelibrary.service;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -46,13 +47,19 @@ class BookRentInfoServiceTest {
     @InjectMocks
     BookRentInfoService bookRentInfoService;
 
+    private Member member;
+    private Book book;
+
+    @BeforeEach
+    void setup() {
+        member = getMember();
+        book = getBook();
+    }
+
     @Test
     @DisplayName("멤버는 책을 대여한다.")
     void test_BookRentalService_rentalBook() throws Exception {
         // given
-        final Member member = getMember();
-        final Book book = getBook();
-
         BookRentInfo bookRentInfo = BookRentInfo.builder()
                 .member(member)
                 .book(book)
@@ -79,9 +86,7 @@ class BookRentInfoServiceTest {
         when(memberRepository.findById(any())).thenReturn(Optional.empty());
 
         // when
-        Long memberId = 1L;
-        Long bookId = 1L;
-        RequestRentBookDto requestRentBookDto = new RequestRentBookDto(memberId, Collections.singletonList(bookId));
+        RequestRentBookDto requestRentBookDto = new RequestRentBookDto(1L, Collections.singletonList(1L));
 
         assertThatThrownBy(() -> bookRentInfoService.rentBooks(requestRentBookDto))
                 .isInstanceOf(CustomException.class)
@@ -93,12 +98,10 @@ class BookRentInfoServiceTest {
     void test_bookNotFound_whenRentBook() throws Exception {
         // given
         when(bookRepository.findById(any())).thenReturn(Optional.empty());
-        when(memberRepository.findById(any())).thenReturn(Optional.of(getMember()));
+        when(memberRepository.findById(any())).thenReturn(Optional.of(member));
 
         // when
-        Long memberId = 1L;
-        Long bookId = 1L;
-        RequestRentBookDto requestRentBookDto = new RequestRentBookDto(memberId, Collections.singletonList(bookId));
+        RequestRentBookDto requestRentBookDto = new RequestRentBookDto(1L, Collections.singletonList(1L));
 
         // then
         assertThatThrownBy(() -> bookRentInfoService.rentBooks(requestRentBookDto))
@@ -110,8 +113,6 @@ class BookRentInfoServiceTest {
     @DisplayName("이미 대출된 책은 예외 발생해야 한다.")
     void test_exceptionForRentedBook_whenRentBook() throws Exception {
         // given
-        final Member member = getMember();
-        final Book book = getBook();
         book.changeStatus(BookStatus.RENTED);
         given(memberRepository.findById(any())).willReturn(Optional.of(member));
         given(bookRepository.findById(any())).willReturn(Optional.of(book));
@@ -128,7 +129,6 @@ class BookRentInfoServiceTest {
     @DisplayName("멤버는 책을 반납한다.")
     void test_bookReturn() throws Exception {
         // given
-        Book book = getBook();
         BookRentInfo bookRentInfo = BookRentInfo.builder()
                 .member(getMember())
                 .book(book)
