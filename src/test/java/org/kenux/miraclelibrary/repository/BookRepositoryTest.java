@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -53,8 +54,8 @@ class BookRepositoryTest {
                 .title("title")
                 .author("author")
                 .isbn("isbn")
-                .createDate(LocalDate.now())
-                .status(BookStatus.AVAILABLE)
+                .createDate(LocalDateTime.now())
+                .status(BookStatus.RENTABLE)
                 .build();
     }
 }

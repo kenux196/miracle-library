@@ -6,11 +6,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.kenux.miraclelibrary.domain.Book;
 import org.kenux.miraclelibrary.domain.enums.BookStatus;
 import org.kenux.miraclelibrary.repository.BookRepository;
+import org.kenux.miraclelibrary.rest.dto.RegisterBookDto;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -35,7 +37,12 @@ class BookServiceTest {
         given(bookRepository.save(any())).willReturn(book);
 
         // when
-        Long result = bookService.registerNewBook(book);
+        RegisterBookDto registerBookDto = RegisterBookDto.builder()
+                .title("title")
+                .author("author")
+                .isbn("isbn")
+                .build();
+        Long result = bookService.registerNewBook(registerBookDto);
 
         // then
         assertThat(result).isEqualTo(1L);
@@ -76,8 +83,8 @@ class BookServiceTest {
                 .title("title")
                 .author("author")
                 .isbn("isbn")
-                .status(BookStatus.AVAILABLE)
-                .createDate(LocalDate.of(2021, 1, 1))
+                .status(BookStatus.RENTABLE)
+                .createDate(LocalDateTime.of(2021, 1, 1, 13, 1, 1))
                 .build();
     }
 

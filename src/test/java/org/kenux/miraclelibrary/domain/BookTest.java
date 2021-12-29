@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.kenux.miraclelibrary.domain.enums.BookStatus;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -26,9 +27,9 @@ class BookTest {
     void test_changeStatus() {
         Book book = createBook();
 
-        book.changeStatus(BookStatus.AVAILABLE);
+        book.changeStatus(BookStatus.RENTABLE);
 
-        assertThat(book.getStatus()).isEqualTo(BookStatus.AVAILABLE);
+        assertThat(book.getStatus()).isEqualTo(BookStatus.RENTABLE);
     }
 
     private Book createBook() {
@@ -40,7 +41,7 @@ class BookTest {
                 .build();
     }
 
-    private LocalDate createDate() {
-        return LocalDate.of(2021, 1, 1);
+    private LocalDateTime createDate() {
+        return LocalDateTime.of(2021, 1, 1, 1, 1, 1);
     }
 }

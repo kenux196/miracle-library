@@ -106,8 +106,8 @@ class BookRentInfoRepositoryTest {
                 .title("title")
                 .author("author")
                 .isbn("isbn")
-                .status(BookStatus.AVAILABLE)
-                .createDate(LocalDate.of(2021, 1, 1))
+                .status(BookStatus.RENTABLE)
+                .createDate(LocalDateTime.of(2021, 1, 1, 1, 1, 1))
                 .build();
         return bookRepository.save(book);
     }

@@ -141,7 +141,7 @@ class BookRentInfoServiceTest {
                 .title("title")
                 .author("author")
                 .isbn("isbn")
-                .createDate(LocalDate.of(2020, 12, 20))
+                .createDate(LocalDateTime.of(2020, 12, 20, 1, 1, 1))
                 .build();
     }
 

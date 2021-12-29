@@ -6,6 +6,7 @@ import org.kenux.miraclelibrary.domain.enums.BookStatus;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 @Entity
@@ -33,7 +34,7 @@ public class Book {
     @Enumerated(EnumType.STRING)
     private BookStatus status;
 
-    private LocalDate createDate;
+    private LocalDateTime createDate;
 
     @Override
     public boolean equals(Object o) {
