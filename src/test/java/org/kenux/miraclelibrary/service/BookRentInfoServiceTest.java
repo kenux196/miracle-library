@@ -13,8 +13,8 @@ import org.kenux.miraclelibrary.exception.ErrorCode;
 import org.kenux.miraclelibrary.repository.BookRentInfoRepository;
 import org.kenux.miraclelibrary.repository.BookRepository;
 import org.kenux.miraclelibrary.repository.MemberRepository;
-import org.kenux.miraclelibrary.rest.dto.RequestBookRental;
-import org.kenux.miraclelibrary.rest.dto.RequestBookReturn;
+import org.kenux.miraclelibrary.rest.dto.RequestRentBookDto;
+import org.kenux.miraclelibrary.rest.dto.RequestReturnBookDto;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -65,8 +65,8 @@ class BookRentInfoServiceTest {
         given(bookRentInfoRepository.save(any())).willReturn(bookRentInfo);
 
         // when
-        RequestBookRental requestBookRental = new RequestBookRental(member.getId(), Collections.singletonList(book.getId()));
-        List<BookRentInfo> saved = bookRentInfoService.rentBooks(requestBookRental);
+        RequestRentBookDto requestRentBookDto = new RequestRentBookDto(member.getId(), Collections.singletonList(book.getId()));
+        List<BookRentInfo> saved = bookRentInfoService.rentBooks(requestRentBookDto);
 
         // then
         assertThat(saved).isNotEmpty();
@@ -81,9 +81,9 @@ class BookRentInfoServiceTest {
         // when
         Long memberId = 1L;
         Long bookId = 1L;
-        RequestBookRental requestBookRental = new RequestBookRental(memberId, Collections.singletonList(bookId));
+        RequestRentBookDto requestRentBookDto = new RequestRentBookDto(memberId, Collections.singletonList(bookId));
 
-        assertThatThrownBy(() -> bookRentInfoService.rentBooks(requestBookRental))
+        assertThatThrownBy(() -> bookRentInfoService.rentBooks(requestRentBookDto))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.MEMBER_NOT_FOUND.getMessage());
     }
@@ -98,10 +98,10 @@ class BookRentInfoServiceTest {
         // when
         Long memberId = 1L;
         Long bookId = 1L;
-        RequestBookRental requestBookRental = new RequestBookRental(memberId, Collections.singletonList(bookId));
+        RequestRentBookDto requestRentBookDto = new RequestRentBookDto(memberId, Collections.singletonList(bookId));
 
         // then
-        assertThatThrownBy(() -> bookRentInfoService.rentBooks(requestBookRental))
+        assertThatThrownBy(() -> bookRentInfoService.rentBooks(requestRentBookDto))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.BOOK_NOT_FOUND.getMessage());
     }
@@ -116,10 +116,10 @@ class BookRentInfoServiceTest {
         given(memberRepository.findById(any())).willReturn(Optional.of(member));
         given(bookRepository.findById(any())).willReturn(Optional.of(book));
 
-        RequestBookRental requestBookRental = new RequestBookRental(1L, Collections.singletonList(1L));
+        RequestRentBookDto requestRentBookDto = new RequestRentBookDto(1L, Collections.singletonList(1L));
 
         // when then
-        assertThatThrownBy(() -> bookRentInfoService.rentBooks(requestBookRental))
+        assertThatThrownBy(() -> bookRentInfoService.rentBooks(requestRentBookDto))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.BOOK_WAS_RENTED.getMessage());
     }
@@ -139,8 +139,8 @@ class BookRentInfoServiceTest {
         given(bookRentInfoRepository.findAllByBookId(any())).willReturn(List.of(bookRentInfo));
 
         // when
-        RequestBookReturn requestBookReturn = new RequestBookReturn(book.getId(), "title");
-        BookRentInfo result = bookRentInfoService.returnBook(requestBookReturn);
+        RequestReturnBookDto requestReturnBookDto = new RequestReturnBookDto(book.getId(), "title");
+        BookRentInfo result = bookRentInfoService.returnBook(requestReturnBookDto);
 
         // then
         assertThat(result.getReturnDate()).isNotNull();
@@ -158,6 +158,7 @@ class BookRentInfoServiceTest {
                 .title("title")
                 .author("author")
                 .isbn("isbn")
+                .status(BookStatus.RENTABLE)
                 .createDate(LocalDateTime.of(2020, 12, 20, 1, 1, 1))
                 .build();
     }

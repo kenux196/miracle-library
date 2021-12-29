@@ -5,7 +5,7 @@ import lombok.Data;
 
 @AllArgsConstructor
 @Data
-public class RequestBookReturn {
+public class RequestReturnBookDto {
     private Long bookId;
 
     private String bookTitle;

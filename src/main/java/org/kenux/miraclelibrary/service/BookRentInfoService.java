@@ -10,8 +10,8 @@ import org.kenux.miraclelibrary.exception.ErrorCode;
 import org.kenux.miraclelibrary.repository.BookRentInfoRepository;
 import org.kenux.miraclelibrary.repository.BookRepository;
 import org.kenux.miraclelibrary.repository.MemberRepository;
-import org.kenux.miraclelibrary.rest.dto.RequestBookRental;
-import org.kenux.miraclelibrary.rest.dto.RequestBookReturn;
+import org.kenux.miraclelibrary.rest.dto.RequestRentBookDto;
+import org.kenux.miraclelibrary.rest.dto.RequestReturnBookDto;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -28,11 +28,11 @@ public class BookRentInfoService {
     private final BookRepository bookRepository;
     private final BookRentInfoRepository bookRentInfoRepository;
 
-    public List<BookRentInfo> rentBooks(RequestBookRental requestBookRental) {
-        Member member = getMember(requestBookRental);
+    public List<BookRentInfo> rentBooks(RequestRentBookDto requestRentBookDto) {
+        Member member = getMember(requestRentBookDto);
 
         List<BookRentInfo> bookRentInfos = new ArrayList<>();
-        requestBookRental.getBookIds().forEach(id -> {
+        requestRentBookDto.getBookIds().forEach(id -> {
             Book book = getBook(id);
             book.changeStatus(BookStatus.RENTED);
             bookRepository.save(book);
@@ -49,8 +49,8 @@ public class BookRentInfoService {
         return bookRentInfos;
     }
 
-    private Member getMember(RequestBookRental requestBookRental) {
-        return memberRepository.findById(requestBookRental.getMemberId())
+    private Member getMember(RequestRentBookDto requestRentBookDto) {
+        return memberRepository.findById(requestRentBookDto.getMemberId())
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
     }
 
@@ -63,8 +63,8 @@ public class BookRentInfoService {
         return book;
     }
 
-    public BookRentInfo returnBook(RequestBookReturn requestBookReturn) {
-        final Optional<Book> book = bookRepository.findById(requestBookReturn.getBookId());
+    public BookRentInfo returnBook(RequestReturnBookDto requestReturnBookDto) {
+        final Optional<Book> book = bookRepository.findById(requestReturnBookDto.getBookId());
         if (book.isEmpty()) {
             throw new CustomException(ErrorCode.BOOK_NOT_FOUND);
         }
