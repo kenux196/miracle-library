@@ -126,20 +126,38 @@ class BookRentInfoServiceTest {
     }
 
     @Test
+    @DisplayName("책 반납 시, 대여 정보를 못찾은 경우 예외 발생")
+    void test_exception_notFoundBookRentInfo() throws Exception {
+        // given
+        BookRentInfo bookRentInfo = BookRentInfo.builder()
+                .member(member)
+                .book(book)
+                .startDate(LocalDateTime.of(2021, 1, 1, 13, 0, 0))
+                .build();
+
+        // when
+        RequestReturnBookDto requestReturnBookDto = new RequestReturnBookDto(1L, "title");
+
+        // then
+        assertThatThrownBy(() -> bookRentInfoService.returnBook(requestReturnBookDto))
+                .isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.RENT_INFO_NOT_FOUND.getMessage());
+    }
+
+    @Test
     @DisplayName("멤버는 책을 반납한다.")
     void test_bookReturn() throws Exception {
         // given
         BookRentInfo bookRentInfo = BookRentInfo.builder()
-                .member(getMember())
+                .member(member)
                 .book(book)
                 .startDate(LocalDateTime.of(2021, 1, 1, 13, 0, 0))
                 .build();
-        given(bookRepository.findById(any())).willReturn(Optional.of(book));
         given(bookRentInfoRepository.save(any())).willReturn(bookRentInfo);
         given(bookRentInfoRepository.findAllByBookId(any())).willReturn(List.of(bookRentInfo));
 
         // when
-        RequestReturnBookDto requestReturnBookDto = new RequestReturnBookDto(book.getId(), "title");
+        RequestReturnBookDto requestReturnBookDto = new RequestReturnBookDto(1L, "title");
         BookRentInfo result = bookRentInfoService.returnBook(requestReturnBookDto);
 
         // then

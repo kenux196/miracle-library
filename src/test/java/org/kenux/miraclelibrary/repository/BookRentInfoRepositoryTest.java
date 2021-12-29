@@ -1,5 +1,6 @@
 package org.kenux.miraclelibrary.repository;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.kenux.miraclelibrary.config.JpaTestConfig;
@@ -31,13 +32,21 @@ class BookRentInfoRepositoryTest {
     @Autowired
     BookRepository bookRepository;
 
+    private Member member;
+    private Book book;
+    private LocalDateTime rentalDate;
+
+    @BeforeEach
+    void setup() {
+        member = getMember();
+        book = getBook();
+        rentalDate = LocalDateTime.of(2021, 1, 1, 13, 0, 0);
+    }
+
     @Test
     @DisplayName("책 대여 정보 저장")
     void test_saveBookRental() throws Exception {
         // given
-        Member member = getMember();
-        Book book = getBook();
-        LocalDateTime rentalDate = LocalDateTime.of(2021, 1, 1, 13, 0, 0);
         BookRentInfo bookRentInfo = new BookRentInfo(member, book, rentalDate);
 
         // when
@@ -57,9 +66,6 @@ class BookRentInfoRepositoryTest {
     @DisplayName("멤버를 통한 대여 정보 검색")
     void test_findAllByMember() {
         // given
-        Member member = getMember();
-        Book book = getBook();
-        LocalDateTime rentalDate = LocalDateTime.of(2021, 1, 1, 13, 0, 0);
         BookRentInfo bookRentInfo = new BookRentInfo(member, book, rentalDate);
         bookRentInfoRepository.save(bookRentInfo);
 
@@ -68,15 +74,16 @@ class BookRentInfoRepositoryTest {
 
         // then
         assertThat(bookRentInfos).isNotEmpty();
+        assertThat(bookRentInfos.get(0).getBook()).isNotNull();
+        assertThat(bookRentInfos.get(0).getBook().getTitle()).isEqualTo("title");
+        assertThat(bookRentInfos.get(0).getMember()).isNotNull();
+        assertThat(bookRentInfos.get(0).getMember().getName()).isEqualTo("member1");
     }
 
     @Test
     @DisplayName("책을 통한 대여 정보 검색")
     void test_findAllByBook() throws Exception {
         // given
-        Member member = getMember();
-        Book book = getBook();
-        LocalDateTime rentalDate = LocalDateTime.of(2021, 1, 1, 13, 0, 0);
         BookRentInfo bookRentInfo = BookRentInfo.builder()
                 .member(member)
                 .book(book)

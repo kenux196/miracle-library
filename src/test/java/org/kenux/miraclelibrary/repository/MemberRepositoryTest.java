@@ -1,5 +1,6 @@
 package org.kenux.miraclelibrary.repository;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.kenux.miraclelibrary.config.JpaTestConfig;
@@ -21,16 +22,18 @@ class MemberRepositoryTest {
     @Autowired
     private MemberRepository memberRepository;
 
+    private Member member;
+    private Member librarian;
+
+    @BeforeEach
+    void setup() {
+        member = createMember();
+        librarian = createLibrarian();
+    }
+
     @Test
     @DisplayName("고객 정보 저장 테스트")
     void test_saveCustomer() {
-        Member member = Member.builder()
-                .name("customer1")
-                .email("customer1@test.com")
-                .password("password")
-                .memberRole(MemberRole.CUSTOMER)
-                .build();;
-
         Member saved = memberRepository.save(member);
 
         assertThat(member.getId()).isNotNull();
@@ -40,12 +43,6 @@ class MemberRepositoryTest {
     @Test
     @DisplayName("고객 이메일이 존재하는지 검사한다.")
     void test_existEmail() {
-        Member member = Member.builder()
-                .name("customer1")
-                .email("customer1@test.com")
-                .password("password")
-                .memberRole(MemberRole.CUSTOMER)
-                .build();;
         memberRepository.save(member);
 
         boolean result = memberRepository.existsByEmail("customer1@test.com");
@@ -56,38 +53,22 @@ class MemberRepositoryTest {
     }
 
     @Test
-    @DisplayName("전체 고객을 조회할 수 있다.")
+    @DisplayName("전체 멤버를 조회할 수 있다.")
     void test_findAll() {
-        Member member = Member.builder()
-                .name("customer1")
-                .email("customer1@test.com")
-                .password("password")
-                .memberRole(MemberRole.CUSTOMER)
-                .build();;
+        // given
         memberRepository.save(member);
+        memberRepository.save(librarian);
 
-        member = Member.builder()
-                .name("customer2")
-                .email("customer2@test.com")
-                .password("password")
-                .memberRole(MemberRole.CUSTOMER)
-                .build();;
-        memberRepository.save(member);
-
+        // when
         List<Member> members = memberRepository.findAll();
 
+        // then
         assertThat(members).hasSize(2);
     }
 
     @Test
     @DisplayName("고객 id로 조회할 수 있다")
     void test_findById() {
-        Member member = Member.builder()
-                .name("customer1")
-                .email("customer1@test.com")
-                .password("password")
-                .memberRole(MemberRole.CUSTOMER)
-                .build();;
         Member saved = memberRepository.save(member);
 
         Optional<Member> found = memberRepository.findById(saved.getId());
@@ -99,12 +80,6 @@ class MemberRepositoryTest {
     @Test
     @DisplayName("고객 이름으로 조회할 수 있다")
     void test_findByName() {
-        Member member = Member.builder()
-                .name("customer1")
-                .email("customer1@test.com")
-                .password("password")
-                .memberRole(MemberRole.CUSTOMER)
-                .build();;
         memberRepository.save(member);
 
         Optional<Member> found = memberRepository.findByName("customer1");
@@ -117,12 +92,6 @@ class MemberRepositoryTest {
     @DisplayName("멤버를 통해서 멤버의 비밀번호를 확인한다.")
     void test_password() {
         // given
-        Member member = Member.builder()
-                .name("customer1")
-                .email("customer1@test.com")
-                .password("password")
-                .memberRole(MemberRole.CUSTOMER)
-                .build();;
         memberRepository.save(member);
 
         // when
@@ -134,4 +103,21 @@ class MemberRepositoryTest {
 
     }
 
+    private Member createMember() {
+        return Member.builder()
+                .name("customer1")
+                .email("customer1@test.com")
+                .password("password")
+                .memberRole(MemberRole.CUSTOMER)
+                .build();
+    }
+
+    private Member createLibrarian() {
+        return Member.builder()
+                .name("librarian1")
+                .email("librarian1@test.com")
+                .password("password")
+                .memberRole(MemberRole.LIBRARIAN)
+                .build();
+    }
 }

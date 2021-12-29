@@ -13,6 +13,7 @@ import org.kenux.miraclelibrary.repository.MemberRepository;
 import org.kenux.miraclelibrary.rest.dto.RequestRentBookDto;
 import org.kenux.miraclelibrary.rest.dto.RequestReturnBookDto;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -28,12 +29,13 @@ public class BookRentInfoService {
     private final BookRepository bookRepository;
     private final BookRentInfoRepository bookRentInfoRepository;
 
+    @Transactional
     public List<BookRentInfo> rentBooks(RequestRentBookDto requestRentBookDto) {
         Member member = getMember(requestRentBookDto);
 
         List<BookRentInfo> bookRentInfos = new ArrayList<>();
         requestRentBookDto.getBookIds().forEach(id -> {
-            Book book = getBook(id);
+            Book book = getBookNotRented(id);
             book.changeStatus(BookStatus.RENTED);
             bookRepository.save(book);
 
@@ -54,22 +56,22 @@ public class BookRentInfoService {
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
     }
 
-    private Book getBook(Long id) {
-        Book book = bookRepository.findById(id)
-                .orElseThrow(() -> new CustomException(ErrorCode.BOOK_NOT_FOUND));
+    private Book getBookNotRented(Long id) {
+        Book book = getBook(id);
         if (book.getStatus().equals(BookStatus.RENTED)) {
             throw new CustomException(ErrorCode.BOOK_WAS_RENTED);
         }
         return book;
     }
 
-    public BookRentInfo returnBook(RequestReturnBookDto requestReturnBookDto) {
-        final Optional<Book> book = bookRepository.findById(requestReturnBookDto.getBookId());
-        if (book.isEmpty()) {
-            throw new CustomException(ErrorCode.BOOK_NOT_FOUND);
-        }
+    private Book getBook(Long id) {
+        return bookRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.BOOK_NOT_FOUND));
+    }
 
-        List<BookRentInfo> bookRentInfoList = bookRentInfoRepository.findAllByBookId(book.get().getId());
+    @Transactional
+    public BookRentInfo returnBook(RequestReturnBookDto requestReturnBookDto) {
+        List<BookRentInfo> bookRentInfoList = bookRentInfoRepository.findAllByBookId(requestReturnBookDto.getBookId());
 
         List<BookRentInfo> found = bookRentInfoList.stream()
                 .filter(bookRental -> bookRental.getReturnDate() == null)
@@ -85,6 +87,9 @@ public class BookRentInfoService {
 
         BookRentInfo bookRentInfo = found.get(0);
         bookRentInfo.setReturnDate(LocalDateTime.now());
+        Book book = found.get(0).getBook();
+        book.changeStatus(BookStatus.RENTABLE);
+        bookRepository.save(book);
         return bookRentInfoRepository.save(bookRentInfo);
     }
 }
