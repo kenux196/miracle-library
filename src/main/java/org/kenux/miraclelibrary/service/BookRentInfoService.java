@@ -29,22 +29,17 @@ public class BookRentInfoService {
     private final BookRentInfoRepository bookRentInfoRepository;
 
     public List<BookRentInfo> rentBooks(RequestBookRental requestBookRental) {
-        Optional<Member> member = memberRepository.findById(requestBookRental.getMemberId());
-        if (member.isEmpty()) {
-            throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
-        }
+        Member member = getMember(requestBookRental);
 
         List<BookRentInfo> bookRentInfos = new ArrayList<>();
         requestBookRental.getBookIds().forEach(id -> {
-            Optional<Book> book = bookRepository.findById(id);
-            if (book.isEmpty()) {
-                throw new CustomException(ErrorCode.BOOK_NOT_FOUND);
-            }
-            bookRepository.save(book.get());
+            Book book = getBook(id);
+            book.changeStatus(BookStatus.RENTED);
+            bookRepository.save(book);
 
             BookRentInfo bookRentInfo = BookRentInfo.builder()
-                    .member(member.get())
-                    .book(book.get())
+                    .member(member)
+                    .book(book)
                     .startDate(LocalDateTime.now())
                     .build();
             BookRentInfo save = bookRentInfoRepository.save(bookRentInfo);
@@ -52,6 +47,20 @@ public class BookRentInfoService {
         });
 
         return bookRentInfos;
+    }
+
+    private Member getMember(RequestBookRental requestBookRental) {
+        return memberRepository.findById(requestBookRental.getMemberId())
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+    }
+
+    private Book getBook(Long id) {
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.BOOK_NOT_FOUND));
+        if (book.getStatus().equals(BookStatus.RENTED)) {
+            throw new CustomException(ErrorCode.BOOK_WAS_RENTED);
+        }
+        return book;
     }
 
     public BookRentInfo returnBook(RequestBookReturn requestBookReturn) {
@@ -67,11 +76,11 @@ public class BookRentInfoService {
                 .collect(Collectors.toList());
 
         if (found.isEmpty()) {
-            throw new CustomException(ErrorCode.RENTAL_INFO_NOT_FOUND);
+            throw new CustomException(ErrorCode.RENT_INFO_NOT_FOUND);
         }
 
         if (found.size() > 1) {
-            throw new CustomException(ErrorCode.RENTAL_INFO_DUPLICATION);
+            throw new CustomException(ErrorCode.RENT_INFO_DUPLICATION);
         }
 
         BookRentInfo bookRentInfo = found.get(0);

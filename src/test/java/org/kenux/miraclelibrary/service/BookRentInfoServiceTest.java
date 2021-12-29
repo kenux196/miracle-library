@@ -20,7 +20,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -105,6 +104,24 @@ class BookRentInfoServiceTest {
         assertThatThrownBy(() -> bookRentInfoService.rentBooks(requestBookRental))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.BOOK_NOT_FOUND.getMessage());
+    }
+
+    @Test
+    @DisplayName("이미 대출된 책은 예외 발생해야 한다.")
+    void test_exceptionForRentedBook_whenRentBook() throws Exception {
+        // given
+        final Member member = getMember();
+        final Book book = getBook();
+        book.changeStatus(BookStatus.RENTED);
+        given(memberRepository.findById(any())).willReturn(Optional.of(member));
+        given(bookRepository.findById(any())).willReturn(Optional.of(book));
+
+        RequestBookRental requestBookRental = new RequestBookRental(1L, Collections.singletonList(1L));
+
+        // when then
+        assertThatThrownBy(() -> bookRentInfoService.rentBooks(requestBookRental))
+                .isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.BOOK_WAS_RENTED.getMessage());
     }
 
     @Test
