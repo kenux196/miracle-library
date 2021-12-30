@@ -10,6 +10,7 @@ import org.kenux.miraclelibrary.rest.dto.LibrarianAddDto;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -34,7 +35,7 @@ class LibrarianManagementServiceTest {
                 .password("password")
                 .memberRole(MemberRole.LIBRARIAN)
                 .build();;
-        member.assignId(1L);
+        ReflectionTestUtils.setField(member, "id", 1L);
         when(memberRepository.save(any())).thenReturn(member);
 
         // when

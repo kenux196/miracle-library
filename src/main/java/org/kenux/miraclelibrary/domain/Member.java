@@ -45,10 +45,6 @@ public class Member {
         this.memberRole = memberRole;
     }
 
-    public void assignId(Long id) {
-        this.id = id;
-    }
-
     public void changePassword(String password) {
         this.password.change(password);
     }

@@ -1,5 +1,6 @@
 package org.kenux.miraclelibrary.service;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,6 +12,7 @@ import org.kenux.miraclelibrary.rest.dto.MemberJoinRequestDto;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,24 +27,25 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class CustomerServiceTest {
+class MemberServiceTest {
 
     @Mock
     private MemberRepository memberRepository;
 
     @InjectMocks
-    private CustomerService customerService;
+    private MemberService memberService;
+
+    private Member member;
+
+    @BeforeEach
+    void setup() {
+        member = getMember();
+    }
 
     @Test
     @DisplayName("회원 가입을 한다.")
-    void test_joinCustomer() {
+    void test_joinMember() {
         // given
-        Member member = Member.builder()
-                .name("customer1")
-                .email("customer1@test.com")
-                .password("password")
-                .build();;
-        member.assignId(1L);
         when(memberRepository.save(any())).thenReturn(member);
 
         // when
@@ -51,10 +54,10 @@ class CustomerServiceTest {
                 .email("customer1@test.com")
                 .password("password")
                 .build();
-        Member saved = customerService.join(memberJoinRequestDto);
+        Long savedId = memberService.join(memberJoinRequestDto);
 
         // then
-        assertThat(saved.getId()).isEqualTo(1);
+        assertThat(savedId).isEqualTo(1);
     }
 
     @Test
@@ -69,7 +72,7 @@ class CustomerServiceTest {
         given(memberRepository.existsByEmail(any())).willReturn(true);
 
         // when then
-        assertThatThrownBy(() -> customerService.join(memberJoinRequestDto))
+        assertThatThrownBy(() -> memberService.join(memberJoinRequestDto))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(EMAIL_DUPLICATION.getMessage());
     }
@@ -85,7 +88,7 @@ class CustomerServiceTest {
                 .build();
 
         // when then
-        assertThatThrownBy(() -> customerService.join(memberJoinRequestDto))
+        assertThatThrownBy(() -> memberService.join(memberJoinRequestDto))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.PASSWORD_SHORT.getMessage());
     }
@@ -109,7 +112,7 @@ class CustomerServiceTest {
         when(memberRepository.findAll()).thenReturn(members);
 
         // when
-        List<Member> memberList = customerService.getAllCustomer();
+        List<Member> memberList = memberService.getAllCustomer();
 
         // then
         assertThat(memberList).hasSize(100);
@@ -119,16 +122,10 @@ class CustomerServiceTest {
     @DisplayName("회원 이름으로 고객 조회가 가능해야 한다.")
     void test_findByCustomerName() {
         // given
-        Member member = Member.builder()
-                .name("customer1")
-                .email("customer1@test.com")
-                .password("password")
-                .build();
-        member.assignId(1L);
         when(memberRepository.findByName(any())).thenReturn(Optional.of(member));
 
         // when
-        Optional<Member> result = customerService.getCustomerByName("customer1");
+        Optional<Member> result = memberService.getCustomerByName("customer1");
 
         // then
         assertThat(result).isNotEmpty();
@@ -139,20 +136,24 @@ class CustomerServiceTest {
     @DisplayName("회원 아이디를 통한 회원 조회가 가능하다.")
     void test_findByCustomerId() {
         // given
+        when(memberRepository.findById(any())).thenReturn(Optional.of(member));
+
+        // when
+        Optional<Member> result = memberService.getCustomer(1L);
+
+        // then
+        assertThat(result).isNotEmpty();
+        assertThat(result.get().getId()).isEqualTo(1L);
+    }
+
+    private Member getMember() {
         Member member = Member.builder()
                 .name("customer1")
                 .email("customer1@test.com")
                 .password("password")
                 .build();
-        member.assignId(1L);
-        when(memberRepository.findById(any())).thenReturn(Optional.of(member));
-
-        // when
-        Optional<Member> result = customerService.getCustomer(1L);
-
-        // then
-        assertThat(result).isNotEmpty();
-        assertThat(result.get().getId()).isEqualTo(1L);
+        ReflectionTestUtils.setField(member, "id", 1L);
+        return member;
     }
 
 

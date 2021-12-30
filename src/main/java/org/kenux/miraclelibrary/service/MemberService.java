@@ -14,21 +14,27 @@ import static org.kenux.miraclelibrary.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
-public class CustomerService {
+public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    public Member join(MemberJoinRequestDto memberJoinRequestDto) {
-        if (memberRepository.existsByEmail(memberJoinRequestDto.getEmail())) {
+    public Long join(MemberJoinRequestDto memberJoinRequestDto) {
+        validateEmail(memberJoinRequestDto.getEmail());
+        validatePassword(memberJoinRequestDto.getPassword());
+        Member member = memberJoinRequestDto.toEntity();
+        return memberRepository.save(member).getId();
+    }
+
+    private void validateEmail(String email) {
+        if (memberRepository.existsByEmail(email)) {
             throw new CustomException(EMAIL_DUPLICATION);
         }
+    }
 
-        if (memberJoinRequestDto.getPassword().length() < 8) {
+    private void validatePassword(String password) {
+        if (password.length() < 8) {
             throw new CustomException(PASSWORD_SHORT);
         }
-
-        Member member = memberJoinRequestDto.toEntity();
-        return memberRepository.save(member);
     }
 
     public List<Member> getAllCustomer() {
