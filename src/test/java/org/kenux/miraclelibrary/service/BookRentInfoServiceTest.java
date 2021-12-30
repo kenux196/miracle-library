@@ -160,10 +160,11 @@ class BookRentInfoServiceTest {
 
         // when
         RequestReturnBookDto requestReturnBookDto = new RequestReturnBookDto(memberId, books);
-        final List<BookRentInfo> results = bookRentInfoService.returnBook(requestReturnBookDto);
+//        final List<BookRentInfo> results = bookRentInfoService.returnBook(requestReturnBookDto);
 
         // then
-        assertThat(results).hasSize(1);
+        assertThatNoException().isThrownBy(() -> bookRentInfoService.returnBook(requestReturnBookDto));
+//        assertThat(results).hasSize(1);
     }
 
     @Test
@@ -196,12 +197,8 @@ class BookRentInfoServiceTest {
         // when
         RequestReturnBookDto requestReturnBookDto = new RequestReturnBookDto(memberId, books);
 
-//        assertThatNoException().isThrownBy(() -> bookRentInfoService.returnBook(requestReturnBookDto));
-        List<BookRentInfo> results = bookRentInfoService.returnBook(requestReturnBookDto);
-
         // then
-        assertThat(results).hasSize(3);
-
+        assertThatNoException().isThrownBy(() -> bookRentInfoService.returnBook(requestReturnBookDto));
     }
 
     private Member getMember() {

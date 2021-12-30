@@ -6,12 +6,17 @@ import lombok.NoArgsConstructor;
 import org.kenux.miraclelibrary.domain.Member;
 import org.kenux.miraclelibrary.domain.enums.MemberRole;
 
+import javax.validation.constraints.NotBlank;
+
 @NoArgsConstructor
 @Getter
 public class MemberJoinDto {
 
+    @NotBlank
     private String name;
+    @NotBlank
     private String email;
+    @NotBlank
     private String password;
 
     @Builder

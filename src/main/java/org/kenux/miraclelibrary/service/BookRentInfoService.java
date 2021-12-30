@@ -89,6 +89,9 @@ public class BookRentInfoService {
             bookRentInfo.getBook().changeStatus(BookStatus.RENTABLE);
             bookRentInfoRepository.save(bookRentInfo);
         }
+
+        if (true)  throw new RuntimeException("test");
+
         return bookRentInfoList;
     }
 }
