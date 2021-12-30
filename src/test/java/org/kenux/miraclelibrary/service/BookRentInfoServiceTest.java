@@ -22,12 +22,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
@@ -129,14 +131,11 @@ class BookRentInfoServiceTest {
     @DisplayName("책 반납 시, 대여 정보를 못찾은 경우 예외 발생")
     void test_exception_notFoundBookRentInfo() throws Exception {
         // given
-        BookRentInfo bookRentInfo = BookRentInfo.builder()
-                .member(member)
-                .book(book)
-                .startDate(LocalDateTime.of(2021, 1, 1, 13, 0, 0))
-                .build();
+        Long memberId = 1L;
+        List<Long> books = Collections.singletonList(1L);
 
         // when
-        RequestReturnBookDto requestReturnBookDto = new RequestReturnBookDto(1L, "title");
+        RequestReturnBookDto requestReturnBookDto = new RequestReturnBookDto(memberId, books);
 
         // then
         assertThatThrownBy(() -> bookRentInfoService.returnBook(requestReturnBookDto))
@@ -148,20 +147,61 @@ class BookRentInfoServiceTest {
     @DisplayName("멤버는 책을 반납한다.")
     void test_bookReturn() throws Exception {
         // given
+        Long memberId = 1L;
+        List<Long> books = Collections.singletonList(1L);
+
         BookRentInfo bookRentInfo = BookRentInfo.builder()
                 .member(member)
                 .book(book)
                 .startDate(LocalDateTime.of(2021, 1, 1, 13, 0, 0))
                 .build();
         given(bookRentInfoRepository.save(any())).willReturn(bookRentInfo);
-        given(bookRentInfoRepository.findAllByBookId(any())).willReturn(List.of(bookRentInfo));
+        given(bookRentInfoRepository.findAllByBookIds(any())).willReturn(List.of(bookRentInfo));
 
         // when
-        RequestReturnBookDto requestReturnBookDto = new RequestReturnBookDto(1L, "title");
-        BookRentInfo result = bookRentInfoService.returnBook(requestReturnBookDto);
+        RequestReturnBookDto requestReturnBookDto = new RequestReturnBookDto(memberId, books);
+        final List<BookRentInfo> results = bookRentInfoService.returnBook(requestReturnBookDto);
 
         // then
-        assertThat(result.getReturnDate()).isNotNull();
+        assertThat(results).hasSize(1);
+    }
+
+    @Test
+    @DisplayName("멤버는 여러 권의 책을 반납한다.")
+    void test_returnSeveralBooks() throws Exception {
+        // given
+        Long memberId = 1L;
+        List<Long> books = Stream.of(1L, 2L, 3L).collect(Collectors.toList());
+
+        List<BookRentInfo> bookRentInfos = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            Book book = Book.builder()
+                    .id(i + 1L)
+                    .title("title-" + i)
+                    .author("author")
+                    .isbn("isbn-" + i)
+                    .createDate(LocalDateTime.now())
+                    .status(BookStatus.RENTED)
+                    .build();
+            BookRentInfo bookRentInfo = BookRentInfo.builder()
+                    .member(member)
+                    .book(book)
+                    .startDate(LocalDateTime.now())
+                    .build();
+            ReflectionTestUtils.setField(bookRentInfo, "id", i + 1L);
+            bookRentInfos.add(bookRentInfo);
+        }
+        given(bookRentInfoRepository.findAllByBookIds(any())).willReturn(bookRentInfos);
+
+        // when
+        RequestReturnBookDto requestReturnBookDto = new RequestReturnBookDto(memberId, books);
+
+//        assertThatNoException().isThrownBy(() -> bookRentInfoService.returnBook(requestReturnBookDto));
+        List<BookRentInfo> results = bookRentInfoService.returnBook(requestReturnBookDto);
+
+        // then
+        assertThat(results).hasSize(3);
+
     }
 
     private Member getMember() {

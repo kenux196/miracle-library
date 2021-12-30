@@ -70,26 +70,25 @@ public class BookRentInfoService {
     }
 
     @Transactional
-    public BookRentInfo returnBook(RequestReturnBookDto requestReturnBookDto) {
-        List<BookRentInfo> bookRentInfoList = bookRentInfoRepository.findAllByBookId(requestReturnBookDto.getBookId());
+    public List<BookRentInfo> returnBook(RequestReturnBookDto requestReturnBookDto) {
+        List<BookRentInfo> bookRentInfoList =
+                bookRentInfoRepository.findAllByBookIds(requestReturnBookDto.getBooks()).stream()
+                        .filter(bookRental -> bookRental.getReturnDate() == null)
+                        .collect(Collectors.toList());
 
-        List<BookRentInfo> found = bookRentInfoList.stream()
-                .filter(bookRental -> bookRental.getReturnDate() == null)
-                .collect(Collectors.toList());
-
-        if (found.isEmpty()) {
+        if (bookRentInfoList.isEmpty()) {
             throw new CustomException(ErrorCode.RENT_INFO_NOT_FOUND);
         }
 
-        if (found.size() > 1) {
+        if (bookRentInfoList.size() > requestReturnBookDto.getBooks().size()) {
             throw new CustomException(ErrorCode.RENT_INFO_DUPLICATION);
         }
 
-        BookRentInfo bookRentInfo = found.get(0);
-        bookRentInfo.setReturnDate(LocalDateTime.now());
-        Book book = found.get(0).getBook();
-        book.changeStatus(BookStatus.RENTABLE);
-        bookRepository.save(book);
-        return bookRentInfoRepository.save(bookRentInfo);
+        for (BookRentInfo bookRentInfo : bookRentInfoList) {
+            bookRentInfo.setReturnDate(LocalDateTime.now());
+            bookRentInfo.getBook().changeStatus(BookStatus.RENTABLE);
+            bookRentInfoRepository.save(bookRentInfo);
+        }
+        return bookRentInfoList;
     }
 }

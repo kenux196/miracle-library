@@ -13,8 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -82,7 +82,7 @@ class BookRentInfoRepositoryTest {
 
     @Test
     @DisplayName("책을 통한 대여 정보 검색")
-    void test_findAllByBook() throws Exception {
+    void test_findAllByBookId() throws Exception {
         // given
         BookRentInfo bookRentInfo = BookRentInfo.builder()
                 .member(member)
@@ -96,6 +96,43 @@ class BookRentInfoRepositoryTest {
 
         // then
         assertThat(bookRentInfos).isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("여러 권의 책을 통한 대여 정보 검색")
+    void test_findAllByBooks() throws Exception {
+        // given
+        List<Long> bookList = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            Book book = bookRepository.save(
+                    Book.builder()
+                            .title("title-" + i)
+                            .author("author")
+                            .isbn("isbn-" + i)
+                            .createDate(LocalDateTime.now())
+                            .status(BookStatus.RENTABLE)
+                            .build());
+            bookList.add(book.getId());
+            BookRentInfo bookRentInfo = BookRentInfo.builder()
+                    .member(member)
+                    .book(book)
+                    .startDate(rentalDate)
+                    .build();
+            bookRentInfoRepository.save(bookRentInfo);
+        }
+
+        // when
+        List<BookRentInfo> bookRentInfos = bookRentInfoRepository.findAllByBookIds(bookList);
+
+        // then
+        assertThat(bookRentInfos).hasSize(3);
+        assertThat(bookRentInfos.get(0).getBook().getId()).isEqualTo(bookList.get(0));
+        assertThat(bookRentInfos.get(0).getBook().getTitle()).isEqualTo("title-0");
+        assertThat(bookRentInfos.get(1).getBook().getId()).isEqualTo(bookList.get(1));
+        assertThat(bookRentInfos.get(1).getBook().getTitle()).isEqualTo("title-1");
+        assertThat(bookRentInfos.get(2).getBook().getId()).isEqualTo(bookList.get(2));
+        assertThat(bookRentInfos.get(2).getBook().getTitle()).isEqualTo("title-2");
+
     }
 
     private Member getMember() {
