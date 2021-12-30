@@ -70,7 +70,17 @@ public class BookRentInfoService {
     }
 
     @Transactional
-    public List<BookRentInfo> returnBook(RequestReturnBookDto requestReturnBookDto) {
+    public void returnBook(RequestReturnBookDto requestReturnBookDto) {
+        List<BookRentInfo> bookRentInfoList = getBookRentInfos(requestReturnBookDto);
+
+        for (BookRentInfo bookRentInfo : bookRentInfoList) {
+            bookRentInfo.setReturnDate(LocalDateTime.now());
+            bookRentInfo.getBook().changeStatus(BookStatus.RENTABLE);
+            bookRentInfoRepository.save(bookRentInfo);
+        }
+    }
+
+    private List<BookRentInfo> getBookRentInfos(RequestReturnBookDto requestReturnBookDto) {
         List<BookRentInfo> bookRentInfoList =
                 bookRentInfoRepository.findAllByBookIds(requestReturnBookDto.getBooks()).stream()
                         .filter(bookRental -> bookRental.getReturnDate() == null)
@@ -83,13 +93,7 @@ public class BookRentInfoService {
         if (bookRentInfoList.size() > requestReturnBookDto.getBooks().size()) {
             throw new CustomException(ErrorCode.RENT_INFO_DUPLICATION);
         }
-
-        for (BookRentInfo bookRentInfo : bookRentInfoList) {
-            bookRentInfo.setReturnDate(LocalDateTime.now());
-            bookRentInfo.getBook().changeStatus(BookStatus.RENTABLE);
-            bookRentInfoRepository.save(bookRentInfo);
-        }
-
         return bookRentInfoList;
     }
+
 }
