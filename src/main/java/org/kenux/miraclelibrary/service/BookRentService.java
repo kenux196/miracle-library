@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class BookRentInfoService {
+public class BookRentService {
 
     private final MemberRepository memberRepository;
     private final BookRepository bookRepository;

@@ -36,7 +36,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class BookRentInfoServiceTest {
+class BookRentServiceTest {
 
     @Mock
     MemberRepository memberRepository;
@@ -48,7 +48,7 @@ class BookRentInfoServiceTest {
     BookRentInfoRepository bookRentInfoRepository;
 
     @InjectMocks
-    BookRentInfoService bookRentInfoService;
+    BookRentService bookRentService;
 
     private Member member;
     private Book book;
@@ -74,7 +74,7 @@ class BookRentInfoServiceTest {
         given(bookRentInfoRepository.findAllByMemberId(memberId)).willReturn(List.of(bookRentInfo));
 
         // when
-        List<BookRentInfo> bookRentInfos = bookRentInfoService.getRentInfoByMember(memberId);
+        List<BookRentInfo> bookRentInfos = bookRentService.getRentInfoByMember(memberId);
 
         // then
         assertThat(bookRentInfos).hasSize(1);
@@ -99,7 +99,7 @@ class BookRentInfoServiceTest {
 
         // when
         BookRentRequestDto bookRentRequestDto = new BookRentRequestDto(member.getId(), Collections.singletonList(book.getId()));
-        List<BookRentInfo> saved = bookRentInfoService.rentBooks(bookRentRequestDto);
+        List<BookRentInfo> saved = bookRentService.rentBooks(bookRentRequestDto);
 
         // then
         assertThat(saved).isNotEmpty();
@@ -114,7 +114,7 @@ class BookRentInfoServiceTest {
         // when
         BookRentRequestDto bookRentRequestDto = new BookRentRequestDto(1L, Collections.singletonList(1L));
 
-        assertThatThrownBy(() -> bookRentInfoService.rentBooks(bookRentRequestDto))
+        assertThatThrownBy(() -> bookRentService.rentBooks(bookRentRequestDto))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.MEMBER_NOT_FOUND.getMessage());
     }
@@ -130,7 +130,7 @@ class BookRentInfoServiceTest {
         BookRentRequestDto bookRentRequestDto = new BookRentRequestDto(1L, Collections.singletonList(1L));
 
         // then
-        assertThatThrownBy(() -> bookRentInfoService.rentBooks(bookRentRequestDto))
+        assertThatThrownBy(() -> bookRentService.rentBooks(bookRentRequestDto))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.BOOK_NOT_FOUND.getMessage());
     }
@@ -146,7 +146,7 @@ class BookRentInfoServiceTest {
         BookRentRequestDto bookRentRequestDto = new BookRentRequestDto(1L, Collections.singletonList(1L));
 
         // when then
-        assertThatThrownBy(() -> bookRentInfoService.rentBooks(bookRentRequestDto))
+        assertThatThrownBy(() -> bookRentService.rentBooks(bookRentRequestDto))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.BOOK_WAS_RENTED.getMessage());
     }
@@ -162,7 +162,7 @@ class BookRentInfoServiceTest {
         BookReturnRequestDto bookReturnRequestDto = new BookReturnRequestDto(memberId, books);
 
         // then
-        assertThatThrownBy(() -> bookRentInfoService.returnBook(bookReturnRequestDto))
+        assertThatThrownBy(() -> bookRentService.returnBook(bookReturnRequestDto))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.RENT_INFO_NOT_FOUND.getMessage());
     }
@@ -187,7 +187,7 @@ class BookRentInfoServiceTest {
 //        final List<BookRentInfo> results = bookRentInfoService.returnBook(requestReturnBookDto);
 
         // then
-        assertThatNoException().isThrownBy(() -> bookRentInfoService.returnBook(bookReturnRequestDto));
+        assertThatNoException().isThrownBy(() -> bookRentService.returnBook(bookReturnRequestDto));
 //        assertThat(results).hasSize(1);
     }
 
@@ -222,7 +222,7 @@ class BookRentInfoServiceTest {
         BookReturnRequestDto bookReturnRequestDto = new BookReturnRequestDto(memberId, books);
 
         // then
-        assertThatNoException().isThrownBy(() -> bookRentInfoService.returnBook(bookReturnRequestDto));
+        assertThatNoException().isThrownBy(() -> bookRentService.returnBook(bookReturnRequestDto));
 
         // verify
         verify(bookRentInfoRepository).save(bookRentInfos.get(0));
