@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.kenux.miraclelibrary.domain.Member;
 import org.kenux.miraclelibrary.exception.CustomException;
 import org.kenux.miraclelibrary.repository.MemberRepository;
-import org.kenux.miraclelibrary.rest.dto.MemberJoinDto;
+import org.kenux.miraclelibrary.rest.dto.MemberJoinRequestDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,16 +18,16 @@ public class CustomerService {
 
     private final MemberRepository memberRepository;
 
-    public Member join(MemberJoinDto memberJoinDto) {
-        if (memberRepository.existsByEmail(memberJoinDto.getEmail())) {
+    public Member join(MemberJoinRequestDto memberJoinRequestDto) {
+        if (memberRepository.existsByEmail(memberJoinRequestDto.getEmail())) {
             throw new CustomException(EMAIL_DUPLICATION);
         }
 
-        if (memberJoinDto.getPassword().length() < 8) {
+        if (memberJoinRequestDto.getPassword().length() < 8) {
             throw new CustomException(PASSWORD_SHORT);
         }
 
-        Member member = memberJoinDto.toEntity();
+        Member member = memberJoinRequestDto.toEntity();
         return memberRepository.save(member);
     }
 

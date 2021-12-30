@@ -5,16 +5,14 @@ import org.junit.jupiter.api.Test;
 import org.kenux.miraclelibrary.domain.Book;
 import org.kenux.miraclelibrary.domain.enums.BookStatus;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
-class RegisterBookDtoTest {
+class BookRegisterRequestDtoTest {
 
     @Test
     @DisplayName("새책 등록은 엔티티로 변환할 수 있다.")
     void test_createRegisterBookDto() {
-        RegisterBookDto dto = RegisterBookDto.builder()
+        BookRegisterRequestDto dto = BookRegisterRequestDto.builder()
                 .title("title")
                 .author("author")
                 .isbn("isbn")
@@ -29,7 +27,7 @@ class RegisterBookDtoTest {
     @DisplayName("Book Entity 변환가능하다. 이때, 생성 시간이 있어야 하고, Rentable 상태이어야 한다.")
     void test_toEntity() throws Exception {
         // given
-        RegisterBookDto dto = RegisterBookDto.builder()
+        BookRegisterRequestDto dto = BookRegisterRequestDto.builder()
                 .title("title")
                 .author("author")
                 .isbn("isbn")

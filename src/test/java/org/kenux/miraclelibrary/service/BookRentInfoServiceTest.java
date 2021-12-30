@@ -14,8 +14,8 @@ import org.kenux.miraclelibrary.exception.ErrorCode;
 import org.kenux.miraclelibrary.repository.BookRentInfoRepository;
 import org.kenux.miraclelibrary.repository.BookRepository;
 import org.kenux.miraclelibrary.repository.MemberRepository;
-import org.kenux.miraclelibrary.rest.dto.RequestRentBookDto;
-import org.kenux.miraclelibrary.rest.dto.RequestReturnBookDto;
+import org.kenux.miraclelibrary.rest.dto.BookRentRequestDto;
+import org.kenux.miraclelibrary.rest.dto.BookReturnRequestDto;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -98,8 +98,8 @@ class BookRentInfoServiceTest {
         given(bookRentInfoRepository.save(any())).willReturn(bookRentInfo);
 
         // when
-        RequestRentBookDto requestRentBookDto = new RequestRentBookDto(member.getId(), Collections.singletonList(book.getId()));
-        List<BookRentInfo> saved = bookRentInfoService.rentBooks(requestRentBookDto);
+        BookRentRequestDto bookRentRequestDto = new BookRentRequestDto(member.getId(), Collections.singletonList(book.getId()));
+        List<BookRentInfo> saved = bookRentInfoService.rentBooks(bookRentRequestDto);
 
         // then
         assertThat(saved).isNotEmpty();
@@ -112,9 +112,9 @@ class BookRentInfoServiceTest {
         when(memberRepository.findById(any())).thenReturn(Optional.empty());
 
         // when
-        RequestRentBookDto requestRentBookDto = new RequestRentBookDto(1L, Collections.singletonList(1L));
+        BookRentRequestDto bookRentRequestDto = new BookRentRequestDto(1L, Collections.singletonList(1L));
 
-        assertThatThrownBy(() -> bookRentInfoService.rentBooks(requestRentBookDto))
+        assertThatThrownBy(() -> bookRentInfoService.rentBooks(bookRentRequestDto))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.MEMBER_NOT_FOUND.getMessage());
     }
@@ -127,10 +127,10 @@ class BookRentInfoServiceTest {
         when(memberRepository.findById(any())).thenReturn(Optional.of(member));
 
         // when
-        RequestRentBookDto requestRentBookDto = new RequestRentBookDto(1L, Collections.singletonList(1L));
+        BookRentRequestDto bookRentRequestDto = new BookRentRequestDto(1L, Collections.singletonList(1L));
 
         // then
-        assertThatThrownBy(() -> bookRentInfoService.rentBooks(requestRentBookDto))
+        assertThatThrownBy(() -> bookRentInfoService.rentBooks(bookRentRequestDto))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.BOOK_NOT_FOUND.getMessage());
     }
@@ -143,10 +143,10 @@ class BookRentInfoServiceTest {
         given(memberRepository.findById(any())).willReturn(Optional.of(member));
         given(bookRepository.findById(any())).willReturn(Optional.of(book));
 
-        RequestRentBookDto requestRentBookDto = new RequestRentBookDto(1L, Collections.singletonList(1L));
+        BookRentRequestDto bookRentRequestDto = new BookRentRequestDto(1L, Collections.singletonList(1L));
 
         // when then
-        assertThatThrownBy(() -> bookRentInfoService.rentBooks(requestRentBookDto))
+        assertThatThrownBy(() -> bookRentInfoService.rentBooks(bookRentRequestDto))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.BOOK_WAS_RENTED.getMessage());
     }
@@ -159,10 +159,10 @@ class BookRentInfoServiceTest {
         List<Long> books = Collections.singletonList(1L);
 
         // when
-        RequestReturnBookDto requestReturnBookDto = new RequestReturnBookDto(memberId, books);
+        BookReturnRequestDto bookReturnRequestDto = new BookReturnRequestDto(memberId, books);
 
         // then
-        assertThatThrownBy(() -> bookRentInfoService.returnBook(requestReturnBookDto))
+        assertThatThrownBy(() -> bookRentInfoService.returnBook(bookReturnRequestDto))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.RENT_INFO_NOT_FOUND.getMessage());
     }
@@ -183,11 +183,11 @@ class BookRentInfoServiceTest {
         given(bookRentInfoRepository.findAllByBookIds(any())).willReturn(List.of(bookRentInfo));
 
         // when
-        RequestReturnBookDto requestReturnBookDto = new RequestReturnBookDto(memberId, books);
+        BookReturnRequestDto bookReturnRequestDto = new BookReturnRequestDto(memberId, books);
 //        final List<BookRentInfo> results = bookRentInfoService.returnBook(requestReturnBookDto);
 
         // then
-        assertThatNoException().isThrownBy(() -> bookRentInfoService.returnBook(requestReturnBookDto));
+        assertThatNoException().isThrownBy(() -> bookRentInfoService.returnBook(bookReturnRequestDto));
 //        assertThat(results).hasSize(1);
     }
 
@@ -219,10 +219,10 @@ class BookRentInfoServiceTest {
         given(bookRentInfoRepository.findAllByBookIds(any())).willReturn(bookRentInfos);
 
         // when
-        RequestReturnBookDto requestReturnBookDto = new RequestReturnBookDto(memberId, books);
+        BookReturnRequestDto bookReturnRequestDto = new BookReturnRequestDto(memberId, books);
 
         // then
-        assertThatNoException().isThrownBy(() -> bookRentInfoService.returnBook(requestReturnBookDto));
+        assertThatNoException().isThrownBy(() -> bookRentInfoService.returnBook(bookReturnRequestDto));
 
         // verify
         verify(bookRentInfoRepository).save(bookRentInfos.get(0));

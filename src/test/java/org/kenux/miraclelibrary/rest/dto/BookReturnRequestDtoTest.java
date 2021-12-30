@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class RequestReturnBookDtoTest {
+class BookReturnRequestDtoTest {
 
     @Test
     @DisplayName("생성 테스트 : 멤버 정보, 반납할 책 리스트 정보 포함해야 한다.")
@@ -19,10 +19,10 @@ class RequestReturnBookDtoTest {
         List<Long> returnBookList = Stream.of(1L, 2L, 10L).collect(Collectors.toList());
 
         // when
-        RequestReturnBookDto requestReturnBookDto = new RequestReturnBookDto(memberId, returnBookList);
+        BookReturnRequestDto bookReturnRequestDto = new BookReturnRequestDto(memberId, returnBookList);
 
         // then
-        assertThat(requestReturnBookDto.getMemberId()).isEqualTo(memberId);
-        assertThat(requestReturnBookDto.getBooks()).hasSize(3);
+        assertThat(bookReturnRequestDto.getMemberId()).isEqualTo(memberId);
+        assertThat(bookReturnRequestDto.getBooks()).hasSize(3);
     }
 }
