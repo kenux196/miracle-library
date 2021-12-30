@@ -32,6 +32,7 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -199,6 +200,9 @@ class BookRentInfoServiceTest {
 
         // then
         assertThatNoException().isThrownBy(() -> bookRentInfoService.returnBook(requestReturnBookDto));
+
+        // verify
+        verify(bookRentInfoRepository).save(bookRentInfos.get(0));
     }
 
     private Member getMember() {

@@ -90,8 +90,6 @@ public class BookRentInfoService {
             bookRentInfoRepository.save(bookRentInfo);
         }
 
-        if (true)  throw new RuntimeException("test");
-
         return bookRentInfoList;
     }
 }
