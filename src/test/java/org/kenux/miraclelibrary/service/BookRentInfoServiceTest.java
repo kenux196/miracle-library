@@ -60,6 +60,29 @@ class BookRentInfoServiceTest {
     }
 
     @Test
+    @DisplayName("멤버의 대여 정보 이력 조회한다.")
+    void test_searchRentInfoByMember() throws Exception {
+        // given
+        Long memberId = 1L;
+        BookRentInfo bookRentInfo = BookRentInfo.builder()
+                .member(member)
+                .book(book)
+                .startDate(LocalDateTime.of(2021, 12, 25, 13, 0, 0))
+                .build();
+
+        given(memberRepository.findById(any())).willReturn(Optional.of(member));
+        given(bookRentInfoRepository.findAllByMemberId(memberId)).willReturn(List.of(bookRentInfo));
+
+        // when
+        List<BookRentInfo> bookRentInfos = bookRentInfoService.getRentInfoByMember(memberId);
+
+        // then
+        assertThat(bookRentInfos).hasSize(1);
+        verify(memberRepository).findById(memberId);
+    }
+
+
+    @Test
     @DisplayName("멤버는 책을 대여한다.")
     void test_BookRentalService_rentalBook() throws Exception {
         // given

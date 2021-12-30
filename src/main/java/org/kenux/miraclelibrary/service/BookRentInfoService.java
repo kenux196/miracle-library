@@ -31,7 +31,7 @@ public class BookRentInfoService {
 
     @Transactional
     public List<BookRentInfo> rentBooks(RequestRentBookDto requestRentBookDto) {
-        Member member = getMember(requestRentBookDto);
+        Member member = getMember(requestRentBookDto.getMemberId());
 
         List<BookRentInfo> bookRentInfos = new ArrayList<>();
         requestRentBookDto.getBookIds().forEach(id -> {
@@ -51,8 +51,8 @@ public class BookRentInfoService {
         return bookRentInfos;
     }
 
-    private Member getMember(RequestRentBookDto requestRentBookDto) {
-        return memberRepository.findById(requestRentBookDto.getMemberId())
+    private Member getMember(Long id) {
+        return memberRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
     }
 
@@ -96,4 +96,8 @@ public class BookRentInfoService {
         return bookRentInfoList;
     }
 
+    public List<BookRentInfo> getRentInfoByMember(Long memberId) {
+        final Member member = getMember(memberId);
+        return bookRentInfoRepository.findAllByMemberId(member.getId());
+    }
 }
