@@ -6,7 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.kenux.miraclelibrary.domain.Member;
 import org.kenux.miraclelibrary.domain.enums.MemberRole;
 import org.kenux.miraclelibrary.repository.MemberRepository;
-import org.kenux.miraclelibrary.rest.dto.LibrarianAddDto;
+import org.kenux.miraclelibrary.rest.dto.LibrarianAddRequest;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -39,12 +39,12 @@ class LibrarianManagementServiceTest {
         when(memberRepository.save(any())).thenReturn(member);
 
         // when
-        LibrarianAddDto librarianAddDto = LibrarianAddDto.builder()
+        LibrarianAddRequest librarianAddRequest = LibrarianAddRequest.builder()
                 .name("customer1")
                 .email("customer1@test.com")
                 .password("password")
                 .build();
-        Member saved = librarianManagementService.addLibrarian(librarianAddDto);
+        Member saved = librarianManagementService.addLibrarian(librarianAddRequest);
 
         // then
         assertThat(saved.getId()).isEqualTo(1);

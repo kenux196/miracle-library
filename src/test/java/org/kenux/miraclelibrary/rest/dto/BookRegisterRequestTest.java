@@ -7,12 +7,12 @@ import org.kenux.miraclelibrary.domain.enums.BookStatus;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class BookRegisterRequestDtoTest {
+class BookRegisterRequestTest {
 
     @Test
     @DisplayName("새책 등록은 엔티티로 변환할 수 있다.")
     void test_createRegisterBookDto() {
-        BookRegisterRequestDto dto = BookRegisterRequestDto.builder()
+        BookRegisterRequest dto = BookRegisterRequest.builder()
                 .title("title")
                 .author("author")
                 .isbn("isbn")
@@ -27,7 +27,7 @@ class BookRegisterRequestDtoTest {
     @DisplayName("Book Entity 변환가능하다. 이때, 생성 시간이 있어야 하고, Rentable 상태이어야 한다.")
     void test_toEntity() throws Exception {
         // given
-        BookRegisterRequestDto dto = BookRegisterRequestDto.builder()
+        BookRegisterRequest dto = BookRegisterRequest.builder()
                 .title("title")
                 .author("author")
                 .isbn("isbn")

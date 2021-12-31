@@ -10,7 +10,7 @@ import javax.validation.constraints.NotBlank;
 
 @NoArgsConstructor
 @Getter
-public class MemberJoinRequestDto {
+public class MemberJoinRequest {
 
     @NotBlank
     private String name;
@@ -20,7 +20,7 @@ public class MemberJoinRequestDto {
     private String password;
 
     @Builder
-    public MemberJoinRequestDto(String name, String email, String password) {
+    public MemberJoinRequest(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;

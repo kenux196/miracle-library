@@ -8,14 +8,14 @@ import org.kenux.miraclelibrary.domain.enums.MemberRole;
 
 @NoArgsConstructor
 @Getter
-public class LibrarianAddDto {
+public class LibrarianAddRequest {
 
     private String name;
     private String email;
     private String password;
 
     @Builder
-    public LibrarianAddDto(String name, String email, String password) {
+    public LibrarianAddRequest(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;

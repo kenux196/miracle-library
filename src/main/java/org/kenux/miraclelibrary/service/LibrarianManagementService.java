@@ -4,11 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.kenux.miraclelibrary.domain.Member;
 import org.kenux.miraclelibrary.exception.CustomException;
 import org.kenux.miraclelibrary.repository.MemberRepository;
-import org.kenux.miraclelibrary.rest.dto.LibrarianAddDto;
+import org.kenux.miraclelibrary.rest.dto.LibrarianAddRequest;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
 
 import static org.kenux.miraclelibrary.exception.ErrorCode.EMAIL_DUPLICATION;
 
@@ -18,12 +15,12 @@ public class LibrarianManagementService {
 
     private final MemberRepository memberRepository;
 
-    public Member addLibrarian(LibrarianAddDto librarianAddDto) {
-        if (memberRepository.existsByEmail(librarianAddDto.getEmail())) {
+    public Member addLibrarian(LibrarianAddRequest librarianAddRequest) {
+        if (memberRepository.existsByEmail(librarianAddRequest.getEmail())) {
             throw new CustomException(EMAIL_DUPLICATION);
         }
 
-        Member member = librarianAddDto.toEntity();
+        Member member = librarianAddRequest.toEntity();
         return memberRepository.save(member);
     }
 }

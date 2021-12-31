@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
-public class BookRegisterRequestDto {
+public class BookRegisterRequest {
 
     @NotBlank
     private String title;

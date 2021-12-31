@@ -9,7 +9,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @Data
-public class BookReturnRequestDto {
+public class BookReturnRequest {
 
     @NotNull
     private Long memberId;

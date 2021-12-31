@@ -6,7 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.kenux.miraclelibrary.domain.Book;
 import org.kenux.miraclelibrary.domain.enums.BookStatus;
 import org.kenux.miraclelibrary.repository.BookRepository;
-import org.kenux.miraclelibrary.rest.dto.BookRegisterRequestDto;
+import org.kenux.miraclelibrary.rest.dto.BookRegisterRequest;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -36,12 +36,12 @@ class BookServiceTest {
         given(bookRepository.save(any())).willReturn(book);
 
         // when
-        BookRegisterRequestDto bookRegisterRequestDto = BookRegisterRequestDto.builder()
+        BookRegisterRequest bookRegisterRequest = BookRegisterRequest.builder()
                 .title("title")
                 .author("author")
                 .isbn("isbn")
                 .build();
-        Long result = bookService.registerNewBook(bookRegisterRequestDto);
+        Long result = bookService.registerNewBook(bookRegisterRequest);
 
         // then
         assertThat(result).isEqualTo(1L);
