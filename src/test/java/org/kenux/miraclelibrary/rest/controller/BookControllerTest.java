@@ -30,16 +30,12 @@ class BookControllerTest {
     @MockBean
     private BookService bookService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
     @Test
     void 책_등록_페이지_로딩() throws Exception {
         // given
+        // when
         RequestBuilder request = MockMvcRequestBuilders
                 .get("/books/register");
-
-        // when
         ResultActions result = mockMvc.perform(request);
 
         // then
@@ -50,16 +46,11 @@ class BookControllerTest {
 
     @Test
     void 책_등록_실패_제목_미입력() throws Exception {
-        BookRegisterRequest bookRegisterRequest = BookRegisterRequest.builder()
-                .author("author")
-                .isbn("isbn")
-                .build();
-
+        // when
         RequestBuilder request = MockMvcRequestBuilders
                 .post("/books/register")
-                .requestAttr("a", bookRegisterRequest);
-
-        // when
+                .param("author", "author")
+                .param("isbn", "isbn");
         ResultActions result = mockMvc.perform(request);
 
         // then
@@ -70,22 +61,15 @@ class BookControllerTest {
     @Test
     void 책_등록_성공() throws Exception {
         // given
-        BookRegisterRequest bookRegisterRequest = BookRegisterRequest.builder()
-                .title("title")
-                .author("author")
-                .isbn("isbn")
-                .build();
-        String content = objectMapper.writeValueAsString(bookRegisterRequest);
-
         given(bookService.registerNewBook(any())).willReturn(1L);
 
 
         // when
         RequestBuilder request = MockMvcRequestBuilders
                 .post("/books/register")
-                .content(content)
-                .contentType(MediaType.APPLICATION_JSON)
-                ;
+                .param("title", "title")
+                .param("author", "author")
+                .param("isbn", "isbn");
         ResultActions result = mockMvc.perform(request);
 
         // then

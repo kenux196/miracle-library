@@ -20,7 +20,7 @@ public class BookController {
     }
 
     @PostMapping(value = "/register")
-    public String registerBook(@Validated BookRegisterRequest bookRegisterRequest) {
+    public String registerBook(@Validated @ModelAttribute BookRegisterRequest bookRegisterRequest) {
         bookService.registerNewBook(bookRegisterRequest);
         return "redirect:/";
     }
