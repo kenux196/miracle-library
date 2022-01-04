@@ -1,24 +1,26 @@
 package org.kenux.miraclelibrary.rest.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.kenux.miraclelibrary.exception.CustomException;
-import org.kenux.miraclelibrary.exception.ErrorCode;
-import org.kenux.miraclelibrary.rest.dto.BookRegisterRequest;
+import org.kenux.miraclelibrary.domain.Book;
+import org.kenux.miraclelibrary.domain.enums.BookStatus;
+import org.kenux.miraclelibrary.rest.dto.BookListResponse;
 import org.kenux.miraclelibrary.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -81,13 +83,25 @@ class BookControllerTest {
     @DisplayName("북 전체 리스트 가져오기")
     void test_getAllBooks() throws Exception {
         // given
-//        given(bookService.searchBook())
+        Book book = Book.builder()
+                .id(1L)
+                .title("title")
+                .author("author")
+                .isbn("isbn")
+                .status(BookStatus.RENTABLE)
+                .createDate(LocalDateTime.now())
+                .build();
+        List<BookListResponse> bookListResponses = Collections.singletonList(BookListResponse.of(book));
+        given(bookService.searchBook(null)).willReturn(Collections.singletonList(book));
 
         // when
         final ResultActions resultActions = mockMvc.perform(get("/books"));
 
         // then
         resultActions.andExpect(status().isOk())
+                .andExpect(view().name("books/book-list"))
+                .andExpect(model().attributeExists("bookList"))
+                .andExpect(model().attribute("bookList", bookListResponses))
                 .andDo(print());
     }
 
