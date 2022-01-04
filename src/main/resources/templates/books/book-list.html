@@ -6,6 +6,28 @@
 </head>
 <body>
 <h1>책 리스트</h1>
-
+<table>
+    <thead>
+    <tr>
+        <th> 도서번호 </th>
+        <th> 제목 </th>
+        <th> 작가 </th>
+        <th> Isbn </th>
+        <th> 대여상태 </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${bookList.isEmpty()}">
+        <td colspan="2"> No Books Available </td>
+    </tr>
+    <tr th:each="book : ${bookList}">
+        <td><span th:text="${book.bookId}"> id </span></td>
+        <td><span th:text="${book.title}"> Title </span></td>
+        <td><span th:text="${book.author}"> Author </span></td>
+        <td><span th:text="${book.isbn}"> Isbn </span></td>
+        <td><span th:text="${book.status}"> status </span></td>
+    </tr>
+    </tbody>
+</table>
 </body>
 </html>

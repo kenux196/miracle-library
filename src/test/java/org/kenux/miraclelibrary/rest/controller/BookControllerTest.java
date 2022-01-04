@@ -76,6 +76,7 @@ class BookControllerTest {
 
         // then
         result.andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/books"))
                 .andDo(print());
     }
 
