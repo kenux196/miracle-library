@@ -62,6 +62,21 @@ class BookServiceTest {
     }
 
     @Test
+    @DisplayName("키워드가 입력되지 않으면 전체 책 리스트를 가져온다.")
+    void test_getAllBooks_whenNotExistKeyword() throws Exception {
+        // given
+        Book book = createBookForTest();
+        given(bookRepository.findAll()).willReturn(Collections.singletonList(book));
+
+        // when
+        final List<Book> books = bookService.searchBook(null);
+
+        // then
+        assertThat(books).isNotEmpty();
+    }
+
+
+    @Test
     @DisplayName("검색한 책의 대출 가능 여부를 확인할 수 있어야 한다.")
     void test_isAvailableRent() throws Exception {
         // given

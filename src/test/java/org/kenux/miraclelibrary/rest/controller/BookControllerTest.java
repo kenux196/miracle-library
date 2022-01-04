@@ -1,6 +1,7 @@
 package org.kenux.miraclelibrary.rest.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.kenux.miraclelibrary.exception.CustomException;
 import org.kenux.miraclelibrary.exception.ErrorCode;
@@ -18,6 +19,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willThrow;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -34,8 +36,7 @@ class BookControllerTest {
     void 책_등록_페이지_로딩() throws Exception {
         // given
         // when
-        RequestBuilder request = MockMvcRequestBuilders
-                .get("/books/register");
+        RequestBuilder request = get("/books/register");
         ResultActions result = mockMvc.perform(request);
 
         // then
@@ -63,7 +64,6 @@ class BookControllerTest {
         // given
         given(bookService.registerNewBook(any())).willReturn(1L);
 
-
         // when
         RequestBuilder request = MockMvcRequestBuilders
                 .post("/books/register")
@@ -76,4 +76,19 @@ class BookControllerTest {
         result.andExpect(status().is3xxRedirection())
                 .andDo(print());
     }
+
+    @Test
+    @DisplayName("북 전체 리스트 가져오기")
+    void test_getAllBooks() throws Exception {
+        // given
+//        given(bookService.searchBook())
+
+        // when
+        final ResultActions resultActions = mockMvc.perform(get("/books"));
+
+        // then
+        resultActions.andExpect(status().isOk())
+                .andDo(print());
+    }
+
 }

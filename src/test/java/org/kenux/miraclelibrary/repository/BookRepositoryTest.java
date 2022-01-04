@@ -48,6 +48,21 @@ class BookRepositoryTest {
         assertThat(found).isEmpty();
     }
 
+    @Test
+    @DisplayName("전체 리스트를 가져온다.")
+    void test_findAllBooks_whenNotExistKeyword() throws Exception {
+        // given
+        final Book book = createBook();
+        bookRepository.save(book);
+
+        // when
+        final List<Book> result = bookRepository.findAll();
+
+        // then
+        assertThat(result).hasSize(1);
+    }
+
+
     private Book createBook() {
         return Book.builder()
                 .title("title")
