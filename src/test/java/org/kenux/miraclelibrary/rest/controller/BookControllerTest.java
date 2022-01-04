@@ -105,4 +105,30 @@ class BookControllerTest {
                 .andDo(print());
     }
 
+    @Test
+    @DisplayName("사용자가 입력한 키워드에 따른 책 검색 리스트 가져온다.")
+    void test_searchBook() throws Exception {
+        Book book = Book.builder()
+                .id(1L)
+                .title("title")
+                .author("author")
+                .isbn("isbn")
+                .status(BookStatus.RENTABLE)
+                .createDate(LocalDateTime.now())
+                .build();
+        List<BookListResponse> bookListResponses = Collections.singletonList(BookListResponse.of(book));
+        given(bookService.searchBook(any())).willReturn(Collections.singletonList(book));
+
+        // when
+        final ResultActions resultActions = mockMvc.perform(get("/books"));
+
+        // then
+        resultActions.andExpect(status().isOk())
+                .andExpect(view().name("books/book-list"))
+                .andExpect(model().attributeExists("bookList"))
+                .andExpect(model().attribute("bookList", bookListResponses))
+                .andDo(print());
+    }
+
+
 }

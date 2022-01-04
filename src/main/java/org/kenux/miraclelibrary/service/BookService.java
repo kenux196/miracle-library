@@ -20,7 +20,6 @@ public class BookService {
     }
 
     public List<Book> searchBook(String keyword) {
-        if (keyword != null) return bookRepository.findAllByKeyword(keyword);
-        return bookRepository.findAll();
+        return bookRepository.findAllByKeyword(keyword);
     }
 }

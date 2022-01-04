@@ -66,7 +66,7 @@ class BookServiceTest {
     void test_getAllBooks_whenNotExistKeyword() throws Exception {
         // given
         Book book = createBookForTest();
-        given(bookRepository.findAll()).willReturn(Collections.singletonList(book));
+        given(bookRepository.findAllByKeyword(null)).willReturn(Collections.singletonList(book));
 
         // when
         final List<Book> books = bookService.searchBook(null);

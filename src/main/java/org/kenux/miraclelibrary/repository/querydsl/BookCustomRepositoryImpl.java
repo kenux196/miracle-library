@@ -1,5 +1,6 @@
 package org.kenux.miraclelibrary.repository.querydsl;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.kenux.miraclelibrary.domain.Book;
@@ -18,7 +19,15 @@ public class BookCustomRepositoryImpl implements BookCustomRepository {
     @Override
     public List<Book> findAllByKeyword(String keyword) {
         return jpaQueryFactory.selectFrom(book)
-                .where(book.title.contains(keyword).or(book.author.contains(keyword)))
+                .where(titleOrAuthorContains(keyword))
                 .fetch();
+    }
+
+    private BooleanExpression titleOrAuthorContains(String keyword) {
+        if (keyword == null) {
+            return null;
+        }
+        return book.title.contains(keyword)
+                .or(book.author.contains(keyword));
     }
 }

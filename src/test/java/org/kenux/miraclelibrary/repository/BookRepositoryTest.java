@@ -56,7 +56,7 @@ class BookRepositoryTest {
         bookRepository.save(book);
 
         // when
-        final List<Book> result = bookRepository.findAll();
+        final List<Book> result = bookRepository.findAllByKeyword(null);
 
         // then
         assertThat(result).hasSize(1);
