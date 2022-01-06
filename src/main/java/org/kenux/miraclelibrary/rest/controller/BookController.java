@@ -5,7 +5,6 @@ import org.kenux.miraclelibrary.domain.Book;
 import org.kenux.miraclelibrary.rest.dto.BookListResponse;
 import org.kenux.miraclelibrary.rest.dto.BookRegisterRequest;
 import org.kenux.miraclelibrary.service.BookService;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;

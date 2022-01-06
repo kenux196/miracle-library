@@ -1,7 +1,6 @@
 package org.kenux.miraclelibrary.domain;
 
 import lombok.*;
-import org.kenux.miraclelibrary.domain.enums.BookStatus;
 
 import javax.persistence.*;
 import java.time.LocalDate;

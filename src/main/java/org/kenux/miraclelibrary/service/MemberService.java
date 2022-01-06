@@ -10,7 +10,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-import static org.kenux.miraclelibrary.exception.ErrorCode.*;
+import static org.kenux.miraclelibrary.exception.ErrorCode.EMAIL_DUPLICATION;
+import static org.kenux.miraclelibrary.exception.ErrorCode.PASSWORD_SHORT;
 
 @Service
 @RequiredArgsConstructor
