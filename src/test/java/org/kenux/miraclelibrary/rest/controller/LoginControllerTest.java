@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(LoginController.class)
@@ -52,14 +53,13 @@ class LoginControllerTest {
         // when
         final RequestBuilder request = MockMvcRequestBuilders.post("/login")
                 .content(mapper.writeValueAsString(loginRequest))
-//                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                ;
+                .contentType(MediaType.APPLICATION_JSON);
+
         final ResultActions result = mockMvc.perform(request);
 
         // then
         result.andExpect(status().isOk())
-//                .andExpect(content().string(mapper.writeValueAsString(loginResponse)))
+                .andExpect(content().string(mapper.writeValueAsString(loginResponse)))
                 .andDo(print());
 
     }
