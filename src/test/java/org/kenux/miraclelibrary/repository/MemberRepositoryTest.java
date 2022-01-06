@@ -82,11 +82,26 @@ class MemberRepositoryTest {
     void test_findByName() {
         memberRepository.save(member);
 
-        Optional<Member> found = memberRepository.findByName("customer1");
+        Optional<Member> found = memberRepository.findByName(member.getName());
 
         assertThat(found).isNotEmpty();
-        assertThat(found.get().getName()).isEqualTo("customer1");
+        assertThat(found.get().getName()).isEqualTo(member.getName());
     }
+
+    @Test
+    @DisplayName("멤버 이메일로 조회")
+    void test_findByEmail() throws Exception {
+        // given
+        memberRepository.save(member);
+        
+        // when
+        Optional<Member> found = memberRepository.findByEmail(member.getEmail());
+
+        // then
+        assertThat(found).isNotEmpty();
+        assertThat(found.get().getEmail()).isEqualTo(member.getEmail());
+    }
+
 
     @Test
     @DisplayName("멤버를 통해서 멤버의 비밀번호를 확인한다.")

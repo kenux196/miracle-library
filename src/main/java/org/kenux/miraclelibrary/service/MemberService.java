@@ -38,15 +38,15 @@ public class MemberService {
         }
     }
 
-    public List<Member> getAllCustomer() {
+    public List<Member> getMembers() {
         return memberRepository.findAll();
     }
 
-    public Optional<Member> getCustomerByName(String name) {
+    public Optional<Member> getMembersByName(String name) {
         return memberRepository.findByName(name);
     }
 
-    public Optional<Member> getCustomer(Long id) {
+    public Optional<Member> getMember(Long id) {
         return memberRepository.findById(id);
     }
 }

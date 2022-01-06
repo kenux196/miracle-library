@@ -20,7 +20,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.kenux.miraclelibrary.exception.ErrorCode.EMAIL_DUPLICATION;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -112,7 +111,7 @@ class MemberServiceTest {
         when(memberRepository.findAll()).thenReturn(members);
 
         // when
-        List<Member> memberList = memberService.getAllCustomer();
+        List<Member> memberList = memberService.getMembers();
 
         // then
         assertThat(memberList).hasSize(100);
@@ -125,7 +124,7 @@ class MemberServiceTest {
         when(memberRepository.findByName(any())).thenReturn(Optional.of(member));
 
         // when
-        Optional<Member> result = memberService.getCustomerByName("customer1");
+        Optional<Member> result = memberService.getMembersByName("customer1");
 
         // then
         assertThat(result).isNotEmpty();
@@ -139,7 +138,7 @@ class MemberServiceTest {
         when(memberRepository.findById(any())).thenReturn(Optional.of(member));
 
         // when
-        Optional<Member> result = memberService.getCustomer(1L);
+        Optional<Member> result = memberService.getMember(1L);
 
         // then
         assertThat(result).isNotEmpty();
