@@ -12,11 +12,11 @@ import javax.validation.constraints.NotBlank;
 @Getter
 public class MemberJoinRequest {
 
-    @NotBlank
+    @NotBlank(message = "이름을 입력하세요")
     private String name;
-    @NotBlank
+    @NotBlank(message = "이메일 주소를 입력하세요")
     private String email;
-    @NotBlank
+    @NotBlank(message = "패스워드를 입력하세요.")
     private String password;
 
     @Builder

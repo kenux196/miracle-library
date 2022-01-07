@@ -5,6 +5,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.kenux.miraclelibrary.domain.Member;
 import org.kenux.miraclelibrary.domain.enums.MemberRole;
+import org.kenux.miraclelibrary.exception.CustomException;
+import org.kenux.miraclelibrary.exception.ErrorCode;
 import org.kenux.miraclelibrary.rest.dto.LoginRequest;
 import org.kenux.miraclelibrary.rest.dto.LoginResponse;
 import org.kenux.miraclelibrary.service.LoginService;
@@ -63,5 +65,40 @@ class LoginControllerTest {
                 .andDo(print());
 
     }
+
+    @Test
+    @DisplayName("가입된 멤버가 없는 경우, 404 리턴")
+    void test_memberNotFound_whenLogin() throws Exception {
+        // given
+        LoginRequest loginRequest = new LoginRequest("user@test.com", "password");
+        given(loginService.login(any())).willThrow(new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        // when
+        final RequestBuilder request = MockMvcRequestBuilders.post("/login")
+                .content(mapper.writeValueAsString(loginRequest))
+                .contentType(MediaType.APPLICATION_JSON);
+        final ResultActions result = mockMvc.perform(request);
+
+        // then
+        result.andExpect(status().is4xxClientError())
+                .andExpect(status().is(404));
+    }
+
+    @Test
+    @DisplayName("로그인 패스워드 틀린 경우, 400 리턴")
+    void test_loginFailed_wrongPassword() throws Exception {
+        // given
+        LoginRequest loginRequest = new LoginRequest("user@test.com", "password");
+        given(loginService.login(any())).willThrow(new CustomException(ErrorCode.PASSWORD_WRONG));
+        // when
+        final RequestBuilder request = MockMvcRequestBuilders.post("/login")
+                .content(mapper.writeValueAsString(loginRequest))
+                .contentType(MediaType.APPLICATION_JSON);
+        final ResultActions result = mockMvc.perform(request);
+
+        // then
+        result.andExpect(status().is4xxClientError())
+                .andExpect(status().is(400));
+    }
+
 
 }

@@ -14,7 +14,7 @@ public class LoginService {
 
     private final MemberRepository memberRepository;
 
-    public Member login(LoginRequest loginRequest) {
+    public Member login(LoginRequest loginRequest) throws Exception {
         final Member member = memberRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 

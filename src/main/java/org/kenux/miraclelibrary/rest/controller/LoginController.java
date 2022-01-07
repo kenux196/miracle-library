@@ -6,11 +6,12 @@ import org.kenux.miraclelibrary.rest.dto.LoginRequest;
 import org.kenux.miraclelibrary.rest.dto.LoginResponse;
 import org.kenux.miraclelibrary.service.LoginService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/login")
@@ -20,7 +21,7 @@ public class LoginController {
     private final LoginService loginService;
 
     @PostMapping
-    public ResponseEntity<?> login(@Validated @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> login(@RequestBody @Valid LoginRequest loginRequest) throws Exception {
         final Member member = loginService.login(loginRequest);
         return ResponseEntity.ok(LoginResponse.of(member));
     }
