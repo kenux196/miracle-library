@@ -29,6 +29,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = {ConstraintViolationException.class, DataIntegrityViolationException.class})
     protected ResponseEntity<ErrorResponse> handleDataException() {
 //        log.error("handleCustomException throw CustomException : {}", e.getErrorCode());
+        // TODO : refactoring - skyun 2022-01-07
         return ErrorResponse.toResponseEntity(ErrorCode.RENT_INFO_DUPLICATION);
     }
 
@@ -37,7 +38,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                                                          HttpHeaders headers,
                                                          HttpStatus status,
                                                          WebRequest request) {
-        // TODO : Refactoring - skyun 2022-01-07
+        // TODO : refactoring - skyun 2022-01-07
         final ErrorResponse errorResponse = ErrorResponse.builder()
                 .build();
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
@@ -52,35 +53,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     private ErrorResponse makeErrorResponse(BindingResult bindingResult) {
-        String code = "";
+        String code = ErrorCode.PARAMETER_WRONG.name();
         String message = "";
-        String detail = "";
         if (bindingResult.hasErrors()) {
             final FieldError fieldError = bindingResult.getFieldError();
             if (fieldError != null) {
-                if (fieldError.getDefaultMessage() != null) {
-                    detail = fieldError.getDefaultMessage();
-                }
-                String bindResultCode = fieldError.getCode();
-                if (bindResultCode != null) {
-                    switch (bindResultCode) {
-                        case "NotNull":
-                        case "NotBlank":
-                            code = ErrorCode.NOT_NULL.name();
-                            message = ErrorCode.NOT_NULL.getMessage();
-                            break;
-                        case "NotEmpty":
-                            code = ErrorCode.NOT_EMPTY.name();
-                            message = ErrorCode.NOT_EMPTY.getMessage();
-                            break;
-                        case "Min":
-                            code = ErrorCode.MIN_VALUE.name();
-                            message = ErrorCode.MIN_VALUE.getMessage();
-                            break;
-                        default:
-                            break;
-                    }
-                }
+                message = fieldError.getDefaultMessage();
             }
         }
 
@@ -88,7 +66,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST.value())
                 .code(code)
                 .message(message)
-                .detail(detail)
                 .build();
     }
 }

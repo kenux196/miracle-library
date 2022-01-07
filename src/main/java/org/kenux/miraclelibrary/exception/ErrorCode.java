@@ -18,9 +18,7 @@ public enum ErrorCode {
     RENT_INFO_NOT_FOUND(NOT_FOUND, "대출 정보가 존재하지 않습니다."),
     RENT_INFO_DUPLICATION(CONFLICT, "동일한 대출 정보가 존재합니다."),
     BOOK_WAS_RENTED(CONFLICT, "해당 책은 대출 상태입니다. 다시 확인하세요."),
-    NOT_NULL(BAD_REQUEST, "필수값이 누락되었습니다."),
-    NOT_EMPTY(BAD_REQUEST, "값이 비어있습니다."),
-    MIN_VALUE(BAD_REQUEST, "최소값보다 커야 합니다.")
+    PARAMETER_WRONG(BAD_REQUEST, "파라미터 값이 잘못되었습니다."),
     ;
 
     private final HttpStatus httpStatus;

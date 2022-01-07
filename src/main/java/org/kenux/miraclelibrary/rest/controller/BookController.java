@@ -7,9 +7,9 @@ import org.kenux.miraclelibrary.rest.dto.BookRegisterRequest;
 import org.kenux.miraclelibrary.service.BookService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,7 +21,7 @@ public class BookController {
     private final BookService bookService;
 
     @PostMapping(value = "/register")
-    public ResponseEntity<Long> registerBook(@Validated @ModelAttribute BookRegisterRequest bookRegisterRequest) {
+    public ResponseEntity<Long> registerBook(@Valid @ModelAttribute BookRegisterRequest bookRegisterRequest) {
         final Long bookId = bookService.registerNewBook(bookRegisterRequest);
         return ResponseEntity.ok(bookId);
     }

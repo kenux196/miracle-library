@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank;
 @Getter
 public class MemberJoinRequest {
 
-    @NotBlank(message = "이름을 입력하세요")
+    @NotBlank(message = "이름값이 비었습니다.")
     private String name;
     @NotBlank(message = "이메일 주소를 입력하세요")
     private String email;
