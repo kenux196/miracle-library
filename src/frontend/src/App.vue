@@ -1,10 +1,16 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> | <router-link to="/book">Book</router-link> |
-      <router-link to="/myInfo">내정보</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
+    <b-nav pills>
+      <b-nav-item to="/" active>홈</b-nav-item>
+      <b-nav-item-dropdown id="my-nav-dropdown" text="도서" toggle-class="nav-link-custom" right>
+        <b-dropdown-item to="/book">도서</b-dropdown-item>
+        <b-dropdown-item>Two</b-dropdown-item>
+        <b-dropdown-divider></b-dropdown-divider>
+        <b-dropdown-item>Three</b-dropdown-item></b-nav-item-dropdown
+      >
+      <b-nav-item to="/myInfo">내 정보</b-nav-item>
+      <b-nav-item to="/about">About</b-nav-item>
+    </b-nav>
     <router-view />
   </div>
 </template>
@@ -18,16 +24,7 @@
   color: #2c3e50;
 }
 
-#nav {
+.nav {
   padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
 }
 </style>

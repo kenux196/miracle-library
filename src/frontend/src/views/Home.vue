@@ -1,9 +1,21 @@
 <template>
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png" />
-    <notice></notice>
-    <new-books></new-books>
-    <rent-top-books></rent-top-books>
+    <b-container class="bv-example-row">
+      <b-row>
+        <b-col>1 of 3</b-col>
+        <b-col>2 of 3</b-col>
+        <b-col>3 of 3</b-col>
+      </b-row>
+    </b-container>
+    <div class="notice center-block">
+      <notice></notice>
+    </div>
+    <div class="new-book">
+      <new-books></new-books>
+      <rent-top-books></rent-top-books>
+    </div>
+    <div></div>
   </div>
 </template>
 
@@ -22,3 +34,4 @@ export default {
   },
 };
 </script>
+<style scoped></style>
