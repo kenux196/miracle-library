@@ -1,5 +1,6 @@
 package org.kenux.miraclelibrary.rest.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.kenux.miraclelibrary.domain.Book;
@@ -19,11 +20,11 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = {BookController.class})
 class BookControllerTest {
@@ -34,18 +35,7 @@ class BookControllerTest {
     @MockBean
     private BookService bookService;
 
-    @Test
-    void 책_등록_페이지_로딩() throws Exception {
-        // given
-        // when
-        RequestBuilder request = get("/books/register");
-        ResultActions result = mockMvc.perform(request);
-
-        // then
-        result.andExpect(status().isOk())
-                .andExpect(view().name("books/registerForm"))
-                .andDo(print());
-    }
+    private ObjectMapper mapper = new ObjectMapper();
 
     @Test
     void 책_등록_실패_제목_미입력() throws Exception {
@@ -75,8 +65,8 @@ class BookControllerTest {
         ResultActions result = mockMvc.perform(request);
 
         // then
-        result.andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/books"))
+        result.andExpect(status().isOk())
+                .andExpect(content().string("1"))
                 .andDo(print());
     }
 
@@ -100,9 +90,7 @@ class BookControllerTest {
 
         // then
         resultActions.andExpect(status().isOk())
-                .andExpect(view().name("books/book-list"))
-                .andExpect(model().attributeExists("bookList"))
-                .andExpect(model().attribute("bookList", bookListResponses))
+                .andExpect(content().string(mapper.writeValueAsString(bookListResponses)))
                 .andDo(print());
     }
 
@@ -125,9 +113,7 @@ class BookControllerTest {
 
         // then
         resultActions.andExpect(status().isOk())
-                .andExpect(view().name("books/book-list"))
-                .andExpect(model().attributeExists("bookList"))
-                .andExpect(model().attribute("bookList", bookListResponses))
+                .andExpect(content().string(mapper.writeValueAsString(bookListResponses)))
                 .andDo(print());
     }
 
