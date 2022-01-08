@@ -4,7 +4,7 @@
       <b-nav-item to="/" active>홈</b-nav-item>
       <b-nav-item-dropdown id="my-nav-dropdown" text="도서" toggle-class="nav-link-custom" right>
         <b-dropdown-item to="/book">도서</b-dropdown-item>
-        <b-dropdown-item>Two</b-dropdown-item>
+        <b-dropdown-item to="/book-manage">책 관리</b-dropdown-item>
         <b-dropdown-divider></b-dropdown-divider>
         <b-dropdown-item>Three</b-dropdown-item></b-nav-item-dropdown
       >
