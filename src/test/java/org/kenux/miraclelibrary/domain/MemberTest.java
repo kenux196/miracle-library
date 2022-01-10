@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class MemberTest {
 
     @Test
-    @DisplayName("멤버는 id, name, password, email, 역할이 있다.")
+    @DisplayName("멤버 객체 생성")
     void test_CustomerBasic() {
         final Member member = createMember();
 
