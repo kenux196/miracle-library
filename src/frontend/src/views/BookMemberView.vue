@@ -1,6 +1,5 @@
 <template>
-  <div class="book-management">
-    <book-add-form></book-add-form>
+  <div class="books">
     <b-dd-divider></b-dd-divider>
     <div class="book-list">
       <book-list></book-list>
@@ -12,13 +11,11 @@
 <script>
 // @ is an alias to /src
 import BookList from '@/components/BookList.vue';
-import BookAddForm from '../components/BookAddForm.vue';
 
 export default {
-  name: 'Home',
+  name: 'BookSearch',
   components: {
     BookList,
-    BookAddForm,
   },
 };
 </script>
