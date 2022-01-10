@@ -1,5 +1,5 @@
 <template>
-  <div class="news">
+  <div class="w-70 p-3">
     <h1>도서관 소식</h1>
     <b-table striped hover :items="items" :fields="fields"></b-table>
   </div>

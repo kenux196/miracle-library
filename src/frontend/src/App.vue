@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <b-nav pills>
-      <b-nav-item to="/" active>홈</b-nav-item>
+    <b-nav class="w-70 p-3">
+      <b-nav-item to="/">홈</b-nav-item>
       <b-nav-item-dropdown id="my-nav-dropdown" text="도서" toggle-class="nav-link-custom" right>
         <b-dropdown-item to="/book">도서</b-dropdown-item>
         <b-dropdown-item to="/book-manage">책 관리</b-dropdown-item>
@@ -20,11 +20,7 @@
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+  /* text-align: center; */
   color: #2c3e50;
-}
-
-.nav {
-  padding: 30px;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="w-70 p-3">
     <b-button v-b-modal.modal-footer-sm>신간 등록</b-button>
     <b-modal id="modal-footer-sm" title="신규 책 등록" button-size="sm">
       <b-form @submit="onSubmit" @reset="onReset">

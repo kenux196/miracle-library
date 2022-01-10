@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="w-70 p-3">
     <h1>도서 목록</h1>
     <book-search></book-search>
     <b-table select-mode="multi" striped hover :items="items" :fields="fields"></b-table>

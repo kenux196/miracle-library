@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="w-70 p-3">
     <h1>인기 서적</h1>
     <b-table striped hover :items="items" :fields="fields"></b-table>
   </div>
