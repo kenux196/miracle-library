@@ -9,8 +9,7 @@
 </template>
 
 <script>
-// @ is an alias to /src
-import BookList from '@/components/BookList.vue';
+import BookList from '../components/BookList.vue';
 
 export default {
   name: 'BookSearch',

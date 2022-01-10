@@ -1,6 +1,7 @@
 <template>
   <div>
     <h1>도서 목록</h1>
+    <book-search></book-search>
     <b-table select-mode="multi" striped hover :items="items" :fields="fields"></b-table>
     <h2>샘플</h2>
     <b-table-simple responsive>
@@ -26,9 +27,12 @@
 </template>
 
 <script>
+import BookSearch from './BookSearch.vue';
 export default {
+  components: { BookSearch },
   data() {
     return {
+      keyword: '',
       fields: [
         {
           key: 'id',

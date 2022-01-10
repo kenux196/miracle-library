@@ -3,7 +3,8 @@
     <book-add-form></book-add-form>
     <b-dd-divider></b-dd-divider>
     <div class="book-list">
-      <book-list></book-list>
+      <book-search></book-search>
+      <book-list-manage></book-list-manage>
     </div>
     <div></div>
   </div>
@@ -11,15 +12,17 @@
 
 <script>
 // @ is an alias to /src
-import BookList from '@/components/BookList.vue';
 import BookAddForm from '../components/BookAddForm.vue';
+import BookListManage from '../components/BookListManage.vue';
+import BookSearch from '../components/BookSearch.vue';
 
 export default {
   name: 'Home',
   components: {
-    BookList,
     BookAddForm,
+    BookListManage,
+    BookSearch,
   },
 };
 </script>
-<style scoped></style>
+<style></style>

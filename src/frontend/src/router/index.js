@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '@/views/Home.vue';
-import BookMemberVue from '@/views/BookMemberView.vue';
+import Books from '@/views/Books.vue';
 import BookManagement from '@/views/BookManagement.vue';
 import MyInfo from '@/views/MyInfo.vue';
 
@@ -15,8 +15,8 @@ const routes = [
   },
   {
     path: '/book',
-    name: 'Book',
-    component: BookMemberVue,
+    name: 'Books',
+    component: Books,
   },
   {
     path: '/book-manage',
