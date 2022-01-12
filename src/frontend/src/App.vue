@@ -11,9 +11,17 @@
       <b-nav-item to="/myInfo">내 정보</b-nav-item>
       <b-nav-item to="/about">About</b-nav-item>
     </b-nav>
+    <sub-nav></sub-nav>
     <router-view />
   </div>
 </template>
+
+<script>
+import SubNav from './components/SubNav.vue';
+export default {
+  components: { SubNav },
+};
+</script>
 
 <style>
 #app {
