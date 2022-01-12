@@ -60,4 +60,10 @@ public class Book {
     public void changeStatus(BookStatus status) {
         this.status = status;
     }
+
+    public void setCreateDate(LocalDateTime createDate) {
+        if (this.createDate == null) {
+            this.createDate = createDate;
+        }
+    }
 }

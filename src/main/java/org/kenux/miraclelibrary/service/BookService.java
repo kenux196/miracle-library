@@ -6,6 +6,7 @@ import org.kenux.miraclelibrary.repository.BookRepository;
 import org.kenux.miraclelibrary.rest.dto.BookRegisterRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -21,5 +22,9 @@ public class BookService {
 
     public List<Book> searchBook(String keyword) {
         return bookRepository.findAllByKeyword(keyword);
+    }
+
+    public List<Book> getNewBooks() {
+        return bookRepository.findNewBookWithinOneMonth(LocalDateTime.now());
     }
 }

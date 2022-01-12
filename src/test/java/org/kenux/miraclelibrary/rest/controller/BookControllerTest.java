@@ -117,5 +117,29 @@ class BookControllerTest {
                 .andDo(print());
     }
 
+    @Test
+    @DisplayName("api: /books/new-book => 신간 서적 리스트 조회 요청처리")
+    void 신간_서적_리스트_요청처리() throws Exception {
+        Book book = Book.builder()
+                .id(1L)
+                .title("title")
+                .author("author")
+                .isbn("isbn")
+                .status(BookStatus.RENTABLE)
+                .createDate(LocalDateTime.now())
+                .build();
+
+        List<BookListResponse> bookListResponses = Collections.singletonList(BookListResponse.of(book));
+        given(bookService.getNewBooks()).willReturn(Collections.singletonList(book));
+
+        // when
+        final ResultActions resultActions = mockMvc.perform(get("/books/new-book"));
+
+        // then
+        resultActions.andExpect(status().isOk())
+                .andExpect(content().string(mapper.writeValueAsString(bookListResponses)))
+                .andDo(print());
+    }
+
 
 }

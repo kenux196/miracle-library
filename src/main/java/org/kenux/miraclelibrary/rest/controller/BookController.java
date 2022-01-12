@@ -6,7 +6,6 @@ import org.kenux.miraclelibrary.rest.dto.BookListResponse;
 import org.kenux.miraclelibrary.rest.dto.BookRegisterRequest;
 import org.kenux.miraclelibrary.service.BookService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -27,11 +26,22 @@ public class BookController {
     }
 
     @GetMapping
-    public ResponseEntity<?> searchBook(@RequestParam(value = "keyword", required = false) String keyword, Model model) {
+    public ResponseEntity<?> searchBook(@RequestParam(value = "keyword", required = false) String keyword) {
         final List<Book> books = bookService.searchBook(keyword);
-        final List<BookListResponse> bookListResponseList = books.stream()
+        final List<BookListResponse> bookListResponseList = bookListResponsesOf(books);
+        return ResponseEntity.ok(bookListResponseList);
+    }
+
+    @GetMapping("/new-book")
+    public ResponseEntity<?> getNewBooks() {
+        final List<Book> books = bookService.getNewBooks();
+        final List<BookListResponse> bookListResponseList = bookListResponsesOf(books);
+        return ResponseEntity.ok(bookListResponseList);
+    }
+
+    private List<BookListResponse> bookListResponsesOf(List<Book> books) {
+        return books.stream()
                 .map(BookListResponse::of)
                 .collect(Collectors.toList());
-        return ResponseEntity.ok(bookListResponseList);
     }
 }

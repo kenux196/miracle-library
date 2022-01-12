@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -75,7 +76,6 @@ class BookServiceTest {
         assertThat(books).isNotEmpty();
     }
 
-
     @Test
     @DisplayName("검색한 책의 대출 가능 여부를 확인할 수 있어야 한다.")
     void test_isAvailableRent() throws Exception {
@@ -89,6 +89,41 @@ class BookServiceTest {
 
         // then
         assertThat(books.get(0).getStatus()).isEqualTo(BookStatus.RENTED);
+    }
+
+    @Test
+    void 신간_서적_리스트_가져오기() throws Exception {
+        // given
+        Book book = createBookForTest();
+        book.changeStatus(BookStatus.RENTABLE);
+        given(bookRepository.findNewBookWithinOneMonth(any())).willReturn(Collections.singletonList(book));
+        
+        // when
+        List<Book> newBooks = bookService.getNewBooks();
+
+        // then
+        assertThat(newBooks).hasSize(1);
+    }
+
+
+    private List<Book> createBookListForTest(int count) {
+        List<Book> bookList = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            final Book book = Book.builder()
+                    .id((long) i)
+                    .title("book" + i)
+                    .author("author" + i)
+                    .isbn("ABC" + i)
+                    .createDate(LocalDateTime.now())
+                    .build();
+            if (i % 2 == 1) {
+                book.changeStatus(BookStatus.RENTED);
+            } else {
+                book.changeStatus(BookStatus.RENTABLE);
+            }
+            bookList.add(book);
+        }
+        return bookList;
     }
 
     private Book createBookForTest() {
