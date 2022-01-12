@@ -19,7 +19,7 @@ const routes = [
     component: Books,
   },
   {
-    path: '/book-manage',
+    path: '/book/manage',
     name: 'BookManagement',
     component: BookManagement,
   },
