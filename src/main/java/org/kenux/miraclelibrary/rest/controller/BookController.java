@@ -20,7 +20,7 @@ public class BookController {
     private final BookService bookService;
 
     @PostMapping(value = "/register")
-    public ResponseEntity<Long> registerBook(@Valid @ModelAttribute BookRegisterRequest bookRegisterRequest) {
+    public ResponseEntity<Long> registerBook(@Valid @RequestBody BookRegisterRequest bookRegisterRequest) {
         final Long bookId = bookService.registerNewBook(bookRegisterRequest);
         return ResponseEntity.ok(bookId);
     }

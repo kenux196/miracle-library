@@ -1,5 +1,6 @@
 package org.kenux.miraclelibrary.rest.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,7 +30,8 @@ class MemberControllerTest {
     @MockBean
     MemberService memberService;
 
-    ObjectMapper mapper = new ObjectMapper();
+    @Autowired
+    ObjectMapper mapper;
 
     @Test
     @DisplayName("회원 가입")
@@ -40,7 +42,7 @@ class MemberControllerTest {
 
         // when
         RequestBuilder request = MockMvcRequestBuilders.post("/member/join")
-                .content(mapper.writeValueAsString(memberJoinRequest))
+                .content(convertToJson(memberJoinRequest))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
 
@@ -61,7 +63,7 @@ class MemberControllerTest {
 
         // when
         RequestBuilder request = MockMvcRequestBuilders.post("/member/join")
-                .content(mapper.writeValueAsString(memberJoinRequest))
+                .content(convertToJson(memberJoinRequest))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
 
@@ -72,4 +74,7 @@ class MemberControllerTest {
                 .andDo(print());
     }
 
+    private String convertToJson(Object value) throws JsonProcessingException {
+        return mapper.writeValueAsString(value);
+    }
 }

@@ -2,7 +2,6 @@ package org.kenux.miraclelibrary.rest.controller;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.kenux.miraclelibrary.rest.controller.HelloController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.MockMvc;
@@ -20,7 +19,7 @@ class HelloControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    @DisplayName("Get /hello")
+    @DisplayName("GET /hello")
     void test_hello() throws Exception {
         RequestBuilder request = MockMvcRequestBuilders
                 .get("/hello");

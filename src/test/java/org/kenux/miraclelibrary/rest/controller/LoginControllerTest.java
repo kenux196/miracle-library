@@ -1,5 +1,6 @@
 package org.kenux.miraclelibrary.rest.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,11 +36,12 @@ class LoginControllerTest {
     @MockBean
     LoginService loginService;
 
-    ObjectMapper mapper = new ObjectMapper();
+    @Autowired
+    ObjectMapper mapper;
 
     @Test
-    @DisplayName("로그인 성공")
-    void test_successLogin() throws Exception {
+    @DisplayName("POST /login - 로그인 성공")
+    void loginSuccess() throws Exception {
         // given
         LoginRequest loginRequest = new LoginRequest("user@test.com", "password");
         Member member = Member.builder()
@@ -54,7 +56,7 @@ class LoginControllerTest {
 
         // when
         final RequestBuilder request = MockMvcRequestBuilders.post("/login")
-                .content(mapper.writeValueAsString(loginRequest))
+                .content(convertToJson(loginRequest))
                 .contentType(MediaType.APPLICATION_JSON);
 
         final ResultActions result = mockMvc.perform(request);
@@ -67,14 +69,14 @@ class LoginControllerTest {
     }
 
     @Test
-    @DisplayName("가입된 멤버가 없는 경우, 404 리턴")
-    void test_memberNotFound_whenLogin() throws Exception {
+    @DisplayName("POST /login - 가입된 멤버가 없는 경우, 404 리턴")
+    void loginFailed_memberNotFound() throws Exception {
         // given
         LoginRequest loginRequest = new LoginRequest("user@test.com", "password");
         given(loginService.login(any())).willThrow(new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         // when
         final RequestBuilder request = MockMvcRequestBuilders.post("/login")
-                .content(mapper.writeValueAsString(loginRequest))
+                .content(convertToJson(loginRequest))
                 .contentType(MediaType.APPLICATION_JSON);
         final ResultActions result = mockMvc.perform(request);
 
@@ -84,14 +86,14 @@ class LoginControllerTest {
     }
 
     @Test
-    @DisplayName("로그인 패스워드 틀린 경우, 400 리턴")
-    void test_loginFailed_wrongPassword() throws Exception {
+    @DisplayName("POST /login - 로그인 패스워드 틀린 경우, 400 리턴")
+    void loginFailed_wrongPassword() throws Exception {
         // given
         LoginRequest loginRequest = new LoginRequest("user@test.com", "password");
         given(loginService.login(any())).willThrow(new CustomException(ErrorCode.PASSWORD_WRONG));
         // when
         final RequestBuilder request = MockMvcRequestBuilders.post("/login")
-                .content(mapper.writeValueAsString(loginRequest))
+                .content(convertToJson(loginRequest))
                 .contentType(MediaType.APPLICATION_JSON);
         final ResultActions result = mockMvc.perform(request);
 
@@ -101,4 +103,7 @@ class LoginControllerTest {
     }
 
 
+    private String convertToJson(Object value) throws JsonProcessingException {
+        return mapper.writeValueAsString(value);
+    }
 }
