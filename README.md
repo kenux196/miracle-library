@@ -1,2 +1,4 @@
-# write-test-code
+# miracle-library
 
+나의 개발 놀이터 중 하나입니다.
+감각 유지를 위해서 주기적으로 연습하는 공간이에요.
