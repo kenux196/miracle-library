@@ -38,9 +38,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                                                          HttpHeaders headers,
                                                          HttpStatus status,
                                                          WebRequest request) {
-        // TODO : refactoring - skyun 2022-01-07
-        final ErrorResponse errorResponse = ErrorResponse.builder()
-                .build();
+        final ErrorResponse errorResponse = makeErrorResponse(ex.getBindingResult());
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 

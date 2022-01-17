@@ -41,7 +41,7 @@ class MemberControllerTest {
         given(memberService.join(any())).willReturn(1L);
 
         // when
-        RequestBuilder request = MockMvcRequestBuilders.post("/member/join")
+        RequestBuilder request = MockMvcRequestBuilders.post("/member")
                 .content(convertToJson(memberJoinRequest))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
@@ -62,7 +62,7 @@ class MemberControllerTest {
                 .build();
 
         // when
-        RequestBuilder request = MockMvcRequestBuilders.post("/member/join")
+        RequestBuilder request = MockMvcRequestBuilders.post("/member")
                 .content(convertToJson(memberJoinRequest))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
