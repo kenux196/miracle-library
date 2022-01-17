@@ -3,24 +3,32 @@ package org.kenux.miraclelibrary.repository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.kenux.miraclelibrary.config.JpaAuditingTestConfig;
 import org.kenux.miraclelibrary.config.JpaTestConfig;
 import org.kenux.miraclelibrary.domain.Member;
 import org.kenux.miraclelibrary.domain.enums.MemberRole;
+import org.kenux.miraclelibrary.exception.CustomException;
+import org.kenux.miraclelibrary.exception.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
+import javax.persistence.EntityManager;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-@Import(JpaTestConfig.class)
+@Import({JpaTestConfig.class, JpaAuditingTestConfig.class})
 class MemberRepositoryTest {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    EntityManager em;
 
     private Member member;
     private Member librarian;
@@ -38,6 +46,34 @@ class MemberRepositoryTest {
 
         assertThat(member.getId()).isNotNull();
         assertThat(saved.getId()).isEqualTo(member.getId());
+    }
+
+    @Test
+    @DisplayName("멤버 저장 시, 생성일 기록")
+    void test_savedMemberHasCreateDate() {
+        Member saved = memberRepository.save(member);
+
+        assertThat(saved.getCreateDate()).isNotNull();
+        assertThat(saved.getCreateDate()).isAfter(LocalDateTime.of(2022, 1, 1, 1,1,1));
+    }
+    
+    @Test
+    @DisplayName("멤버 정보 변경, UpdateDate 갱신")
+    void test_updateDate() {
+        // given
+        Member saved = memberRepository.save(member);
+
+        // when
+        saved.changeEmail("kenux@test.com");
+        Long id = saved.getId();
+        em.flush();
+        em.clear();
+
+        final Member findMember = memberRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+
+        // then
+        assertThat(findMember.getUpdateDate()).isAfter(findMember.getCreateDate());
     }
 
     @Test
