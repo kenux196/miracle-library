@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -109,7 +110,7 @@ class BookRentInfoRepositoryTest {
                             .title("title-" + i)
                             .author("author")
                             .isbn("isbn-" + i)
-                            .createDate(LocalDateTime.now())
+                            .publicationDate(LocalDate.of(2022, 1, 1).plusMonths(i))
                             .status(BookStatus.RENTABLE)
                             .build());
             bookList.add(book.getId());
@@ -151,7 +152,7 @@ class BookRentInfoRepositoryTest {
                 .author("author")
                 .isbn("isbn")
                 .status(BookStatus.RENTABLE)
-                .createDate(LocalDateTime.of(2021, 1, 1, 1, 1, 1))
+                .publicationDate(LocalDate.of(2022, 1, 1))
                 .build();
         return bookRepository.save(book);
     }

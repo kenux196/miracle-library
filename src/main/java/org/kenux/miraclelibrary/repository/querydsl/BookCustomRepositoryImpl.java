@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.kenux.miraclelibrary.domain.Book;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.kenux.miraclelibrary.domain.QBook.book;
@@ -33,10 +33,10 @@ public class BookCustomRepositoryImpl implements BookCustomRepository {
     }
 
     @Override
-    public List<Book> findNewBookWithinOneMonth(LocalDateTime time) {
-        LocalDateTime findDate = time.minusMonths(1);
+    public List<Book> findNewBookWithinOneMonth(LocalDate time) {
+        LocalDate findDate = time.minusMonths(1);
         return jpaQueryFactory.selectFrom(book)
-                .where(book.createDate.after(findDate))
+                .where(book.publicationDate.after(findDate))
                 .fetch();
     }
 }

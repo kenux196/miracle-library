@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -117,14 +118,14 @@ class BookRepositoryTest {
     }
 
     @Test
-    void 한달_이내에_등록된_신간_도서_조회() throws Exception {
+    void 한달_이내에_출간된_신간_도서_조회() throws Exception {
         // given
         final Book book1 = Book.builder()
                 .title("book1")
                 .author("author1")
                 .isbn("123")
                 .status(BookStatus.RENTABLE)
-                .createDate(LocalDateTime.of(2020, 1, 1, 1, 1))
+                .publicationDate(LocalDate.of(2020, 1, 1))
                 .build();
         bookRepository.save(book1);
         final Book book2 = Book.builder()
@@ -132,11 +133,11 @@ class BookRepositoryTest {
                 .author("author2")
                 .isbn("123")
                 .status(BookStatus.RENTABLE)
-                .createDate(LocalDateTime.of(2022, 1, 1, 1, 1))
+                .publicationDate(LocalDate.of(2022, 1, 1))
                 .build();
         bookRepository.save(book2);
 
-        LocalDateTime today = LocalDateTime.of(2022, 1, 11, 1,1);
+        LocalDate today = LocalDate.of(2022, 1, 11);
 
         // when
         final List<Book> newBookWithinOneMonth =
@@ -184,7 +185,7 @@ class BookRepositoryTest {
                 .title("title")
                 .author("author")
                 .isbn("isbn")
-                .createDate(LocalDateTime.now())
+                .publicationDate(LocalDate.of(2022, 1,1))
                 .status(BookStatus.RENTABLE)
                 .build();
     }
