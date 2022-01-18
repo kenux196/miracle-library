@@ -5,4 +5,4 @@ test-job: # 임의로 지정한 JOB 이름
   script:
     - echo "Hello World" # 실행할 스크립트
   tags:
-    - build-server # build-server 태그가 달린 runner에서 실행
+    - first # build-server 태그가 달린 runner에서 실행
