@@ -31,6 +31,10 @@ public class Book extends BaseTimeEntity {
 
     private LocalDate publicationDate;
 
+//    @Column(name = "category", nullable = false)
+//    @Enumerated(EnumType.STRING)
+    private BookCategory category;
+
     private String content;
 
     // TODO : cover 이미지 추가 관련 처리 필요.   - sky 2022/01/17
@@ -54,6 +58,10 @@ public class Book extends BaseTimeEntity {
 
     public void changeCover(String cover) {
         this.cover = cover;
+    }
+
+    public void changeCategory(BookCategory category) {
+        this.category = category;
     }
 
     @Override

@@ -31,6 +31,21 @@ class BookTest {
     }
 
     @Test
+    @DisplayName("책 필수 정보 추가: 카테고리")
+    void bookCategory() {
+        Book book = createBook();
+        assertThat(book.getCategory()).isEqualTo(BookCategory.FICTION);
+    }
+
+    @Test
+    @DisplayName("책 카테고리 변경")
+    void changeBookCategory() {
+        Book book = createBook();
+        book.changeCategory(BookCategory.ESSAY);
+        assertThat(book.getCategory()).isEqualTo(BookCategory.ESSAY);
+    }
+
+    @Test
     @DisplayName("책은 상태 변경 : 보유, 대여중, 유실, 파기")
     void changeStatus() {
         Book book = createBook();
@@ -81,6 +96,7 @@ class BookTest {
                 .author("저자")
                 .isbn("isbn")
                 .publicationDate(LocalDate.of(2022, 1,1))
+                .category(BookCategory.FICTION)
                 .build();
     }
 }
