@@ -1,19 +1,14 @@
 
-image: java:11-jdk
-
 stages:
   - build
   - test
   # - deploy
-cache:
-  paths:
-    - .gradle/wrapper
-    - .gradle/caches
 
 build:
+  image: openjdk:11
   stage: build
   script: 
-    - chmod 777 gradlew
+    - chmod +x gradlew
     - ./gradlew clean build
   artifacts:
     paths:
@@ -21,11 +16,12 @@ build:
     expire_in: 1 day
   only:
     - main
-  tags: 
-    - first
+  # tags: 
+    # - first
 
 test:
   stage: test
-  script: ./gradlew test
+  script: 
+    - ./gradlew test
   # tags: 
   #   - first
