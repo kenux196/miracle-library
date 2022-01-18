@@ -9,7 +9,7 @@ build:
   stage: build
   script: 
     # - gradle wrapper
-    # - chmod +x gradlew
+    - chmod +x gradlew
     - ./gradlew clean build
   artifacts:
     paths:
@@ -24,7 +24,7 @@ test:
   stage: test
   script: 
     # - gradle wrapper
-    # - chmod +x gradlew
+    - chmod +x gradlew
     - ./gradlew test
   tags: 
     - first
