@@ -12,7 +12,9 @@ cache:
 
 build:
   stage: build
-  script: ./gradlew clean build
+  script: 
+    - chmod 777 gradlew
+    - ./gradlew clean build
   artifacts:
     paths:
       - build/libs/*.jar
