@@ -21,24 +21,24 @@
 
 build:
   stage: build
-  script: gradle --build-cache assemble
+  script: "./gradlew --build-cache assemble"
   tags: 
     - first
-  cache:
-    key: "$CI_COMMIT_REF_NAME"
-    policy: push
-    paths:
-      - build
-      - .gradle
+  # cache:
+    # key: "$CI_COMMIT_REF_NAME"
+    # policy: push
+    # paths:
+    #   - build
+    #   - .gradle
 
 test:
   stage: test
-  script: gradle test
+  script: "./gradlew test"
   tags: 
     - first
-  cache:
-    key: "$CI_COMMIT_REF_NAME"
-    policy: pull
-    paths:
-      - build
-      - .gradle
+  # cache:
+  #   key: "$CI_COMMIT_REF_NAME"
+  #   policy: pull
+  #   paths:
+  #     - build
+  #     - .gradle
