@@ -7,13 +7,12 @@ import lombok.NoArgsConstructor;
 import org.kenux.miraclelibrary.domain.enums.MemberRole;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "member")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Member {
+public class Member extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,10 +31,6 @@ public class Member {
     @Column(name = "member_role", nullable = false)
     @Enumerated(EnumType.STRING)
     private MemberRole memberRole;
-
-    private LocalDateTime createdDate;
-
-    private LocalDateTime updatedDate;
 
     @Builder
     public Member(String name, String email, String password, MemberRole memberRole) {
@@ -59,5 +54,16 @@ public class Member {
 
     public String getPassword() {
         return this.password.getPassword();
+    }
+
+    @Override
+    public String toString() {
+        return "Member{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", password=" + password +
+                ", memberRole=" + memberRole +
+                '}';
     }
 }

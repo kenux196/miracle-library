@@ -4,6 +4,7 @@
 # Ignore Gradle GUI config
 gradle-app.setting
 
+
 # Cache of project
 .gradletasknamecache
 
@@ -12,6 +13,7 @@ gradle-app.setting
 
 # Log file
 *.log
+
 
 ### VisualStudioCode
 .vscode/*

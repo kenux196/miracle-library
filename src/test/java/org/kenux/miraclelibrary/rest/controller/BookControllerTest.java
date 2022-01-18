@@ -18,7 +18,7 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
@@ -70,6 +70,7 @@ class BookControllerTest {
                 .title("title")
                 .author("author")
                 .isbn("isbn")
+                .publicationDate(LocalDate.now())
                 .build();
         given(bookService.registerNewBook(any())).willReturn(1L);
 
@@ -96,7 +97,7 @@ class BookControllerTest {
                 .author("author")
                 .isbn("isbn")
                 .status(BookStatus.RENTABLE)
-                .createDate(LocalDateTime.now())
+                .publicationDate(LocalDate.of(2022, 1, 1))
                 .build();
         List<BookListResponse> bookListResponses = Collections.singletonList(BookListResponse.of(book));
         given(bookService.searchBook(null)).willReturn(Collections.singletonList(book));
@@ -119,7 +120,7 @@ class BookControllerTest {
                 .author("author")
                 .isbn("isbn")
                 .status(BookStatus.RENTABLE)
-                .createDate(LocalDateTime.now())
+                .publicationDate(LocalDate.of(2022, 1, 1))
                 .build();
         List<BookListResponse> bookListResponses = Collections.singletonList(BookListResponse.of(book));
         given(bookService.searchBook(any())).willReturn(Collections.singletonList(book));
@@ -144,7 +145,7 @@ class BookControllerTest {
                 .author("author")
                 .isbn("isbn")
                 .status(BookStatus.RENTABLE)
-                .createDate(LocalDateTime.now())
+                .publicationDate(LocalDate.of(2022, 1, 1))
                 .build();
 
         List<BookListResponse> bookListResponses = Collections.singletonList(BookListResponse.of(book));

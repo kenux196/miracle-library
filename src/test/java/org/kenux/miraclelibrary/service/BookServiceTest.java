@@ -11,7 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -114,7 +114,7 @@ class BookServiceTest {
                     .title("book" + i)
                     .author("author" + i)
                     .isbn("ABC" + i)
-                    .createDate(LocalDateTime.now())
+                    .publicationDate(LocalDate.of(2022, 1, 1))
                     .build();
             if (i % 2 == 1) {
                 book.changeStatus(BookStatus.RENTED);
@@ -133,7 +133,7 @@ class BookServiceTest {
                 .author("author")
                 .isbn("isbn")
                 .status(BookStatus.RENTABLE)
-                .createDate(LocalDateTime.of(2021, 1, 1, 13, 1, 1))
+                .publicationDate(LocalDate.of(2022, 1, 1))
                 .build();
     }
 

@@ -21,6 +21,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -205,7 +206,7 @@ class BookRentServiceTest {
                     .title("title-" + i)
                     .author("author")
                     .isbn("isbn-" + i)
-                    .createDate(LocalDateTime.now())
+                    .publicationDate(LocalDate.of(2022, 1, 1).plusMonths(i))
                     .status(BookStatus.RENTED)
                     .build();
             BookRentInfo bookRentInfo = BookRentInfo.builder()
@@ -241,7 +242,7 @@ class BookRentServiceTest {
                 .author("author")
                 .isbn("isbn")
                 .status(BookStatus.RENTABLE)
-                .createDate(LocalDateTime.of(2020, 12, 20, 1, 1, 1))
+                .publicationDate(LocalDate.of(2022, 1, 1))
                 .build();
     }
 

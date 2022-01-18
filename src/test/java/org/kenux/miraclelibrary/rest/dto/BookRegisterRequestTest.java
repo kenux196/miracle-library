@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.kenux.miraclelibrary.domain.Book;
 import org.kenux.miraclelibrary.domain.enums.BookStatus;
 
+import java.time.LocalDate;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 class BookRegisterRequestTest {
@@ -40,14 +42,14 @@ class BookRegisterRequestTest {
     }
 
     @Test
-    @DisplayName("book entity 로 변환 시, 책의 등록 날짜를 가진다.")
+    @DisplayName("book entity 로 변환 시, 책의 출간 날짜를 가진다.")
     void test_hasBookCreateDate_toEntity() throws Exception {
         // given
         // when
         Book book = bookRegisterRequest.toEntity();
 
         // then
-        assertThat(book.getCreateDate()).isNotNull();
+        assertThat(book.getPublicationDate()).isNotNull();
     }
 
     private BookRegisterRequest createBookRegisterRequest() {
@@ -55,6 +57,7 @@ class BookRegisterRequestTest {
                 .title("title")
                 .author("author")
                 .isbn("isbn")
+                .publicationDate(LocalDate.of(2022, 1, 1))
                 .build();
     }
 

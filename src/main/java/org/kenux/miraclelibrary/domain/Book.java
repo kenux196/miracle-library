@@ -5,7 +5,7 @@ import lombok.*;
 import org.kenux.miraclelibrary.domain.enums.BookStatus;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 
 @Entity
@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @Getter
-public class Book {
+public class Book extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,11 +29,40 @@ public class Book {
     @Column(name = "isbn", nullable = false)
     private String isbn;
 
+    private LocalDate publicationDate;
+
+//    @Column(name = "category", nullable = false)
+//    @Enumerated(EnumType.STRING)
+    private BookCategory category;
+
+    private String content;
+
+    // TODO : cover 이미지 추가 관련 처리 필요.   - sky 2022/01/17
+    private String cover;
+
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private BookStatus status;
 
-    private LocalDateTime createDate;
+    public void changeStatus(BookStatus status) {
+        this.status = status;
+    }
+
+    public LocalDate getPublicationDate() {
+        return publicationDate;
+    }
+
+    public void changeContent(String content) {
+        this.content = content;
+    }
+
+    public void changeCover(String cover) {
+        this.cover = cover;
+    }
+
+    public void changeCategory(BookCategory category) {
+        this.category = category;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -55,15 +84,5 @@ public class Book {
         result = 31 * result + author.hashCode();
         result = 31 * result + isbn.hashCode();
         return result;
-    }
-
-    public void changeStatus(BookStatus status) {
-        this.status = status;
-    }
-
-    public void setCreateDate(LocalDateTime createDate) {
-        if (this.createDate == null) {
-            this.createDate = createDate;
-        }
     }
 }
