@@ -8,7 +8,7 @@ stages:
 build:
   stage: build
   script: 
-    - gradle wrapper
+    # - gradle wrapper
     # - chmod +x gradlew
     - ./gradlew clean build
   artifacts:
@@ -23,7 +23,7 @@ build:
 test:
   stage: test
   script: 
-    - gradle wrapper
+    # - gradle wrapper
     # - chmod +x gradlew
     - ./gradlew test
   tags: 
