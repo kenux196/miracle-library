@@ -8,6 +8,7 @@ build:
   image: openjdk:11
   stage: build
   script: 
+    - gradle wrapper
     - chmod +x gradlew
     - ./gradlew clean build
   artifacts:
