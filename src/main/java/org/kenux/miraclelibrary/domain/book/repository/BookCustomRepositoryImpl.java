@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.kenux.miraclelibrary.domain.QBook.book;
+import static org.kenux.miraclelibrary.domain.book.domain.QBook.book;
 
 @Repository
 @RequiredArgsConstructor
