@@ -15,8 +15,8 @@ build:
     paths:
       - build/libs/*.jar
     expire_in: 1 day
-  only:
-    - main
+  # only:
+    # - main
   tags: 
     - first
 
