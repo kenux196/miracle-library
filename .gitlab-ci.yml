@@ -21,18 +21,14 @@ build:
   tags: 
     - first
 
-# test:
-#   stage: test
-#   script: 
-#     # - gradle wrapper
-#     - chmod +x gradlew
-#     - ./gradlew test
-#   tags: 
-#     - first
 test:
   stage: test
-  script:
-    - './gradlew test jacocoTestReport' # jacoco must be configured to create an xml report
+  script: 
+    # - gradle wrapper
+    - chmod +x gradlew
+    - ./gradlew test jacocoTestReport
   artifacts:
     paths:
-      - build/jacoco/jacoco.xml
+      - build/jacoco/jacoco.xml    
+  tags: 
+    - first
