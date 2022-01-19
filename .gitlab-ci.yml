@@ -29,6 +29,6 @@ test:
     - ./gradlew test jacocoTestReport
   artifacts:
     paths:
-      - build/jacoco/jacoco.xml    
+      - build/reports/jacoco/test/html/index.xml    
   tags: 
     - first
