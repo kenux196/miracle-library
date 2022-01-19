@@ -2,7 +2,8 @@ image: openjdk:11
 
 stages:
   - build
-  # - test
+  - test
+  - visualize
   # - deploy
 
 build:
@@ -28,3 +29,10 @@ build:
 #     - ./gradlew test
 #   tags: 
 #     - first
+test:
+  stage: test
+  script:
+    - './gradlew test jacocoTestReport' # jacoco must be configured to create an xml report
+  artifacts:
+    paths:
+      - build/jacoco/jacoco.xml
