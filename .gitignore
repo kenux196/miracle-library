@@ -14,7 +14,6 @@ gradle-app.setting
 # Log file
 *.log
 
-
 ### VisualStudioCode
 .vscode/*
 !.vscode/settings.json
@@ -30,3 +29,6 @@ out/
 
 ### macOS
 .DS_Store
+
+# jenv
+.java-version
