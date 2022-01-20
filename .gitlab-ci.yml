@@ -1,8 +1,5 @@
 image: gradle:7.3.1-jdk11
 
-variables:
-  JACOCO_CSV_LOCATION: '$CI_PROJECT_DIR/build/jacocoCsv'
-
 stages:
   - build
   - test
@@ -40,3 +37,6 @@ job-deploy:
     - echo 'Not used'
   tags: 
     - first # gir-runner 이름
+  only:
+    - main
+  
