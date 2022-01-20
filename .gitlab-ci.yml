@@ -34,4 +34,4 @@ job-deploy:
   tags: 
     - first # gir-runner 이름
   only:
-    - main:
+    - main
