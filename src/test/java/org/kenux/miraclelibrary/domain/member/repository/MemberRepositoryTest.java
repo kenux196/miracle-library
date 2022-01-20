@@ -5,8 +5,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.kenux.miraclelibrary.domain.member.domain.Member;
 import org.kenux.miraclelibrary.domain.member.domain.MemberRole;
-import org.kenux.miraclelibrary.global.config.JpaAuditingTestConfig;
-import org.kenux.miraclelibrary.global.config.JpaTestConfig;
+import org.kenux.miraclelibrary.global.config.JpaAuditingConfig;
+import org.kenux.miraclelibrary.global.config.QueryDslConfig;
 import org.kenux.miraclelibrary.global.exception.CustomException;
 import org.kenux.miraclelibrary.global.exception.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-@Import({JpaTestConfig.class, JpaAuditingTestConfig.class})
+@Import({QueryDslConfig.class, JpaAuditingConfig.class})
 class MemberRepositoryTest {
 
     @Autowired
