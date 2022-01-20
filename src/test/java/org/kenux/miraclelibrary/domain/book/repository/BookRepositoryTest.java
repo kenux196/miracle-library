@@ -4,15 +4,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.kenux.miraclelibrary.domain.book.domain.Book;
+import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
 import org.kenux.miraclelibrary.domain.book.domain.BookStatus;
+import org.kenux.miraclelibrary.domain.book.dto.BookSearchFilter;
 import org.kenux.miraclelibrary.global.config.QueryDslConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,6 +56,86 @@ class BookRepositoryTest {
 
         found = bookRepository.findAllByKeyword("kkk");
         assertThat(found).isEmpty();
+    }
+
+    @Test
+    @DisplayName("도서 카테고리 별 검색")
+    void findByCategory() {
+        final Book book = createBook();
+        final Book saved = bookRepository.save(book);
+
+        List<Book> result = bookRepository.findAllByCategory(BookCategory.ESSAY);
+
+        assertThat(result).hasSize(1);
+        assertThat(result.get(0)).isSameAs(saved);
+    }
+
+    @Test
+    @DisplayName("도서 필터 검색 : 필터에 키워드만 있는 경우")
+    void findBookByFilterOnlyKeyword() throws Exception {
+        // given
+        final Book book = createBook();
+        final Book saved = bookRepository.save(book);
+        BookSearchFilter bookSearchFilter = new BookSearchFilter();
+        bookSearchFilter.setKeyword("title");
+
+        // when
+        List<Book> result = bookRepository.findBookByFilter(bookSearchFilter);
+
+        // then
+        assertThat(result).hasSize(1);
+    }
+
+    @Test
+    @DisplayName("도서 필터 검색 : 필터에 키워드만 있는 경우")
+    void findBookByFilterOnlyCategory() throws Exception {
+        // given
+        final Book book = createBook();
+        final Book saved = bookRepository.save(book);
+        BookSearchFilter bookSearchFilter = new BookSearchFilter();
+        bookSearchFilter.setCategory(BookCategory.ESSAY);
+
+        // when
+        List<Book> result = bookRepository.findBookByFilter(bookSearchFilter);
+
+        // then
+        assertThat(result).hasSize(1);
+        assertThat(result.get(0)).isSameAs(saved);
+    }
+
+    @Test
+    @DisplayName("도서 필터 검색 : 필터에 키워드, 필터 모두 있는 경우")
+    void findBookByFilter() throws Exception {
+        // given
+        final Book book = createBook();
+        final Book saved = bookRepository.save(book);
+        BookSearchFilter bookSearchFilter = new BookSearchFilter();
+        bookSearchFilter.setKeyword("ti");
+        bookSearchFilter.setCategory(BookCategory.ESSAY);
+
+        // when
+        List<Book> result = bookRepository.findBookByFilter(bookSearchFilter);
+
+        // then
+        assertThat(result).hasSize(1);
+        assertThat(result.get(0)).isSameAs(saved);
+    }
+
+    @Test
+    @DisplayName("도서 필터 검색 : 필터에 키워드, 필터 모두 있지만 도서 없는 경우")
+    void findBookByFilterNotFound() throws Exception {
+        // given
+        final Book book = createBook();
+        bookRepository.save(book);
+        BookSearchFilter bookSearchFilter = new BookSearchFilter();
+        bookSearchFilter.setKeyword("ti");
+        bookSearchFilter.setCategory(BookCategory.IT);
+
+        // when
+        List<Book> result = bookRepository.findBookByFilter(bookSearchFilter);
+
+        // then
+        assertThat(result).isEmpty();
     }
 
     @Test
@@ -148,19 +228,6 @@ class BookRepositoryTest {
         assertThat(newBookWithinOneMonth.get(0).getTitle()).isEqualTo("book2");
     }
 
-    @Test
-    void sampleTest() {
-        final Book book = createBook();
-        ReflectionTestUtils.setField(
-                book,
-                "createDate",
-                LocalDateTime.of(2021, 12, 30, 1, 1));
-        final Book save = bookRepository.save(book);
-
-        System.out.println("save.getCreateDate() = " + save.getCreateDate());
-    }
-
-
     private List<Book> createBookList() {
         List<Book> books = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
@@ -168,6 +235,7 @@ class BookRepositoryTest {
                     .title("book" + i)
                     .author("author" + i)
                     .isbn("ABC" + i)
+                    .category(BookCategory.ESSAY)
                     .build();
             if (i % 2 == 1) {
                 book.changeStatus(BookStatus.RENTED);
@@ -186,6 +254,7 @@ class BookRepositoryTest {
                 .author("author")
                 .isbn("isbn")
                 .publicationDate(LocalDate.of(2022, 1,1))
+                .category(BookCategory.ESSAY)
                 .status(BookStatus.RENTABLE)
                 .build();
     }
