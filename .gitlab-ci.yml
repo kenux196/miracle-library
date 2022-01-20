@@ -6,13 +6,11 @@ variables:
 stages:
   - build
   - test
-  - visualize
-  # - deploy
+  - deploy
 
-build:
+job-build:
   stage: build
   script: 
-    # - gradle wrapper
     - chmod +x gradlew
     - ./gradlew clean build
   artifacts:
@@ -24,14 +22,21 @@ build:
   tags: 
     - first
 
-test:
+job-test:
   stage: test
   script: 
-    # - gradle wrapper
     - chmod +x gradlew
-    - ./gradlew test jacocoTestReport
-  artifacts:
-    paths:
-      - build/reports/jacoco/test/html/index.xml    
+    - ./gradlew test
+    # - ./gradlew test jacocoTestReport
+  # artifacts:
+  #   paths:
+  #     - build/reports/jacoco/test/html/index.xml    
   tags: 
     - first
+
+job-deploy:
+  stage: deploy
+  script:
+    - echo 'Not used'
+  tags: 
+    - first # gir-runner 이름
