@@ -19,7 +19,7 @@ job-build:
   tags: 
     - first
 
-test:
+job-test:
   stage: test
   script: 
     - chmod +x gradlew
