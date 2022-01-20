@@ -6,6 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.kenux.miraclelibrary.domain.book.domain.Book;
 import org.kenux.miraclelibrary.domain.book.domain.BookStatus;
 import org.kenux.miraclelibrary.domain.book.dto.BookRegisterRequest;
+import org.kenux.miraclelibrary.domain.book.dto.BookSearchFilter;
 import org.kenux.miraclelibrary.domain.book.repository.BookRepository;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -19,6 +20,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class BookServiceTest {
@@ -60,6 +62,49 @@ class BookServiceTest {
 
         // then
         assertThat(books).isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("도서 필터 검색")
+    void searchBookByFilterOnlyKeyword() throws Exception {
+        // given
+        BookSearchFilter bookSearchFilter = new BookSearchFilter();
+        bookSearchFilter.setKeyword("title");
+
+        Book book = createBookForTest();
+        given(bookRepository.findBookByFilter(any())).willReturn(Collections.singletonList(book));
+
+        // when
+        List<Book> books = bookService.searchBookByFilter(bookSearchFilter);
+
+        // then
+        assertThat(books).isNotEmpty();
+
+        // verify
+        verify(bookRepository).findBookByFilter(any());
+    }
+
+    @Test
+    @DisplayName("회원의 도서 검색 결과에는 파기, 분실 상태의 책은 없어야 한다.")
+    void searchBookThatIsNotRemovedBook() throws Exception {
+        // given
+        List<Book> foundBook = new ArrayList<>();
+        Book removedBook = Book.builder()
+                .status(BookStatus.REMOVED)
+                .build();
+        Book lostBook = Book.builder()
+                .status(BookStatus.LOST)
+                .build();
+        foundBook.add(removedBook);
+        foundBook.add(lostBook);
+
+        given(bookRepository.findBookByFilter(any())).willReturn(foundBook);
+
+        // when
+        List<Book> books = bookService.searchBookByFilter(new BookSearchFilter());
+
+        // then
+        assertThat(books).isEmpty();
     }
 
     @Test

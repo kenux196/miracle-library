@@ -7,6 +7,9 @@ import org.kenux.miraclelibrary.global.entity.BaseTimeEntity;
 import javax.persistence.*;
 import java.time.LocalDate;
 
+import static org.kenux.miraclelibrary.domain.book.domain.BookStatus.RENTABLE;
+import static org.kenux.miraclelibrary.domain.book.domain.BookStatus.RENTED;
+
 
 @Entity
 @Table(name = "book")
@@ -62,6 +65,10 @@ public class Book extends BaseTimeEntity {
 
     public void changeCategory(BookCategory category) {
         this.category = category;
+    }
+
+    public boolean isHeldBook() {
+        return status.equals(RENTABLE) || status.equals(RENTED);
     }
 
     @Override

@@ -122,6 +122,23 @@ class BookRepositoryTest {
     }
 
     @Test
+    @DisplayName("도서 필터 검색 : 필터에 키워드, 필터 모두 있지만 도서 없는 경우")
+    void findBookByFilterNotFound() throws Exception {
+        // given
+        final Book book = createBook();
+        bookRepository.save(book);
+        BookSearchFilter bookSearchFilter = new BookSearchFilter();
+        bookSearchFilter.setKeyword("ti");
+        bookSearchFilter.setCategory(BookCategory.IT);
+
+        // when
+        List<Book> result = bookRepository.findBookByFilter(bookSearchFilter);
+
+        // then
+        assertThat(result).isEmpty();
+    }
+
+    @Test
     @DisplayName("전체 리스트를 가져온다.")
     void test_findAllBooks_whenNotExistKeyword() throws Exception {
         // given
