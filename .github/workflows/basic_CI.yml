@@ -31,6 +31,4 @@ jobs:
         settings-path: ${{ github.workspace }} # location for the settings.xml file
 
     - name: Build with Gradle
-      run:
-        - chmod +x gradlew
-        - ./gradlew build
+      run: ./gradlew build
