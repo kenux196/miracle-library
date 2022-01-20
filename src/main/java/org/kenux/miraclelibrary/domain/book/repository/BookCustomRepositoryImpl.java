@@ -4,6 +4,8 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.kenux.miraclelibrary.domain.book.domain.Book;
+import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
+import org.kenux.miraclelibrary.domain.book.dto.BookSearchFilter;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -24,6 +26,22 @@ public class BookCustomRepositoryImpl implements BookCustomRepository {
                 .fetch();
     }
 
+    @Override
+    public List<Book> findNewBookWithinOneMonth(LocalDate time) {
+        LocalDate findDate = time.minusMonths(1);
+        return jpaQueryFactory.selectFrom(book)
+                .where(book.publicationDate.after(findDate))
+                .fetch();
+    }
+
+    @Override
+    public List<Book> findBookByFilter(BookSearchFilter bookSearchFilter) {
+        return jpaQueryFactory.selectFrom(book)
+                .where(eqCategory(bookSearchFilter.getCategory()),
+                        titleOrAuthorContains(bookSearchFilter.getKeyword()))
+                .fetch();
+    }
+
     private BooleanExpression titleOrAuthorContains(String keyword) {
         if (keyword == null) {
             return null;
@@ -32,11 +50,11 @@ public class BookCustomRepositoryImpl implements BookCustomRepository {
                 .or(book.author.contains(keyword));
     }
 
-    @Override
-    public List<Book> findNewBookWithinOneMonth(LocalDate time) {
-        LocalDate findDate = time.minusMonths(1);
-        return jpaQueryFactory.selectFrom(book)
-                .where(book.publicationDate.after(findDate))
-                .fetch();
+    private BooleanExpression eqCategory(BookCategory category) {
+        if (category == null) {
+            return null;
+        }
+
+        return book.category.eq(category);
     }
 }
