@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.kenux.miraclelibrary.BaseIntegrationTest;
 import org.kenux.miraclelibrary.domain.book.domain.Book;
+import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
 import org.kenux.miraclelibrary.domain.book.dto.BookListResponse;
 import org.kenux.miraclelibrary.domain.book.dto.BookRegisterRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +58,7 @@ class BookControllerIntegrationTest extends BaseIntegrationTest {
                 .author("author")
                 .isbn("isbn")
                 .publicationDate(LocalDate.now())
+                .category(BookCategory.ESSAY)
                 .build();
 
         // when
