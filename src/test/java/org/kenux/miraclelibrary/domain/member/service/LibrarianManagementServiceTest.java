@@ -7,14 +7,17 @@ import org.kenux.miraclelibrary.domain.member.domain.Member;
 import org.kenux.miraclelibrary.domain.member.domain.MemberRole;
 import org.kenux.miraclelibrary.domain.member.dto.LibrarianAddRequest;
 import org.kenux.miraclelibrary.domain.member.repository.MemberRepository;
+import org.kenux.miraclelibrary.global.exception.CustomException;
+import org.kenux.miraclelibrary.global.exception.ErrorCode;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 class LibrarianManagementServiceTest {
@@ -24,6 +27,24 @@ class LibrarianManagementServiceTest {
 
     @InjectMocks
     LibrarianManagementService librarianManagementService;
+
+    @Test
+    @DisplayName("관리자는 매니저 추가 시, 이메일 중복 체크되어야 한다.")
+    void emailDuplicateTest_whenAddLibrarian() throws Exception {
+        // given
+        LibrarianAddRequest librarianAddRequest = LibrarianAddRequest.builder()
+                .name("customer1")
+                .email("customer1@test.com")
+                .password("password")
+                .build();
+
+        given(memberRepository.existsByEmail(any())).willReturn(true);
+
+        // when then
+        assertThatThrownBy(() -> librarianManagementService.addLibrarian(librarianAddRequest))
+                .isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.EMAIL_DUPLICATION.getMessage());
+    }
 
     @Test
     @DisplayName("관리자는 사서를 추가할 수 있다.")
@@ -36,7 +57,7 @@ class LibrarianManagementServiceTest {
                 .memberRole(MemberRole.LIBRARIAN)
                 .build();;
         ReflectionTestUtils.setField(member, "id", 1L);
-        when(memberRepository.save(any())).thenReturn(member);
+        given(memberRepository.save(any())).willReturn(member);
 
         // when
         LibrarianAddRequest librarianAddRequest = LibrarianAddRequest.builder()
