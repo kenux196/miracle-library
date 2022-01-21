@@ -26,6 +26,10 @@ repositories {
 //	gradlePluginPortal()
 }
 
+jacoco {
+	toolVersion = '0.8.7'
+}
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -57,17 +61,53 @@ sourceSets {
 
 test {
 	useJUnitPlatform()
+	finalizedBy 'jacocoTestReport'
 }
 
 jacocoTestReport {
 	dependsOn test // tests are required to run before generating the report
 
+	reports {
+		html.enabled true
+		xml.enabled false
+		csv.enabled true
+	}
+
+	def QDomains = []
+	for (qPattern in "*.QA".."*.QZ") {  // qPattern = "*.QA","*.QB","*.QC", ... "*.QZ"
+		QDomains.add(qPattern + "*")
+	}
+
 	afterEvaluate {
 		classDirectories.setFrom(files(classDirectories.files.collect {
-			fileTree(dir: it, exclude: [
-//					"com/myintroduce/web/dto/*",
-					"**/Q*.class"
-			])
+			fileTree(dir: it,
+					exclude: [] + QDomains)
 		}))
+	}
+
+	finalizedBy 'jacocoTestCoverageVerification'
+
+}
+
+jacocoTestCoverageVerification {
+	def QDomains = []
+	for (qPattern in "*.QA".."*.QZ") {  // qPattern = "*.QA","*.QB","*.QC", ... "*.QZ"
+		QDomains.add(qPattern + "*")
+	}
+
+	violationRules {
+		rule {
+			enabled = true
+			element = 'CLASS'
+			// includes = []
+
+			limit {
+				counter = 'LINE'
+				value = 'COVEREDRATIO'
+				minimum = 0.60
+			}
+
+			excludes = [] + QDomains
+		}
 	}
 }
