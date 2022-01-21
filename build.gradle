@@ -73,16 +73,16 @@ jacocoTestReport {
 		csv.enabled true
 	}
 
-	def QDomains = []
-	for (qPattern in "*.QA".."*.QZ") {  // qPattern = "*.QA","*.QB","*.QC", ... "*.QZ"
-		QDomains.add(qPattern + "*")
+	def Qdomains = []
+	for (qPattern in '**/QA'..'**/QZ') {
+		Qdomains.add(qPattern + '*')
 	}
 
 	afterEvaluate {
 		classDirectories.setFrom(files(classDirectories.files.collect {
 			fileTree(dir: it, exclude: [
 					"**/config/*"
-			] + QDomains)
+			] + Qdomains)
 		}))
 	}
 
@@ -92,9 +92,9 @@ jacocoTestReport {
 jacocoTestCoverageVerification {
 	dependsOn jacocoTestReport
 
-	def QDomains = []
-	for (qPattern in "*.QA".."*.QZ") {  // qPattern = "*.QA","*.QB","*.QC", ... "*.QZ"
-		QDomains.add(qPattern + "*")
+	def Qdomains = []
+	for (qPattern in '*.QA'..'*.QZ') {
+		Qdomains.add(qPattern + '*')
 	}
 
 	violationRules {
@@ -109,7 +109,7 @@ jacocoTestCoverageVerification {
 				minimum = 0.60
 			}
 
-			excludes = ["**/config/*"] + QDomains
+			excludes = ["**/config/*"] + Qdomains
 		}
 	}
 }
