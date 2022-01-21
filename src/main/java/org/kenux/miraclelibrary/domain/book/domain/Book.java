@@ -51,10 +51,6 @@ public class Book extends BaseTimeEntity {
         this.status = status;
     }
 
-    public LocalDate getPublicationDate() {
-        return publicationDate;
-    }
-
     public void changeContent(String content) {
         this.content = content;
     }
