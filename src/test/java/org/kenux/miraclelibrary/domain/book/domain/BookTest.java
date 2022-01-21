@@ -2,6 +2,7 @@ package org.kenux.miraclelibrary.domain.book.domain;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDate;
 
@@ -27,6 +28,24 @@ class BookTest {
         assertThat(book.getIsbn()).isEqualTo("isbn");
         assertThat(book.getPublicationDate())
                 .isEqualTo(LocalDate.of(2022, 1,1));
+    }
+
+    @Test
+    @DisplayName("Equals And HashCode 테스트")
+    void equal() throws Exception {
+        // given
+        Book book1 = createBook();
+        ReflectionTestUtils.setField(book1, "id", 1L);
+        Book book2 = createBook();
+        ReflectionTestUtils.setField(book2, "id", 1L);
+
+        // when
+        boolean equalsResult = book1.equals(book2);
+        boolean hashCodeResult = (book1.hashCode() == book2.hashCode());
+
+        // then
+        assertThat(equalsResult).isTrue();
+        assertThat(hashCodeResult).isTrue();
     }
 
     @Test
@@ -87,6 +106,22 @@ class BookTest {
 
         // then
         assertThat(book.getCover()).isEqualTo(cover);
+    }
+
+    @Test
+    @DisplayName("보유책인지 확인")
+    void heldBook() throws Exception {
+        // given
+        Book book1 = createBook();
+        Book book2 = createBook();
+
+        // when
+        book1.changeStatus(BookStatus.RENTED);
+        book2.changeStatus(BookStatus.REMOVED);
+
+        // then
+        assertThat(book1.isHeldBook()).isTrue();
+        assertThat(book2.isHeldBook()).isFalse();
     }
 
     private Book createBook() {
