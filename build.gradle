@@ -86,10 +86,11 @@ jacocoTestReport {
 	}
 
 	finalizedBy 'jacocoTestCoverageVerification'
-
 }
 
 jacocoTestCoverageVerification {
+	dependsOn jacocoTestReport
+
 	def QDomains = []
 	for (qPattern in "*.QA".."*.QZ") {  // qPattern = "*.QA","*.QB","*.QC", ... "*.QZ"
 		QDomains.add(qPattern + "*")
