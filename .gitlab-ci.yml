@@ -25,7 +25,12 @@ job-test:
   stage: test
   script: 
     - chmod +x gradlew
-    - ./gradlew clean test
+    - ./gradlew clean test --info
+    # Print test coverage to console
+    - cat build/reports/jacoco/test/html/index.html | grep -o 'Total[^%]*%'
+  artifacts:
+    paths:
+      - build/reports/jacoco/test/*
   tags: 
     - first
 
