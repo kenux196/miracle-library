@@ -8,7 +8,6 @@ class MiracleLibraryApplicationTests {
 
 	@Test
 	void contextLoads() {
-		MiracleLibraryApplication.main(new String[] {});
 	}
 
 	@Test
