@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.kenux.miraclelibrary.domain.book.domain.Book;
+import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
 import org.kenux.miraclelibrary.domain.book.domain.BookStatus;
 import org.kenux.miraclelibrary.domain.book.dto.BookListResponse;
 import org.kenux.miraclelibrary.domain.book.dto.BookRegisterRequest;
@@ -70,6 +71,7 @@ class BookControllerTest {
                 .title("title")
                 .author("author")
                 .isbn("isbn")
+                .category(BookCategory.ESSAY)
                 .publicationDate(LocalDate.now())
                 .build();
         given(bookService.registerNewBook(any())).willReturn(1L);
