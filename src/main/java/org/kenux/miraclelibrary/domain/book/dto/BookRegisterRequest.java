@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.kenux.miraclelibrary.domain.book.domain.Book;
+import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
 import org.kenux.miraclelibrary.domain.book.domain.BookStatus;
 
 import javax.validation.constraints.NotBlank;
@@ -31,12 +32,16 @@ public class BookRegisterRequest {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDate publicationDate;
 
+    @NotNull
+    private BookCategory category;
+
     public Book toEntity() {
         return Book.builder()
                 .title(title)
                 .author(author)
                 .isbn(isbn)
                 .publicationDate(publicationDate)
+                .category(category)
                 .status(BookStatus.RENTABLE)
                 .build();
     }

@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kenux.miraclelibrary.domain.book.domain.Book;
+import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
 import org.kenux.miraclelibrary.domain.book.domain.BookStatus;
 import org.kenux.miraclelibrary.domain.book.dto.BookRegisterRequest;
 import org.kenux.miraclelibrary.domain.book.dto.BookSearchFilter;
@@ -39,12 +40,7 @@ class BookServiceTest {
         given(bookRepository.save(any())).willReturn(book);
 
         // when
-        BookRegisterRequest bookRegisterRequest = BookRegisterRequest.builder()
-                .title("title")
-                .author("author")
-                .isbn("isbn")
-                .build();
-        Long result = bookService.registerNewBook(bookRegisterRequest);
+        Long result = bookService.registerNewBook(new BookRegisterRequest());
 
         // then
         assertThat(result).isEqualTo(1L);
@@ -177,6 +173,7 @@ class BookServiceTest {
                 .title("title")
                 .author("author")
                 .isbn("isbn")
+                .category(BookCategory.ESSAY)
                 .status(BookStatus.RENTABLE)
                 .publicationDate(LocalDate.of(2022, 1, 1))
                 .build();
