@@ -109,7 +109,7 @@ jacocoTestCoverageVerification {
 				minimum = 0.60
 			}
 
-			excludes = [] + QDomains
+			excludes = ["**/config/*"] + QDomains
 		}
 	}
 }
