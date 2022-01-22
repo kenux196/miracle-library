@@ -56,145 +56,14 @@ class BookRepositoryTest {
     }
 
     @Test
-    @DisplayName("키워드 검색: 키워드 없으면 전체 리스트 가져온다.")
-    void findAllByKeyword_키워드없음() throws Exception {
-        // given
-        final Book book = createBook();
-        bookRepository.save(book);
-
-        // when
-        final List<Book> result = bookRepository.findAllByKeyword(null);
-
-        // then
-        assertThat(result).isNotEmpty();
-    }
-
-    @Test
-    @DisplayName("키워드 겁색: 제목 키워드 검색")
-    void findAllByKeyword_제목키워드() {
-        final Book book = createBook();
-        bookRepository.save(book);
-
-        List<Book> result = bookRepository.findAllByKeyword("title");
-        assertThat(result).isNotEmpty();
-    }
-
-    @Test
-    @DisplayName("키워드 겁색: 작가 키워드 검색")
-    void findAllByKeyword_작가키워드() {
-        // given
-        final Book book = createBook();
-        bookRepository.save(book);
-
-        // when
-        List<Book> result = bookRepository.findAllByKeyword("auth");
-
-        // then
-        assertThat(result).isNotEmpty();
-    }
-
-    @Test
-    @DisplayName("키워드 겁색: 검색 결과 없음")
-    void findAllByKeyword_해당검색결과없음() {
-        // given
-        final Book book = createBook();
-        bookRepository.save(book);
-
-        // when
-        List<Book> found = bookRepository.findAllByKeyword("any");
-
-        // then
-        assertThat(found).isEmpty();
-    }
-
-    @Test
-    @DisplayName("카테고리 겁색: ESSAY")
-    void findByCategory_에세이() {
-        // given
-        final Book book = createBook();
-        book.changeCategory(BookCategory.ESSAY);
-        final Book saved = bookRepository.save(book);
-
-        // when
-        List<Book> result = bookRepository.findAllByCategory(BookCategory.ESSAY);
-
-        // then
-        assertThat(result).hasSize(1);
-        assertThat(result.get(0)).isSameAs(saved);
-    }
-
-    @Test
-    @DisplayName("카테고리 겁색: 소설")
-    void findByCategory_소설() {
-        // given
-        final Book book = createBook();
-        book.changeCategory(BookCategory.FICTION);
-        final Book saved = bookRepository.save(book);
-
-        // when
-        List<Book> result = bookRepository.findAllByCategory(BookCategory.FICTION);
-
-        // then
-        assertThat(result).hasSize(1);
-        assertThat(result.get(0)).isSameAs(saved);
-    }
-
-    @Test
-    @DisplayName("카테고리 겁색: IT도서")
-    void findByCategory_IT도서() {
-        // given
-        final Book book = createBook();
-        book.changeCategory(BookCategory.IT);
-        final Book saved = bookRepository.save(book);
-
-        // when
-        List<Book> result = bookRepository.findAllByCategory(BookCategory.IT);
-
-        // then
-        assertThat(result).hasSize(1);
-        assertThat(result.get(0)).isSameAs(saved);
-    }
-
-    @Test
-    @DisplayName("카테고리 겁색: 인문학")
-    void findByCategory_인문학() {
-        // given
-        final Book book = createBook();
-        book.changeCategory(BookCategory.HUMANITIES);
-        final Book saved = bookRepository.save(book);
-
-        // when
-        List<Book> result = bookRepository.findAllByCategory(BookCategory.HUMANITIES);
-
-        // then
-        assertThat(result).hasSize(1);
-        assertThat(result.get(0)).isSameAs(saved);
-    }
-
-    @Test
-    @DisplayName("카테고리 겁색: 경제분야")
-    void findByCategory_경제분야() {
-        // given
-        final Book book = createBook();
-        book.changeCategory(BookCategory.ECONOMY);
-        final Book saved = bookRepository.save(book);
-
-        // when
-        List<Book> result = bookRepository.findAllByCategory(BookCategory.ECONOMY);
-
-        // then
-        assertThat(result).hasSize(1);
-        assertThat(result.get(0)).isSameAs(saved);
-    }
-
-    @Test
     @DisplayName("필터 검색기능: 필터에 키워드만 있는 경우")
     void findBookByFilter_키워드값만있는경우() throws Exception {
         // given
         final Book book = createBook();
         final Book saved = bookRepository.save(book);
-        BookSearchFilter bookSearchFilter = new BookSearchFilter();
-        bookSearchFilter.setKeyword("title");
+        BookSearchFilter bookSearchFilter = BookSearchFilter.builder()
+                .keyword("title")
+                .build();
 
         // when
         List<Book> result = bookRepository.findBookByFilter(bookSearchFilter);
@@ -209,8 +78,9 @@ class BookRepositoryTest {
         // given
         final Book book = createBook();
         final Book saved = bookRepository.save(book);
-        BookSearchFilter bookSearchFilter = new BookSearchFilter();
-        bookSearchFilter.setCategory(BookCategory.ESSAY);
+        BookSearchFilter bookSearchFilter = BookSearchFilter.builder()
+                .category(BookCategory.ESSAY)
+                .build();
 
         // when
         List<Book> result = bookRepository.findBookByFilter(bookSearchFilter);
@@ -226,9 +96,10 @@ class BookRepositoryTest {
         // given
         final Book book = createBook();
         final Book saved = bookRepository.save(book);
-        BookSearchFilter bookSearchFilter = new BookSearchFilter();
-        bookSearchFilter.setKeyword("ti");
-        bookSearchFilter.setCategory(BookCategory.ESSAY);
+        BookSearchFilter bookSearchFilter = BookSearchFilter.builder()
+                .keyword("ti")
+                .category(BookCategory.ESSAY)
+                .build();
 
         // when
         List<Book> result = bookRepository.findBookByFilter(bookSearchFilter);
@@ -244,9 +115,10 @@ class BookRepositoryTest {
         // given
         final Book book = createBook();
         bookRepository.save(book);
-        BookSearchFilter bookSearchFilter = new BookSearchFilter();
-        bookSearchFilter.setKeyword("ti");
-        bookSearchFilter.setCategory(BookCategory.IT);
+        BookSearchFilter bookSearchFilter = BookSearchFilter.builder()
+                .keyword("ti")
+                .category(BookCategory.IT)
+                .build();
 
         // when
         List<Book> result = bookRepository.findBookByFilter(bookSearchFilter);
@@ -333,7 +205,8 @@ class BookRepositoryTest {
     }
 
     @Test
-    void 한달_이내에_출간된_신간_도서_조회() throws Exception {
+    @DisplayName("도서 검색: 한달 이내에 출간된 신간도서 조회")
+    void findNewBookWithinOneMonth() throws Exception {
         // given
         final Book book1 = Book.builder()
                 .title("book1")

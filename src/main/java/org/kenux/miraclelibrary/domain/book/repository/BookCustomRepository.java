@@ -8,9 +8,7 @@ import java.util.List;
 
 public interface BookCustomRepository {
 
-    List<Book> findAllByKeyword(String keyword);
+    List<Book> findBookByFilter(BookSearchFilter bookSearchFilter);
 
     List<Book> findNewBookWithinOneMonth(LocalDate time);
-
-    List<Book> findBookByFilter(BookSearchFilter bookSearchFilter);
 }
