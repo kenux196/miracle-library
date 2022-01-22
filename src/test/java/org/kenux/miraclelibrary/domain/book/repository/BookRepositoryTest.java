@@ -11,12 +11,14 @@ import org.kenux.miraclelibrary.global.config.QueryDslConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
 @Import(QueryDslConfig.class)
@@ -31,8 +33,8 @@ class BookRepositoryTest {
     }
 
     @Test
-    @DisplayName("책 정보 등록")
-    void test_BookRepository_hasBookData() {
+    @DisplayName("저장: 정상 케이스")
+    void save_정상() {
         final Book book = createBook();
 
         final Book save = bookRepository.save(book);
@@ -43,36 +45,151 @@ class BookRepositoryTest {
     }
 
     @Test
-    @DisplayName("제목 혹은 저자에 대한 키워드로 책을 검색할 수 있어야 한다.")
-    void test_BookRepository_findByTitle() {
+    @DisplayName("저장: 필수항목 없으면, 예외 발생")
+    void save_필수항목없음_예외발생() {
+        // given
+        final Book book = Book.builder().build();
+
+        // when then
+        assertThatThrownBy(() -> bookRepository.save(book))
+                .isInstanceOf(DataIntegrityViolationException.class);
+    }
+
+    @Test
+    @DisplayName("키워드 검색: 키워드 없으면 전체 리스트 가져온다.")
+    void findAllByKeyword_키워드없음() throws Exception {
+        // given
         final Book book = createBook();
         bookRepository.save(book);
 
-        List<Book> found = bookRepository.findAllByKeyword("title");
-        assertThat(found).isNotEmpty();
+        // when
+        final List<Book> result = bookRepository.findAllByKeyword(null);
 
-        found = bookRepository.findAllByKeyword("auth");
-        assertThat(found).isNotEmpty();
+        // then
+        assertThat(result).isNotEmpty();
+    }
 
-        found = bookRepository.findAllByKeyword("kkk");
+    @Test
+    @DisplayName("키워드 겁색: 제목 키워드 검색")
+    void findAllByKeyword_제목키워드() {
+        final Book book = createBook();
+        bookRepository.save(book);
+
+        List<Book> result = bookRepository.findAllByKeyword("title");
+        assertThat(result).isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("키워드 겁색: 작가 키워드 검색")
+    void findAllByKeyword_작가키워드() {
+        // given
+        final Book book = createBook();
+        bookRepository.save(book);
+
+        // when
+        List<Book> result = bookRepository.findAllByKeyword("auth");
+
+        // then
+        assertThat(result).isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("키워드 겁색: 검색 결과 없음")
+    void findAllByKeyword_해당검색결과없음() {
+        // given
+        final Book book = createBook();
+        bookRepository.save(book);
+
+        // when
+        List<Book> found = bookRepository.findAllByKeyword("any");
+
+        // then
         assertThat(found).isEmpty();
     }
 
     @Test
-    @DisplayName("도서 카테고리 별 검색")
-    void findByCategory() {
+    @DisplayName("카테고리 겁색: ESSAY")
+    void findByCategory_에세이() {
+        // given
         final Book book = createBook();
+        book.changeCategory(BookCategory.ESSAY);
         final Book saved = bookRepository.save(book);
 
+        // when
         List<Book> result = bookRepository.findAllByCategory(BookCategory.ESSAY);
 
+        // then
         assertThat(result).hasSize(1);
         assertThat(result.get(0)).isSameAs(saved);
     }
 
     @Test
-    @DisplayName("도서 필터 검색 : 필터에 키워드만 있는 경우")
-    void findBookByFilterOnlyKeyword() throws Exception {
+    @DisplayName("카테고리 겁색: 소설")
+    void findByCategory_소설() {
+        // given
+        final Book book = createBook();
+        book.changeCategory(BookCategory.FICTION);
+        final Book saved = bookRepository.save(book);
+
+        // when
+        List<Book> result = bookRepository.findAllByCategory(BookCategory.FICTION);
+
+        // then
+        assertThat(result).hasSize(1);
+        assertThat(result.get(0)).isSameAs(saved);
+    }
+
+    @Test
+    @DisplayName("카테고리 겁색: IT도서")
+    void findByCategory_IT도서() {
+        // given
+        final Book book = createBook();
+        book.changeCategory(BookCategory.IT);
+        final Book saved = bookRepository.save(book);
+
+        // when
+        List<Book> result = bookRepository.findAllByCategory(BookCategory.IT);
+
+        // then
+        assertThat(result).hasSize(1);
+        assertThat(result.get(0)).isSameAs(saved);
+    }
+
+    @Test
+    @DisplayName("카테고리 겁색: 인문학")
+    void findByCategory_인문학() {
+        // given
+        final Book book = createBook();
+        book.changeCategory(BookCategory.HUMANITIES);
+        final Book saved = bookRepository.save(book);
+
+        // when
+        List<Book> result = bookRepository.findAllByCategory(BookCategory.HUMANITIES);
+
+        // then
+        assertThat(result).hasSize(1);
+        assertThat(result.get(0)).isSameAs(saved);
+    }
+
+    @Test
+    @DisplayName("카테고리 겁색: 경제분야")
+    void findByCategory_경제분야() {
+        // given
+        final Book book = createBook();
+        book.changeCategory(BookCategory.ECONOMY);
+        final Book saved = bookRepository.save(book);
+
+        // when
+        List<Book> result = bookRepository.findAllByCategory(BookCategory.ECONOMY);
+
+        // then
+        assertThat(result).hasSize(1);
+        assertThat(result.get(0)).isSameAs(saved);
+    }
+
+    @Test
+    @DisplayName("필터 검색기능: 필터에 키워드만 있는 경우")
+    void findBookByFilter_키워드값만있는경우() throws Exception {
         // given
         final Book book = createBook();
         final Book saved = bookRepository.save(book);
@@ -87,8 +204,8 @@ class BookRepositoryTest {
     }
 
     @Test
-    @DisplayName("도서 필터 검색 : 필터에 키워드만 있는 경우")
-    void findBookByFilterOnlyCategory() throws Exception {
+    @DisplayName("필터 검색기능: 필터에 카테고리값만 있는 경우")
+    void findBookByFilter_카테고리값만있는경우() throws Exception {
         // given
         final Book book = createBook();
         final Book saved = bookRepository.save(book);
@@ -104,8 +221,8 @@ class BookRepositoryTest {
     }
 
     @Test
-    @DisplayName("도서 필터 검색 : 필터에 키워드, 필터 모두 있는 경우")
-    void findBookByFilter() throws Exception {
+    @DisplayName("필터 검색기능: 키워드, 카테고리 모두 있는 경우, 카테고리 And Keyword 겁색한다.")
+    void findBookByFilter_키워드카테고리모두있는경우() throws Exception {
         // given
         final Book book = createBook();
         final Book saved = bookRepository.save(book);
@@ -122,8 +239,8 @@ class BookRepositoryTest {
     }
 
     @Test
-    @DisplayName("도서 필터 검색 : 필터에 키워드, 필터 모두 있지만 도서 없는 경우")
-    void findBookByFilterNotFound() throws Exception {
+    @DisplayName("필터 검색기능: 검색결과 없는 경우")
+    void findBookByFilter_검색결과없는경우() throws Exception {
         // given
         final Book book = createBook();
         bookRepository.save(book);
@@ -139,22 +256,8 @@ class BookRepositoryTest {
     }
 
     @Test
-    @DisplayName("전체 리스트를 가져온다.")
-    void test_findAllBooks_whenNotExistKeyword() throws Exception {
-        // given
-        final Book book = createBook();
-        bookRepository.save(book);
-
-        // when
-        final List<Book> result = bookRepository.findAllByKeyword(null);
-
-        // then
-        assertThat(result).hasSize(1);
-    }
-
-    @Test
-    @DisplayName("전체 책 보유 수 가져오기")
-    void test_countAllBooks() throws Exception {
+    @DisplayName("전체 항목 수")
+    void countAllBooks() throws Exception {
         // given
         final List<Book> bookList = createBookList();
 
@@ -166,8 +269,40 @@ class BookRepositoryTest {
     }
 
     @Test
-    @DisplayName("전체 책에서 대여된 책 수 가져오기")
-    void test_countOfRentedBook() throws Exception {
+    @DisplayName("도서상태 검색: 분실책")
+    void findAllByStatus_분실상태() throws Exception {
+        // given
+        final List<Book> bookList = createBookList();
+        final long count = bookList.stream()
+                .filter(book -> book.getStatus().equals(BookStatus.LOST))
+                .count();
+
+        // when
+        List<Book> result = bookRepository.findAllByStatus(BookStatus.LOST);
+
+        // then
+        assertThat(result).hasSize((int) count);
+    }
+
+    @Test
+    @DisplayName("도서상태 검색: 파기상태")
+    void findAllByStatus_파기상태() throws Exception {
+        // given
+        final List<Book> bookList = createBookList();
+        final long count = bookList.stream()
+                .filter(book -> book.getStatus().equals(BookStatus.REMOVED))
+                .count();
+
+        // when
+        List<Book> result = bookRepository.findAllByStatus(BookStatus.REMOVED);
+
+        // then
+        assertThat(result).hasSize((int) count);
+    }
+
+    @Test
+    @DisplayName("도서상태 겁색: 대여상태")
+    void findAllByStatus_대여상태() throws Exception {
         // given
         final List<Book> bookList = createBookList();
         final long count = bookList.stream()
@@ -175,15 +310,15 @@ class BookRepositoryTest {
                 .count();
 
         // when
-        final int rentedBookCount = bookRepository.countByStatus(BookStatus.RENTED);
+        List<Book> result = bookRepository.findAllByStatus(BookStatus.RENTED);
 
         // then
-        assertThat(rentedBookCount).isEqualTo(count);
+        assertThat(result).hasSize((int) count);
     }
 
     @Test
-    @DisplayName("전체 책에서 대여가능한 책 수 가져오기")
-    void test_countOfRentableBook() throws Exception {
+    @DisplayName("도서상태 겁색: 대여가능상태")
+    void findAllByStatus_대여가능상태() throws Exception {
         // given
         final List<Book> bookList = createBookList();
         final long count = bookList.stream()
@@ -191,10 +326,10 @@ class BookRepositoryTest {
                 .count();
 
         // when
-        final int rentedBookCount = bookRepository.countByStatus(BookStatus.RENTABLE);
+        List<Book> result = bookRepository.findAllByStatus(BookStatus.RENTABLE);
 
         // then
-        assertThat(rentedBookCount).isEqualTo(count);
+        assertThat(result).hasSize((int) count);
     }
 
     @Test
@@ -230,14 +365,18 @@ class BookRepositoryTest {
 
     private List<Book> createBookList() {
         List<Book> books = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10; i++) {
             final Book book = Book.builder()
                     .title("book" + i)
                     .author("author" + i)
                     .isbn("ABC" + i)
                     .category(BookCategory.ESSAY)
                     .build();
-            if (i % 2 == 1) {
+            if (i == 0) {
+                book.changeStatus(BookStatus.REMOVED);
+            } else if (i == 1) {
+                book.changeStatus(BookStatus.LOST);
+            } else if (i < 5) {
                 book.changeStatus(BookStatus.RENTED);
             } else {
                 book.changeStatus(BookStatus.RENTABLE);

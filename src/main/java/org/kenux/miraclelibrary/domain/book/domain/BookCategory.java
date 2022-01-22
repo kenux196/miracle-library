@@ -5,6 +5,5 @@ public enum BookCategory {
     ESSAY,
     ECONOMY,
     IT,
-    HUMANITIES,
-    ETC
+    HUMANITIES
 }
