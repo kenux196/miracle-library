@@ -20,8 +20,8 @@ class BookRegisterRequestTest {
     }
 
     @Test
-    @DisplayName("Book Entity 로의 변환")
-    void test_toEntity() {
+    @DisplayName("Entity 변환")
+    void toEntity() {
         Book book = bookRegisterRequest.toEntity();
 
         assertThat(book).isNotNull();

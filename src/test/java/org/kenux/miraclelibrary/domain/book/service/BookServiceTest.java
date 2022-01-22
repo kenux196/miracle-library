@@ -32,9 +32,10 @@ class BookServiceTest {
     @InjectMocks
     BookService bookService;
 
+    // TODO : 관리자, 매니저인 경우에만 가능하도록 테스트 변경   - sky 2022/01/22
     @Test
-    @DisplayName("새로운 책을 등록한다.")
-    void test_register_newBook() throws Exception {
+    @DisplayName("신규 도서 등록")
+    void registerNewBook() throws Exception {
         // given
         Book book = createBookForTest();
         given(bookRepository.save(any())).willReturn(book);
@@ -47,26 +48,12 @@ class BookServiceTest {
     }
 
     @Test
-    @DisplayName("제목 혹은 저자에 해당하는 키워드를 통해 책을 검색한다.")
-    void test_searchBookByTitle() throws Exception {
+    @DisplayName("검색필터를 이용해서 도서 조회")
+    void searchBookByFilter() throws Exception {
         // given
-        Book book = createBookForTest();
-        given(bookRepository.findAllByKeyword(any())).willReturn(Collections.singletonList(book));
-
-        // when
-        List<Book> books = bookService.searchBook("title");
-
-        // then
-        assertThat(books).isNotEmpty();
-    }
-
-    @Test
-    @DisplayName("도서 필터 검색")
-    void searchBookByFilterOnlyKeyword() throws Exception {
-        // given
-        BookSearchFilter bookSearchFilter = new BookSearchFilter();
-        bookSearchFilter.setKeyword("title");
-
+        BookSearchFilter bookSearchFilter = BookSearchFilter.builder()
+                .keyword("title")
+                .build();
         Book book = createBookForTest();
         given(bookRepository.findBookByFilter(any())).willReturn(Collections.singletonList(book));
 
@@ -80,9 +67,10 @@ class BookServiceTest {
         verify(bookRepository).findBookByFilter(any());
     }
 
+    // TODO : 관리자, 매니저, 일반회원에 구분 테스트 추가   - sky 2022/01/22
     @Test
-    @DisplayName("회원의 도서 검색 결과에는 파기, 분실 상태의 책은 없어야 한다.")
-    void searchBookThatIsNotRemovedBook() throws Exception {
+    @DisplayName("일반 회원의 도서검색 결과에는 파기/분실 상태 미포함")
+    void searchBookByFilter_검색결과_분실파기상태는_미포함() throws Exception {
         // given
         List<Book> foundBook = new ArrayList<>();
         Book removedBook = Book.builder()
@@ -97,43 +85,15 @@ class BookServiceTest {
         given(bookRepository.findBookByFilter(any())).willReturn(foundBook);
 
         // when
-        List<Book> books = bookService.searchBookByFilter(new BookSearchFilter());
+        List<Book> books = bookService.searchBookByFilter(BookSearchFilter.builder().build());
 
         // then
         assertThat(books).isEmpty();
     }
 
     @Test
-    @DisplayName("키워드가 입력되지 않으면 전체 책 리스트를 가져온다.")
-    void test_getAllBooks_whenNotExistKeyword() throws Exception {
-        // given
-        Book book = createBookForTest();
-        given(bookRepository.findAllByKeyword(null)).willReturn(Collections.singletonList(book));
-
-        // when
-        final List<Book> books = bookService.searchBook(null);
-
-        // then
-        assertThat(books).isNotEmpty();
-    }
-
-    @Test
-    @DisplayName("검색한 책의 대출 가능 여부를 확인할 수 있어야 한다.")
-    void test_isAvailableRent() throws Exception {
-        // given
-        Book book = createBookForTest();
-        book.changeStatus(BookStatus.RENTED);
-        given(bookRepository.findAllByKeyword(any())).willReturn(Collections.singletonList(book));
-
-        // when
-        List<Book> books = bookService.searchBook("title");
-
-        // then
-        assertThat(books.get(0).getStatus()).isEqualTo(BookStatus.RENTED);
-    }
-
-    @Test
-    void 신간_서적_리스트_가져오기() throws Exception {
+    @DisplayName("신간 서적 목록 조회")
+    void getNewBooks() throws Exception {
         // given
         Book book = createBookForTest();
         book.changeStatus(BookStatus.RENTABLE);

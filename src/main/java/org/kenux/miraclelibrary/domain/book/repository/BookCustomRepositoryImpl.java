@@ -20,9 +20,10 @@ public class BookCustomRepositoryImpl implements BookCustomRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<Book> findAllByKeyword(String keyword) {
+    public List<Book> findBookByFilter(BookSearchFilter bookSearchFilter) {
         return jpaQueryFactory.selectFrom(book)
-                .where(titleOrAuthorContains(keyword))
+                .where(eqCategory(bookSearchFilter.getCategory()),
+                        titleOrAuthorContains(bookSearchFilter.getKeyword()))
                 .fetch();
     }
 
@@ -31,14 +32,6 @@ public class BookCustomRepositoryImpl implements BookCustomRepository {
         LocalDate findDate = time.minusMonths(1);
         return jpaQueryFactory.selectFrom(book)
                 .where(book.publicationDate.after(findDate))
-                .fetch();
-    }
-
-    @Override
-    public List<Book> findBookByFilter(BookSearchFilter bookSearchFilter) {
-        return jpaQueryFactory.selectFrom(book)
-                .where(eqCategory(bookSearchFilter.getCategory()),
-                        titleOrAuthorContains(bookSearchFilter.getKeyword()))
                 .fetch();
     }
 

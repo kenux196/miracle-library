@@ -22,10 +22,6 @@ public class BookService {
         return bookRepository.save(book).getId();
     }
 
-    public List<Book> searchBook(String keyword) {
-        return bookRepository.findAllByKeyword(keyword);
-    }
-
     public List<Book> getNewBooks() {
         return bookRepository.findNewBookWithinOneMonth(LocalDate.now());
     }
