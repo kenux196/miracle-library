@@ -11,9 +11,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 class BookTest {
 
     @Test
-    @DisplayName("책 생성")
-    void test_create_book() {
-        Book book = createBook();
+    @DisplayName("생성")
+    void create() {
+        Book book = createBookForTest();
         assertThat(book).isNotNull()
                         .isInstanceOf(Book.class);
     }
@@ -21,7 +21,7 @@ class BookTest {
     @Test
     @DisplayName("책 필수 정보: 제목, 작가, ISBN, 출간일을 꼭 가져야 한다.")
     void bookBasicInfo() throws Exception {
-        Book book = createBook();
+        Book book = createBookForTest();
 
         assertThat(book.getTitle()).isEqualTo("제목");
         assertThat(book.getAuthor()).isEqualTo("저자");
@@ -32,11 +32,11 @@ class BookTest {
 
     @Test
     @DisplayName("Equals And HashCode 테스트")
-    void equal() throws Exception {
+    void equalAndHashCode() throws Exception {
         // given
-        Book book1 = createBook();
+        Book book1 = createBookForTest();
         ReflectionTestUtils.setField(book1, "id", 1L);
-        Book book2 = createBook();
+        Book book2 = createBookForTest();
         ReflectionTestUtils.setField(book2, "id", 1L);
 
         // when
@@ -49,24 +49,24 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("책 필수 정보 추가: 카테고리")
-    void bookCategory() {
-        Book book = createBook();
+    @DisplayName("책 필수정보 추가: 카테고리")
+    void hasCategory() {
+        Book book = createBookForTest();
         assertThat(book.getCategory()).isEqualTo(BookCategory.FICTION);
     }
 
     @Test
-    @DisplayName("책 카테고리 변경")
+    @DisplayName("카테고리 변경")
     void changeBookCategory() {
-        Book book = createBook();
+        Book book = createBookForTest();
         book.changeCategory(BookCategory.ESSAY);
         assertThat(book.getCategory()).isEqualTo(BookCategory.ESSAY);
     }
 
     @Test
-    @DisplayName("책은 상태 변경 : 보유, 대여중, 유실, 파기")
+    @DisplayName("상태 변경 : 보유, 대여중, 유실, 파기")
     void changeStatus() {
-        Book book = createBook();
+        Book book = createBookForTest();
         book.changeStatus(BookStatus.RENTABLE);
         assertThat(book.getStatus()).isEqualTo(BookStatus.RENTABLE);
 
@@ -81,10 +81,10 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("책 소개 정보 수정")
+    @DisplayName("책소개 정보 수정")
     void changeContent() throws Exception {
         // given
-        Book book = createBook();
+        Book book = createBookForTest();
         String content = "책은 소개글이 있다.";
 
         // when
@@ -95,10 +95,10 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("책은 표지 이미지를 변경")
+    @DisplayName("표지 이미지 변경")
     void changeCover() throws Exception {
         // given
-        Book book = createBook();
+        Book book = createBookForTest();
         String cover = "/cover/book_id";
 
         // when
@@ -112,8 +112,8 @@ class BookTest {
     @DisplayName("보유책인지 확인")
     void heldBook() throws Exception {
         // given
-        Book book1 = createBook();
-        Book book2 = createBook();
+        Book book1 = createBookForTest();
+        Book book2 = createBookForTest();
 
         // when
         book1.changeStatus(BookStatus.RENTED);
@@ -124,7 +124,7 @@ class BookTest {
         assertThat(book2.isHeldBook()).isFalse();
     }
 
-    private Book createBook() {
+    private Book createBookForTest() {
         return Book.builder()
                 .title("제목")
                 .author("저자")
