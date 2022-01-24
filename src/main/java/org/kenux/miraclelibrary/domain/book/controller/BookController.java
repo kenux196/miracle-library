@@ -33,7 +33,7 @@ public class BookController {
             @RequestParam(value = "category", required = false) String category) {
         BookSearchFilter searchFilter = BookSearchFilter.builder()
                 .keyword(keyword)
-                .category(category != null ? BookCategory.valueOf(category) : null)
+                .category(category != null ? BookCategory.getBookCategory(category) : null)
                 .build();
         final List<Book> books = bookService.searchBookByFilter(searchFilter);
         final List<BookListResponse> bookListResponseList = bookListResponsesOf(books);
