@@ -49,6 +49,60 @@ class BookTest {
     }
 
     @Test
+    @DisplayName("책 제목 변경")
+    void changeTitle() throws Exception {
+        // given
+        Book book = createBookForTest();
+
+        // when
+        book.changeTitle("책제목수정");
+
+        // then
+        assertThat(book.getTitle()).isEqualTo("책제목수정");
+    }
+
+    @Test
+    @DisplayName("책 작가 변경")
+    void changeAuthor() throws Exception {
+        // given
+        Book book = createBookForTest();
+
+        // when
+        book.changeAuthor("김작가");
+
+        // then
+        assertThat(book.getAuthor()).isEqualTo("김작가");
+    }
+
+    @Test
+    @DisplayName("책 isbn 변경")
+    void changeIsbn() throws Exception {
+        // given
+        Book book = createBookForTest();
+
+        // when
+        book.changeIsbn("isbn1234");
+
+        // then
+        assertThat(book.getIsbn()).isEqualTo("isbn1234");
+    }
+
+    @Test
+    @DisplayName("책 출간일 변경")
+    void changePublicationDate() throws Exception {
+        // given
+        Book book = createBookForTest();
+        LocalDate publicationDate = LocalDate.of(2021, 12, 11);
+
+        // when
+        book.changePublicationDate(publicationDate);
+
+        // then
+        assertThat(book.getPublicationDate()).isEqualTo(publicationDate);
+    }
+
+
+    @Test
     @DisplayName("책 필수정보 추가: 카테고리")
     void hasCategory() {
         Book book = createBookForTest();

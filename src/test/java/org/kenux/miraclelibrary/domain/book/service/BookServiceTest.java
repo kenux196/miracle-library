@@ -8,7 +8,9 @@ import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
 import org.kenux.miraclelibrary.domain.book.domain.BookStatus;
 import org.kenux.miraclelibrary.domain.book.dto.BookRegisterRequest;
 import org.kenux.miraclelibrary.domain.book.dto.BookSearchFilter;
+import org.kenux.miraclelibrary.domain.book.dto.BookUpdateRequest;
 import org.kenux.miraclelibrary.domain.book.repository.BookRepository;
+import org.kenux.miraclelibrary.global.exception.CustomException;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -17,8 +19,11 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.kenux.miraclelibrary.global.exception.ErrorCode.BOOK_NOT_FOUND;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -104,6 +109,76 @@ class BookServiceTest {
 
         // then
         assertThat(newBooks).hasSize(1);
+    }
+
+    @Test
+    @DisplayName("getBook: id로 책 조회결과 없으면 BOOK_NOT_FOUND 예외처리")
+    void getBook_검색결과없으면예외처리() throws Exception {
+        // given
+        given(bookRepository.findById(any())).willReturn(Optional.empty());
+
+        // when // then
+        assertThatThrownBy(() -> bookService.getBook(1L))
+                .isInstanceOf(CustomException.class)
+                .hasMessage(BOOK_NOT_FOUND.getMessage());
+    }    
+    
+    @Test
+    @DisplayName("getBook: 정상")
+    void getBook_정상처리() throws Exception {
+        // given
+        final Book book = createBookForTest();
+        given(bookRepository.findById(any())).willReturn(Optional.ofNullable(book));
+
+        // when
+        final Book result = bookService.getBook(1L);
+
+        // then
+        assertThat(result).isNotNull();
+    }
+
+    @Test
+    @DisplayName("책 업데이트")
+    void updateBook_정상인경우() throws Exception {
+        // given
+        BookUpdateRequest bookUpdateRequest = new BookUpdateRequest();
+        bookUpdateRequest.setId(1L);
+        bookUpdateRequest.setTitle("title1");
+        bookUpdateRequest.setAuthor("author1");
+        bookUpdateRequest.setIsbn("isbn1");
+        bookUpdateRequest.setPublicationDate(LocalDate.of(2022, 1, 24));
+        bookUpdateRequest.setCategory(BookCategory.FICTION);
+        bookUpdateRequest.setContent("content");
+        bookUpdateRequest.setCover("cover11");
+
+        Book expectedBook = Book.builder()
+                .id(bookUpdateRequest.getId())
+                .title(bookUpdateRequest.getTitle())
+                .author(bookUpdateRequest.getAuthor())
+                .isbn(bookUpdateRequest.getIsbn())
+                .publicationDate(bookUpdateRequest.getPublicationDate())
+                .category(bookUpdateRequest.getCategory())
+                .content(bookUpdateRequest.getContent())
+                .cover(bookUpdateRequest.getCover())
+                .status(BookStatus.RENTABLE)
+                .build();
+
+        final Book book = createBookForTest();
+        given(bookRepository.findById(any())).willReturn(Optional.ofNullable(book));
+        given(bookRepository.save(any())).willReturn(book);
+
+        // when
+        Book updatedBook = bookService.updateBook(bookUpdateRequest);
+
+        // then
+        assertThat(updatedBook.getId()).isEqualTo(expectedBook.getId());
+        assertThat(updatedBook.getTitle()).isEqualTo(expectedBook.getTitle());
+        assertThat(updatedBook.getAuthor()).isEqualTo(expectedBook.getAuthor());
+        assertThat(updatedBook.getIsbn()).isEqualTo(expectedBook.getIsbn());
+        assertThat(updatedBook.getPublicationDate()).isEqualTo(expectedBook.getPublicationDate());
+        assertThat(updatedBook.getContent()).isEqualTo(expectedBook.getContent());
+        assertThat(updatedBook.getCover()).isEqualTo(expectedBook.getCover());
+        assertThat(updatedBook.getCategory()).isEqualTo(expectedBook.getCategory());
     }
 
 

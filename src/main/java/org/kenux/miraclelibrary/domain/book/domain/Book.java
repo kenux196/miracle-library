@@ -47,6 +47,22 @@ public class Book extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private BookStatus status;
 
+    public void changeTitle(String title) {
+        this.title = title;
+    }
+
+    public void changeAuthor(String author) {
+        this.author = author;
+    }
+
+    public void changeIsbn(String isbn) {
+        this.isbn = isbn;
+    }
+
+    public void changePublicationDate(LocalDate publicationDate) {
+        this.publicationDate = publicationDate;
+    }
+
     public void changeStatus(BookStatus status) {
         this.status = status;
     }
