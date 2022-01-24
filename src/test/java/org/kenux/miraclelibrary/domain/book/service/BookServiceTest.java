@@ -6,6 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.kenux.miraclelibrary.domain.book.domain.Book;
 import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
 import org.kenux.miraclelibrary.domain.book.domain.BookStatus;
+import org.kenux.miraclelibrary.domain.book.dto.BookDetailResponse;
 import org.kenux.miraclelibrary.domain.book.dto.BookRegisterRequest;
 import org.kenux.miraclelibrary.domain.book.dto.BookSearchFilter;
 import org.kenux.miraclelibrary.domain.book.dto.BookUpdateRequest;
@@ -112,29 +113,34 @@ class BookServiceTest {
     }
 
     @Test
-    @DisplayName("getBook: id로 책 조회결과 없으면 BOOK_NOT_FOUND 예외처리")
-    void getBook_검색결과없으면예외처리() throws Exception {
+    @DisplayName("getBookDetail: id로 책 조회결과 없으면 BOOK_NOT_FOUND 예외처리")
+    void getBookDetail_검색결과없으면예외처리() throws Exception {
         // given
         given(bookRepository.findById(any())).willReturn(Optional.empty());
 
         // when // then
-        assertThatThrownBy(() -> bookService.getBook(1L))
+        assertThatThrownBy(() -> bookService.getBookDetail(1L))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(BOOK_NOT_FOUND.getMessage());
     }    
-    
+
     @Test
-    @DisplayName("getBook: 정상")
-    void getBook_정상처리() throws Exception {
+    @DisplayName("getBookDetail: 정상")
+    void getBookDetail_정상처리() throws Exception {
         // given
         final Book book = createBookForTest();
-        given(bookRepository.findById(any())).willReturn(Optional.ofNullable(book));
+        given(bookRepository.findById(any())).willReturn(Optional.of(book));
 
         // when
-        final Book result = bookService.getBook(1L);
+        final BookDetailResponse response = bookService.getBookDetail(1L);
 
         // then
-        assertThat(result).isNotNull();
+        assertThat(response).isNotNull();
+        assertThat(response.getId()).isEqualTo(book.getId());
+        assertThat(response.getTitle()).isEqualTo(book.getTitle());
+        assertThat(response.getAuthor()).isEqualTo(book.getAuthor());
+        assertThat(response.getIsbn()).isEqualTo(book.getIsbn());
+        assertThat(response.getPublicationDate()).isEqualTo("2022-01-01");
     }
 
     @Test

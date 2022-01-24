@@ -7,12 +7,15 @@ import org.junit.jupiter.api.Test;
 import org.kenux.miraclelibrary.domain.book.domain.Book;
 import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
 import org.kenux.miraclelibrary.domain.book.domain.BookStatus;
-import org.kenux.miraclelibrary.domain.book.dto.BookListResponse;
+import org.kenux.miraclelibrary.domain.book.dto.BookDetailResponse;
 import org.kenux.miraclelibrary.domain.book.dto.BookRegisterRequest;
+import org.kenux.miraclelibrary.domain.book.dto.BookResponse;
 import org.kenux.miraclelibrary.domain.book.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.web.servlet.HttpEncodingAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
@@ -31,6 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = {BookController.class})
+@Import(HttpEncodingAutoConfiguration.class)
 class BookControllerTest {
 
     @Autowired
@@ -102,7 +106,7 @@ class BookControllerTest {
                 .category(BookCategory.ESSAY)
                 .publicationDate(LocalDate.of(2022, 1, 1))
                 .build();
-        List<BookListResponse> bookListResponses = Collections.singletonList(BookListResponse.of(book));
+        List<BookResponse> bookResponses = Collections.singletonList(BookResponse.of(book));
         given(bookService.searchBookByFilter(any())).willReturn(Collections.singletonList(book));
 
         // when
@@ -110,7 +114,7 @@ class BookControllerTest {
 
         // then
         resultActions.andExpect(status().isOk())
-                .andExpect(content().string(convertToJson(bookListResponses)))
+                .andExpect(content().string(convertToJson(bookResponses)))
                 .andDo(print());
     }
 
@@ -126,7 +130,7 @@ class BookControllerTest {
                 .category(BookCategory.ESSAY)
                 .publicationDate(LocalDate.of(2022, 1, 1))
                 .build();
-        List<BookListResponse> bookListResponses = Collections.singletonList(BookListResponse.of(book));
+        List<BookResponse> bookResponses = Collections.singletonList(BookResponse.of(book));
         given(bookService.searchBookByFilter(any())).willReturn(Collections.singletonList(book));
 
         // when
@@ -136,7 +140,7 @@ class BookControllerTest {
 
         // then
         resultActions.andExpect(status().isOk())
-                .andExpect(content().string(convertToJson(bookListResponses)))
+                .andExpect(content().string(convertToJson(bookResponses)))
                 .andDo(print());
     }
 
@@ -152,7 +156,7 @@ class BookControllerTest {
                 .category(BookCategory.ESSAY)
                 .publicationDate(LocalDate.of(2022, 1, 1))
                 .build();
-        List<BookListResponse> bookListResponses = Collections.singletonList(BookListResponse.of(book));
+        List<BookResponse> bookResponses = Collections.singletonList(BookResponse.of(book));
         given(bookService.searchBookByFilter(any())).willReturn(Collections.singletonList(book));
 
         // when
@@ -162,7 +166,7 @@ class BookControllerTest {
 
         // then
         resultActions.andExpect(status().isOk())
-                .andExpect(content().string(convertToJson(bookListResponses)))
+                .andExpect(content().string(convertToJson(bookResponses)))
                 .andDo(print());
     }
 
@@ -178,7 +182,7 @@ class BookControllerTest {
                 .category(BookCategory.ESSAY)
                 .publicationDate(LocalDate.of(2022, 1, 1))
                 .build();
-        List<BookListResponse> bookListResponses = Collections.singletonList(BookListResponse.of(book));
+        List<BookResponse> bookResponses = Collections.singletonList(BookResponse.of(book));
         given(bookService.searchBookByFilter(any())).willReturn(Collections.singletonList(book));
 
         // when
@@ -189,10 +193,35 @@ class BookControllerTest {
 
         // then
         resultActions.andExpect(status().isOk())
-                .andExpect(content().string(convertToJson(bookListResponses)))
+                .andExpect(content().string(convertToJson(bookResponses)))
                 .andDo(print());
     }
 
+    @Test
+    @DisplayName("GET /books/detail/xx: 정상이면, 책의 상세정보 반환")
+    void getBookDetail() throws Exception {
+        // given
+        Book book = Book.builder()
+                .id(1L)
+                .title("title")
+                .author("author")
+                .isbn("isbn")
+                .status(BookStatus.RENTABLE)
+                .category(BookCategory.ESSAY)
+                .content("책소개내용")
+                .cover("이미지경로")
+                .publicationDate(LocalDate.of(2022, 1, 1))
+                .build();
+        BookDetailResponse bookDetailResponse = BookDetailResponse.of(book);
+        given(bookService.getBookDetail(any())).willReturn(bookDetailResponse);
+        // when
+        final ResultActions resultActions = mockMvc.perform(get("/books/detail/1"));
+
+        // then
+        resultActions.andExpect(status().isOk())
+                .andExpect(content().string(convertToJson(bookDetailResponse)))
+                .andDo(print());
+    }
 
     @Test
     @DisplayName("GET /books/new-book : 신간 서적 리스트 조회 요청처리")
@@ -206,7 +235,7 @@ class BookControllerTest {
                 .publicationDate(LocalDate.of(2022, 1, 1))
                 .build();
 
-        List<BookListResponse> bookListResponses = Collections.singletonList(BookListResponse.of(book));
+        List<BookResponse> bookResponses = Collections.singletonList(BookResponse.of(book));
         given(bookService.getNewBooks()).willReturn(Collections.singletonList(book));
 
         // when
@@ -214,7 +243,7 @@ class BookControllerTest {
 
         // then
         resultActions.andExpect(status().isOk())
-                .andExpect(content().string(convertToJson(bookListResponses)))
+                .andExpect(content().string(convertToJson(bookResponses)))
                 .andDo(print());
     }
 
