@@ -90,8 +90,8 @@ class BookControllerTest {
     }
 
     @Test
-    @DisplayName("GET /books : 책 전체 리스트 요청 처리 정상")
-    void getAllBooks() throws Exception {
+    @DisplayName("GET /books : parameter 없는 경우")
+    void searchBook() throws Exception {
         // given
         Book book = Book.builder()
                 .id(1L)
@@ -99,6 +99,7 @@ class BookControllerTest {
                 .author("author")
                 .isbn("isbn")
                 .status(BookStatus.RENTABLE)
+                .category(BookCategory.ESSAY)
                 .publicationDate(LocalDate.of(2022, 1, 1))
                 .build();
         List<BookListResponse> bookListResponses = Collections.singletonList(BookListResponse.of(book));
@@ -114,14 +115,15 @@ class BookControllerTest {
     }
 
     @Test
-    @DisplayName("GET /books?keyword='xxx' : 키워드 검색 요청처리")
-    void searchBook() throws Exception {
+    @DisplayName("GET /books?keyword='xxx' : 키워드만 있는 경우")
+    void searchBook_키워드만있는경우() throws Exception {
         Book book = Book.builder()
                 .id(1L)
                 .title("title")
                 .author("author")
                 .isbn("isbn")
                 .status(BookStatus.RENTABLE)
+                .category(BookCategory.ESSAY)
                 .publicationDate(LocalDate.of(2022, 1, 1))
                 .build();
         List<BookListResponse> bookListResponses = Collections.singletonList(BookListResponse.of(book));
@@ -137,6 +139,60 @@ class BookControllerTest {
                 .andExpect(content().string(convertToJson(bookListResponses)))
                 .andDo(print());
     }
+
+    @Test
+    @DisplayName("GET /books?category='xxx' : 카테고리만 있는 경우")
+    void searchBook_카테고리만있는경우() throws Exception {
+        Book book = Book.builder()
+                .id(1L)
+                .title("title")
+                .author("author")
+                .isbn("isbn")
+                .status(BookStatus.RENTABLE)
+                .category(BookCategory.ESSAY)
+                .publicationDate(LocalDate.of(2022, 1, 1))
+                .build();
+        List<BookListResponse> bookListResponses = Collections.singletonList(BookListResponse.of(book));
+        given(bookService.searchBookByFilter(any())).willReturn(Collections.singletonList(book));
+
+        // when
+        final ResultActions resultActions = mockMvc.perform(
+                get("/books")
+                        .param("category", "essay"));
+
+        // then
+        resultActions.andExpect(status().isOk())
+                .andExpect(content().string(convertToJson(bookListResponses)))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("GET /books?category='xxx' : 키워드,카테고리 모두있는 경우")
+    void searchBook_키워드와카테고리모두있는경우() throws Exception {
+        Book book = Book.builder()
+                .id(1L)
+                .title("title")
+                .author("author")
+                .isbn("isbn")
+                .status(BookStatus.RENTABLE)
+                .category(BookCategory.ESSAY)
+                .publicationDate(LocalDate.of(2022, 1, 1))
+                .build();
+        List<BookListResponse> bookListResponses = Collections.singletonList(BookListResponse.of(book));
+        given(bookService.searchBookByFilter(any())).willReturn(Collections.singletonList(book));
+
+        // when
+        final ResultActions resultActions = mockMvc.perform(
+                get("/books")
+                        .param("keyword", "title")
+                        .param("category", "essay"));
+
+        // then
+        resultActions.andExpect(status().isOk())
+                .andExpect(content().string(convertToJson(bookListResponses)))
+                .andDo(print());
+    }
+
 
     @Test
     @DisplayName("GET /books/new-book : 신간 서적 리스트 조회 요청처리")
