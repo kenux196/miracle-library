@@ -3,8 +3,9 @@ package org.kenux.miraclelibrary.domain.book.controller;
 import lombok.RequiredArgsConstructor;
 import org.kenux.miraclelibrary.domain.book.domain.Book;
 import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
-import org.kenux.miraclelibrary.domain.book.dto.BookListResponse;
+import org.kenux.miraclelibrary.domain.book.dto.BookDetailResponse;
 import org.kenux.miraclelibrary.domain.book.dto.BookRegisterRequest;
+import org.kenux.miraclelibrary.domain.book.dto.BookResponse;
 import org.kenux.miraclelibrary.domain.book.dto.BookSearchFilter;
 import org.kenux.miraclelibrary.domain.book.service.BookService;
 import org.springframework.http.ResponseEntity;
@@ -36,20 +37,26 @@ public class BookController {
                 .category(category != null ? BookCategory.getBookCategory(category) : null)
                 .build();
         final List<Book> books = bookService.searchBookByFilter(searchFilter);
-        final List<BookListResponse> bookListResponseList = bookListResponsesOf(books);
-        return ResponseEntity.ok(bookListResponseList);
+        final List<BookResponse> bookListResponse = bookListResponsesOf(books);
+        return ResponseEntity.ok(bookListResponse);
+    }
+
+    @GetMapping(value = "/detail/{id}")
+    public ResponseEntity<?> getBookDetail(@PathVariable(value = "id") Long id) {
+        final BookDetailResponse bookDetail = bookService.getBookDetail(id);
+        return ResponseEntity.ok(bookDetail);
     }
 
     @GetMapping("/new-book")
     public ResponseEntity<?> getNewBooks() {
         final List<Book> books = bookService.getNewBooks();
-        final List<BookListResponse> bookListResponseList = bookListResponsesOf(books);
-        return ResponseEntity.ok(bookListResponseList);
+        final List<BookResponse> bookListResponse = bookListResponsesOf(books);
+        return ResponseEntity.ok(bookListResponse);
     }
 
-    private List<BookListResponse> bookListResponsesOf(List<Book> books) {
+    private List<BookResponse> bookListResponsesOf(List<Book> books) {
         return books.stream()
-                .map(BookListResponse::of)
+                .map(BookResponse::of)
                 .collect(Collectors.toList());
     }
 }

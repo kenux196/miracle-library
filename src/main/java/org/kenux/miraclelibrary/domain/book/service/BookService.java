@@ -2,6 +2,7 @@ package org.kenux.miraclelibrary.domain.book.service;
 
 import lombok.RequiredArgsConstructor;
 import org.kenux.miraclelibrary.domain.book.domain.Book;
+import org.kenux.miraclelibrary.domain.book.dto.BookDetailResponse;
 import org.kenux.miraclelibrary.domain.book.dto.BookRegisterRequest;
 import org.kenux.miraclelibrary.domain.book.dto.BookSearchFilter;
 import org.kenux.miraclelibrary.domain.book.dto.BookUpdateRequest;
@@ -9,7 +10,6 @@ import org.kenux.miraclelibrary.domain.book.repository.BookRepository;
 import org.kenux.miraclelibrary.global.exception.CustomException;
 import org.kenux.miraclelibrary.global.exception.ErrorCode;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+//@Transactional
 public class BookService {
 
     private final BookRepository bookRepository;
@@ -35,11 +35,6 @@ public class BookService {
         return bookRepository.findBookByFilter(filter).stream()
                 .filter(Book::isHeldBook)
                 .collect(Collectors.toList());
-    }
-
-    public Book getBook(Long id) {
-        return bookRepository.findById(id)
-                .orElseThrow(() -> new CustomException(ErrorCode.BOOK_NOT_FOUND));
     }
 
     public Book updateBook(BookUpdateRequest bookUpdateRequest) {
@@ -68,5 +63,15 @@ public class BookService {
         }
 
         return bookRepository.save(book);
+    }
+
+    public BookDetailResponse getBookDetail(Long id) {
+        final Book book = getBook(id);
+        return BookDetailResponse.of(book);
+    }
+
+    private Book getBook(Long id) {
+        return bookRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.BOOK_NOT_FOUND));
     }
 }
