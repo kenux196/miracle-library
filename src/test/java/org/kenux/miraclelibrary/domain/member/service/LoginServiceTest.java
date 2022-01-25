@@ -35,8 +35,8 @@ class LoginServiceTest {
         // given
         LoginRequest loginRequest = new LoginRequest("user@test.com", "password");
         given(memberRepository.findByEmail(any())).willReturn(Optional.empty());
-        // when
-        // then
+
+        // when then
         assertThatThrownBy(() -> loginService.login(loginRequest))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.MEMBER_NOT_FOUND.getMessage());
@@ -47,33 +47,21 @@ class LoginServiceTest {
     void test_errorLogin_whenWrongPassword() throws Exception {
         // given
         LoginRequest loginRequest = new LoginRequest("user@test.com", "password");
-        Member member = Member.builder()
-                .name("user")
-                .email("user@test.com")
-                .password("wrongPassword")
-                .memberRole(MemberRole.CUSTOMER)
-                .build();
+        Member member = getMember("wrongPassword");
         given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(member));
 
-        // when
-        // then
+        // when then
         assertThatThrownBy(() -> loginService.login(loginRequest))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.PASSWORD_WRONG.getMessage());
     }
-
 
     @Test
     @DisplayName("정상 입력에 대해서 로그인 성공")
     void test_successLogin() throws Exception {
         // given
         LoginRequest loginRequest = new LoginRequest("user@test.com", "password");
-        Member member = Member.builder()
-                .name("user")
-                .email("user@test.com")
-                .password("password")
-                .memberRole(MemberRole.CUSTOMER)
-                .build();
+        Member member = getMember("password");
         given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(member));
         
         // when
@@ -83,5 +71,12 @@ class LoginServiceTest {
         assertThat(result).isNotNull();
     }
 
-
+    private Member getMember(String password) {
+        return Member.builder()
+                .name("user")
+                .email("user@test.com")
+                .password(password)
+                .memberRole(MemberRole.CUSTOMER)
+                .build();
+    }
 }

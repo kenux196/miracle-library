@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.kenux.miraclelibrary.global.entity.BaseTimeEntity;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "member")
@@ -21,8 +22,11 @@ public class Member extends BaseTimeEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "email")
+    @Column(name = "email", nullable = false)
     private String email;
+
+    @Column(name = "phone", nullable = false)
+    private String phone;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "member_password_id")
@@ -32,10 +36,15 @@ public class Member extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private MemberRole memberRole;
 
+    private String address;
+
+    private LocalDateTime lastAccessTime;
+
     @Builder
-    public Member(String name, String email, String password, MemberRole memberRole) {
+    public Member(String name, String email, String phone, String password, MemberRole memberRole) {
         this.name = name;
         this.email = email;
+        this.phone = phone;
         this.password = new MemberPassword(password);
         this.memberRole = memberRole;
     }
@@ -52,18 +61,19 @@ public class Member extends BaseTimeEntity {
         this.name = name;
     }
 
-    public String getPassword() {
-        return this.password.getPassword();
+    public void changePhone(String phone) {
+        this.phone = phone;
     }
 
-    @Override
-    public String toString() {
-        return "Member{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", password=" + password +
-                ", memberRole=" + memberRole +
-                '}';
+    public void changeAddress(String address) {
+        this.address = address;
+    }
+
+    public void updateLastAccessTime(LocalDateTime accessTime) {
+        this.lastAccessTime = accessTime;
+    }
+
+    public String getPassword() {
+        return this.password.getPassword();
     }
 }
