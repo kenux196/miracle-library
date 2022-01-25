@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.kenux.miraclelibrary.global.entity.BaseTimeEntity;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "member")
@@ -35,6 +36,10 @@ public class Member extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private MemberRole memberRole;
 
+    private String address;
+
+    private LocalDateTime lastAccessTime;
+
     @Builder
     public Member(String name, String email, String phone, String password, MemberRole memberRole) {
         this.name = name;
@@ -58,6 +63,14 @@ public class Member extends BaseTimeEntity {
 
     public void changePhone(String phone) {
         this.phone = phone;
+    }
+
+    public void changeAddress(String address) {
+        this.address = address;
+    }
+
+    public void updateLastAccessTime(LocalDateTime accessTime) {
+        this.lastAccessTime = accessTime;
     }
 
     public String getPassword() {
