@@ -77,7 +77,7 @@ class BookControllerIntegrationTest extends BaseIntegrationTest {
     @DisplayName("GET /books : 책 전체 리스트 요청 처리 정상")
     void getAllBooks() throws Exception {
         // given
-        List<BookResponse> bookRespons = new ArrayList<>();
+        List<BookResponse> bookResponses = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             BookRegisterRequest bookRegisterRequest = BookRegisterRequest.builder()
                     .title("title" + i)
@@ -86,7 +86,7 @@ class BookControllerIntegrationTest extends BaseIntegrationTest {
                     .publicationDate(LocalDate.of(2020, 1, 11).plusDays(i))
                     .build();
             final Book book = bookSetup.saveBook(bookRegisterRequest);
-            bookRespons.add(BookResponse.of(book));
+            bookResponses.add(BookResponse.of(book));
         }
 
         // when
@@ -94,7 +94,7 @@ class BookControllerIntegrationTest extends BaseIntegrationTest {
 
         // then
         resultActions.andExpect(status().isOk())
-                .andExpect(content().string(convertToJson(bookRespons)))
+                .andExpect(content().string(convertToJson(bookResponses)))
                 .andDo(print());
     }
 
@@ -102,7 +102,7 @@ class BookControllerIntegrationTest extends BaseIntegrationTest {
     @DisplayName("GET /books?keyword='xxx' : 키워드 검색 요청처리")
     void searchBook() throws Exception {
         // given
-        List<BookResponse> bookRespons = new ArrayList<>();
+        List<BookResponse> bookResponses = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             BookRegisterRequest bookRegisterRequest = BookRegisterRequest.builder()
                     .title("title" + i)
@@ -111,7 +111,7 @@ class BookControllerIntegrationTest extends BaseIntegrationTest {
                     .publicationDate(LocalDate.of(2020, 1, 11).plusDays(i))
                     .build();
             final Book book = bookSetup.saveBook(bookRegisterRequest);
-            bookRespons.add(BookResponse.of(book));
+            bookResponses.add(BookResponse.of(book));
         }
 
         // when
@@ -121,7 +121,7 @@ class BookControllerIntegrationTest extends BaseIntegrationTest {
 
         // then
         resultActions.andExpect(status().isOk())
-                .andExpect(content().string(convertToJson(bookRespons)))
+                .andExpect(content().string(convertToJson(bookResponses)))
                 .andDo(print());
     }
 
@@ -129,7 +129,7 @@ class BookControllerIntegrationTest extends BaseIntegrationTest {
     @DisplayName("GET /books/new-book : 신간 서적 리스트 조회 요청처리")
     void getNewBooks() throws Exception {
         // given
-        List<BookResponse> bookRespons = new ArrayList<>();
+        List<BookResponse> bookResponses = new ArrayList<>();
         final LocalDate publicationDateLessThanOneMonth = LocalDate.now().minusDays(15);
         for (int i = 0; i < 5; i++) {
             BookRegisterRequest bookRegisterRequest = BookRegisterRequest.builder()
@@ -139,7 +139,7 @@ class BookControllerIntegrationTest extends BaseIntegrationTest {
                     .publicationDate(publicationDateLessThanOneMonth)
                     .build();
             final Book book = bookSetup.saveBook(bookRegisterRequest);
-            bookRespons.add(BookResponse.of(book));
+            bookResponses.add(BookResponse.of(book));
         }
 
         for (int i = 0; i < 5; i++) {
@@ -156,7 +156,7 @@ class BookControllerIntegrationTest extends BaseIntegrationTest {
 
         // then
         resultActions.andExpect(status().isOk())
-                .andExpect(content().string(convertToJson(bookRespons)))
+                .andExpect(content().string(convertToJson(bookResponses)))
                 .andDo(print());
     }
 

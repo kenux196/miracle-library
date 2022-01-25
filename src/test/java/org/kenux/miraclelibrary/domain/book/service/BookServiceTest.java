@@ -171,7 +171,6 @@ class BookServiceTest {
 
         final Book book = createBookForTest();
         given(bookRepository.findById(any())).willReturn(Optional.ofNullable(book));
-        given(bookRepository.save(any())).willReturn(book);
 
         // when
         Book updatedBook = bookService.updateBook(bookUpdateRequest);

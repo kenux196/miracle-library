@@ -2,6 +2,7 @@ package org.kenux.miraclelibrary.domain.book.service;
 
 import lombok.RequiredArgsConstructor;
 import org.kenux.miraclelibrary.domain.book.domain.Book;
+import org.kenux.miraclelibrary.domain.book.domain.BookStatus;
 import org.kenux.miraclelibrary.domain.book.dto.BookDetailResponse;
 import org.kenux.miraclelibrary.domain.book.dto.BookRegisterRequest;
 import org.kenux.miraclelibrary.domain.book.dto.BookSearchFilter;
@@ -10,6 +11,7 @@ import org.kenux.miraclelibrary.domain.book.repository.BookRepository;
 import org.kenux.miraclelibrary.global.exception.CustomException;
 import org.kenux.miraclelibrary.global.exception.ErrorCode;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,13 +19,14 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-//@Transactional
+@Transactional
 public class BookService {
 
     private final BookRepository bookRepository;
 
     public Long registerNewBook(BookRegisterRequest bookRegisterRequest) {
         final Book book = bookRegisterRequest.toEntity();
+        book.changeStatus(BookStatus.RENTABLE);
         return bookRepository.save(book).getId();
     }
 
@@ -61,8 +64,7 @@ public class BookService {
         if (bookUpdateRequest.getPublicationDate() != null) {
             book.changePublicationDate(bookUpdateRequest.getPublicationDate());
         }
-
-        return bookRepository.save(book);
+        return book;
     }
 
     public BookDetailResponse getBookDetail(Long id) {
