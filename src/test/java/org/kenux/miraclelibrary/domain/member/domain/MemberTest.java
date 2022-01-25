@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class MemberTest {
 
     @Test
-    @DisplayName("멤버 객체 생성")
+    @DisplayName("멤버 생성: 일반 회원")
     void test_CustomerBasic() {
         final Member member = createMember();
 
@@ -47,11 +47,24 @@ class MemberTest {
         assertThat(member.getName()).isEqualTo("changedName");
     }
 
+    @Test
+    @DisplayName("멤버 연락처 변경")
+    void changePhoneNumber() throws Exception {
+        final Member member = createMember();
+
+        member.changePhone("010-1111-2345");
+
+        assertThat(member.getPhone()).isEqualTo("010-1111-2345");
+    }
+
+
     private Member createMember() {
         return Member.builder()
                 .name("name")
                 .email("email")
+                .phone("010-1234-0987")
                 .password("password")
+                .memberRole(MemberRole.CUSTOMER)
                 .build();
     }
 }

@@ -158,6 +158,7 @@ class MemberRepositoryTest {
         return Member.builder()
                 .name("customer1")
                 .email("customer1@test.com")
+                .phone("010-1234-1234")
                 .password("password")
                 .memberRole(MemberRole.CUSTOMER)
                 .build();
@@ -167,6 +168,7 @@ class MemberRepositoryTest {
         return Member.builder()
                 .name("librarian1")
                 .email("librarian1@test.com")
+                .phone("010-1234-1234")
                 .password("password")
                 .memberRole(MemberRole.LIBRARIAN)
                 .build();
