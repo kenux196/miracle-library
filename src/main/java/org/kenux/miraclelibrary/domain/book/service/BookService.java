@@ -2,7 +2,6 @@ package org.kenux.miraclelibrary.domain.book.service;
 
 import lombok.RequiredArgsConstructor;
 import org.kenux.miraclelibrary.domain.book.domain.Book;
-import org.kenux.miraclelibrary.domain.book.domain.BookStatus;
 import org.kenux.miraclelibrary.domain.book.dto.BookDetailResponse;
 import org.kenux.miraclelibrary.domain.book.dto.BookRegisterRequest;
 import org.kenux.miraclelibrary.domain.book.dto.BookSearchFilter;
@@ -26,7 +25,6 @@ public class BookService {
 
     public Long registerNewBook(BookRegisterRequest bookRegisterRequest) {
         final Book book = bookRegisterRequest.toEntity();
-        book.changeStatus(BookStatus.RENTABLE);
         return bookRepository.save(book).getId();
     }
 
@@ -69,7 +67,7 @@ public class BookService {
 
     public BookDetailResponse getBookDetail(Long id) {
         final Book book = getBook(id);
-        return BookDetailResponse.of(book);
+        return BookDetailResponse.from(book);
     }
 
     private Book getBook(Long id) {

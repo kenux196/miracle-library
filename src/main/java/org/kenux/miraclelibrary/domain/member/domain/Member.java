@@ -1,9 +1,6 @@
 package org.kenux.miraclelibrary.domain.member.domain;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.kenux.miraclelibrary.global.entity.BaseTimeEntity;
 
 import javax.persistence.*;
@@ -11,8 +8,10 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "member")
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Builder
 public class Member extends BaseTimeEntity {
 
     @Id
@@ -28,11 +27,7 @@ public class Member extends BaseTimeEntity {
     @Column(name = "phone", nullable = false)
     private String phone;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "member_password_id")
-    private MemberPassword password;
-
-    @Column(name = "member_role", nullable = false)
+    @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private MemberRole memberRole;
 
@@ -40,17 +35,19 @@ public class Member extends BaseTimeEntity {
 
     private LocalDateTime lastAccessTime;
 
-    @Builder
-    public Member(String name, String email, String phone, String password, MemberRole memberRole) {
-        this.name = name;
-        this.email = email;
-        this.phone = phone;
-        this.password = new MemberPassword(password);
-        this.memberRole = memberRole;
-    }
+    @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private MemberStatus status;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "password_id")
+    private MemberPassword memberPassword;
 
     public void changePassword(String password) {
-        this.password.change(password);
+        if (this.memberPassword == null) {
+            this.memberPassword = new MemberPassword();
+        }
+        this.memberPassword.change(password);
     }
 
     public void changeEmail(String email) {
@@ -73,7 +70,11 @@ public class Member extends BaseTimeEntity {
         this.lastAccessTime = accessTime;
     }
 
-    public String getPassword() {
-        return this.password.getPassword();
+    public void changeStatus(MemberStatus status) {
+        this.status = status;
+    }
+
+    public String getMemberPassword() {
+        return this.memberPassword.getPassword();
     }
 }

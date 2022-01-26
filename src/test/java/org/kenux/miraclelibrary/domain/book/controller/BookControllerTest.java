@@ -106,7 +106,7 @@ class BookControllerTest {
                 .category(BookCategory.ESSAY)
                 .publicationDate(LocalDate.of(2022, 1, 1))
                 .build();
-        List<BookResponse> bookResponses = Collections.singletonList(BookResponse.of(book));
+        List<BookResponse> bookResponses = Collections.singletonList(BookResponse.from(book));
         given(bookService.searchBookByFilter(any())).willReturn(Collections.singletonList(book));
 
         // when
@@ -130,7 +130,7 @@ class BookControllerTest {
                 .category(BookCategory.ESSAY)
                 .publicationDate(LocalDate.of(2022, 1, 1))
                 .build();
-        List<BookResponse> bookResponses = Collections.singletonList(BookResponse.of(book));
+        List<BookResponse> bookResponses = Collections.singletonList(BookResponse.from(book));
         given(bookService.searchBookByFilter(any())).willReturn(Collections.singletonList(book));
 
         // when
@@ -156,7 +156,7 @@ class BookControllerTest {
                 .category(BookCategory.ESSAY)
                 .publicationDate(LocalDate.of(2022, 1, 1))
                 .build();
-        List<BookResponse> bookResponses = Collections.singletonList(BookResponse.of(book));
+        List<BookResponse> bookResponses = Collections.singletonList(BookResponse.from(book));
         given(bookService.searchBookByFilter(any())).willReturn(Collections.singletonList(book));
 
         // when
@@ -182,7 +182,7 @@ class BookControllerTest {
                 .category(BookCategory.ESSAY)
                 .publicationDate(LocalDate.of(2022, 1, 1))
                 .build();
-        List<BookResponse> bookResponses = Collections.singletonList(BookResponse.of(book));
+        List<BookResponse> bookResponses = Collections.singletonList(BookResponse.from(book));
         given(bookService.searchBookByFilter(any())).willReturn(Collections.singletonList(book));
 
         // when
@@ -212,7 +212,7 @@ class BookControllerTest {
                 .cover("이미지경로")
                 .publicationDate(LocalDate.of(2022, 1, 1))
                 .build();
-        BookDetailResponse bookDetailResponse = BookDetailResponse.of(book);
+        BookDetailResponse bookDetailResponse = BookDetailResponse.from(book);
         given(bookService.getBookDetail(any())).willReturn(bookDetailResponse);
         // when
         final ResultActions resultActions = mockMvc.perform(get("/books/detail/1"));
@@ -235,7 +235,7 @@ class BookControllerTest {
                 .publicationDate(LocalDate.of(2022, 1, 1))
                 .build();
 
-        List<BookResponse> bookResponses = Collections.singletonList(BookResponse.of(book));
+        List<BookResponse> bookResponses = Collections.singletonList(BookResponse.from(book));
         given(bookService.getNewBooks()).willReturn(Collections.singletonList(book));
 
         // when

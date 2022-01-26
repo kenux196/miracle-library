@@ -18,7 +18,7 @@ public class LoginResponse {
     private String email;
     private MemberRole role;
 
-    public static LoginResponse of(Member member) {
+    public static LoginResponse from(Member member) {
         return LoginResponse.builder()
                 .id(member.getId())
                 .name(member.getName())

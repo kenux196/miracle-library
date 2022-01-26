@@ -72,11 +72,12 @@ class LoginServiceTest {
     }
 
     private Member getMember(String password) {
-        return Member.builder()
+        Member member = Member.builder()
                 .name("user")
                 .email("user@test.com")
-                .password(password)
                 .memberRole(MemberRole.CUSTOMER)
                 .build();
+        member.changePassword(password);
+        return member;
     }
 }

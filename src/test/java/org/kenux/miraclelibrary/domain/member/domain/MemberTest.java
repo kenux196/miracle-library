@@ -22,14 +22,14 @@ class MemberTest {
     void test_CustomerBasic() {
         assertThat(member.getName()).isEqualTo("name");
         assertThat(member.getEmail()).isEqualTo("email");
-        assertThat(member.getPassword()).isEqualTo("password");
+        assertThat(member.getMemberPassword()).isEqualTo("password");
     }
 
     @Test
     @DisplayName("멤버는 패스워드 변경을 할 수 있어야 한다.")
     void test_changePassword() {
         member.changePassword("password1");
-        assertThat(member.getPassword()).isEqualTo("password1");
+        assertThat(member.getMemberPassword()).isEqualTo("password1");
     }
 
     @Test
@@ -72,14 +72,28 @@ class MemberTest {
         assertThat(member.getLastAccessTime()).isEqualTo(accessTime);
     }
 
+    @Test
+    @DisplayName("회원 상태 변경: 휴면")
+    void changeStatus_휴면상태() throws Exception {
+        member.changeStatus(MemberStatus.DORMANCY);
+        assertThat(member.getStatus()).isEqualTo(MemberStatus.DORMANCY);
+    }
+
+    @Test
+    @DisplayName("회원 상태 변경: 정상")
+    void changeStatus_정상() throws Exception {
+        member.changeStatus(MemberStatus.NORMAL);
+        assertThat(member.getStatus()).isEqualTo(MemberStatus.NORMAL);
+    }
 
     private Member createMember() {
-        return Member.builder()
+        Member member = Member.builder()
                 .name("name")
                 .email("email")
                 .phone("010-1234-0987")
-                .password("password")
                 .memberRole(MemberRole.CUSTOMER)
                 .build();
+        member.changePassword("password");
+        return member;
     }
 }

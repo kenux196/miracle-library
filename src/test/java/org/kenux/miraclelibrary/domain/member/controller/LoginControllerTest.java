@@ -55,7 +55,7 @@ class LoginControllerTest {
         ReflectionTestUtils.setField(member, "id", 1L);
         given(loginService.login(any())).willReturn(member);
 
-        LoginResponse loginResponse = LoginResponse.of(member);
+        LoginResponse loginResponse = LoginResponse.from(member);
 
         // when
         final RequestBuilder request = MockMvcRequestBuilders.post("/login")

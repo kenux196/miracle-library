@@ -234,7 +234,6 @@ class BookRentServiceTest {
                 .name("member1")
                 .email("member1@test.com")
                 .phone("010-1234-1234")
-                .password("password")
                 .memberRole(MemberRole.CUSTOMER)
                 .build();
         ReflectionTestUtils.setField(member, "id", 1L);
