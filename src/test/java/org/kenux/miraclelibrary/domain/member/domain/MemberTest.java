@@ -22,14 +22,14 @@ class MemberTest {
     void test_CustomerBasic() {
         assertThat(member.getName()).isEqualTo("name");
         assertThat(member.getEmail()).isEqualTo("email");
-        assertThat(member.getPassword()).isEqualTo("password");
+        assertThat(member.getMemberPassword()).isEqualTo("password");
     }
 
     @Test
     @DisplayName("멤버는 패스워드 변경을 할 수 있어야 한다.")
     void test_changePassword() {
         member.changePassword("password1");
-        assertThat(member.getPassword()).isEqualTo("password1");
+        assertThat(member.getMemberPassword()).isEqualTo("password1");
     }
 
     @Test

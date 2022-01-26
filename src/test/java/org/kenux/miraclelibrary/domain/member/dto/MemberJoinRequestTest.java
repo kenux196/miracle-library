@@ -66,7 +66,7 @@ class MemberJoinRequestTest {
         // then
         assertThat(member).isNotNull();
         assertThat(member.getName()).isEqualTo(memberJoinRequest.getName());
-        assertThat(member.getPassword()).isEqualTo(memberJoinRequest.getPassword());
+        assertThat(member.getMemberPassword()).isEqualTo(memberJoinRequest.getPassword());
         assertThat(member.getEmail()).isEqualTo(memberJoinRequest.getEmail());
         assertThat(member.getId()).isNull();
     }

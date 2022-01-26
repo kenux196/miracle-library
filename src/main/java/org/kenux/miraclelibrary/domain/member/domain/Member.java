@@ -41,13 +41,13 @@ public class Member extends BaseTimeEntity {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "password_id")
-    private Password password;
+    private MemberPassword memberPassword;
 
     public void changePassword(String password) {
-        if (this.password == null) {
-            this.password = new Password();
+        if (this.memberPassword == null) {
+            this.memberPassword = new MemberPassword();
         }
-        this.password.change(password);
+        this.memberPassword.change(password);
     }
 
     public void changeEmail(String email) {
@@ -74,7 +74,7 @@ public class Member extends BaseTimeEntity {
         this.status = status;
     }
 
-    public String getPassword() {
-        return this.password.getPassword();
+    public String getMemberPassword() {
+        return this.memberPassword.getPassword();
     }
 }

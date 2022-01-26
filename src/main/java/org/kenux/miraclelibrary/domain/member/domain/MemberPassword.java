@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Table(name = "password")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Password {
+public class MemberPassword {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,7 +19,7 @@ public class Password {
     @Column(name = "password", nullable = false)
     private String password;
 
-    public Password(String password) {
+    public MemberPassword(String password) {
         this.password = password;
     }
 
