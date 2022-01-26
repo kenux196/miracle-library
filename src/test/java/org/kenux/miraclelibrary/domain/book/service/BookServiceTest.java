@@ -144,15 +144,13 @@ class BookServiceTest {
     }
 
     @Test
-    @DisplayName("책 업데이트: 제목 변경")
-    void updateBook_제목만변경() throws Exception {
+    @DisplayName("책 업데이트: 변경 항목이 없는 경우")
+    void updateBook_변경항목없는경우() throws Exception {
         // given
         BookUpdateRequest bookUpdateRequest = new BookUpdateRequest();
         bookUpdateRequest.setId(1L);
-        bookUpdateRequest.setTitle("title1");
 
         final Book expectedBook = createBookForTest();
-        expectedBook.changeTitle(bookUpdateRequest.getTitle());
         given(bookRepository.findById(any())).willReturn(Optional.of(expectedBook));
 
         // when
