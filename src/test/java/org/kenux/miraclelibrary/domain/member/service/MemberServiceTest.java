@@ -5,6 +5,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kenux.miraclelibrary.domain.member.domain.Member;
+import org.kenux.miraclelibrary.domain.member.domain.MemberRole;
+import org.kenux.miraclelibrary.domain.member.domain.MemberStatus;
 import org.kenux.miraclelibrary.domain.member.dto.MemberJoinRequest;
 import org.kenux.miraclelibrary.domain.member.repository.MemberRepository;
 import org.kenux.miraclelibrary.global.exception.CustomException;
@@ -148,6 +150,9 @@ class MemberServiceTest {
         Member member = Member.builder()
                 .name("customer1")
                 .email("customer1@test.com")
+                .phone("010-1234-1234")
+                .status(MemberStatus.NORMAL)
+                .memberRole(MemberRole.CUSTOMER)
                 .build();
         ReflectionTestUtils.setField(member, "id", 1L);
         return member;

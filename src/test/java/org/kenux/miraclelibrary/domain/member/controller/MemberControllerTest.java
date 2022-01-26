@@ -38,9 +38,14 @@ class MemberControllerTest {
 
     @Test
     @DisplayName("회원 가입")
-    void test_joinMember() throws Exception {
+    void joinMember() throws Exception {
         // given
-        MemberJoinRequest memberJoinRequest = new MemberJoinRequest("user", "user@test.com", "password");
+        MemberJoinRequest memberJoinRequest = MemberJoinRequest.builder()
+                .name("user")
+                .email("user@test.com")
+                .phone("010-1234-1234")
+                .password("password")
+                .build();
         given(memberService.join(any())).willReturn(1L);
 
         // when
