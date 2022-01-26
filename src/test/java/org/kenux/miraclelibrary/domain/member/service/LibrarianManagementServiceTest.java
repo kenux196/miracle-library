@@ -53,9 +53,8 @@ class LibrarianManagementServiceTest {
         Member member = Member.builder()
                 .name("librarian1")
                 .email("librarian1@test.com")
-                .password("password")
                 .memberRole(MemberRole.LIBRARIAN)
-                .build();;
+                .build();
         ReflectionTestUtils.setField(member, "id", 1L);
         given(memberRepository.save(any())).willReturn(member);
 

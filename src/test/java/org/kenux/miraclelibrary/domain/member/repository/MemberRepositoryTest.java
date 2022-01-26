@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.kenux.miraclelibrary.domain.member.domain.Member;
 import org.kenux.miraclelibrary.domain.member.domain.MemberRole;
+import org.kenux.miraclelibrary.domain.member.domain.MemberStatus;
 import org.kenux.miraclelibrary.global.config.JpaAuditingConfig;
 import org.kenux.miraclelibrary.global.config.QueryDslConfig;
 import org.kenux.miraclelibrary.global.exception.CustomException;
@@ -41,7 +42,7 @@ class MemberRepositoryTest {
 
     @Test
     @DisplayName("회원 저장: 기본 저장")
-    void test_saveCustomer() {
+    void save() {
         Member saved = memberRepository.save(member);
 
         assertThat(member.getId()).isNotNull();
@@ -140,20 +141,6 @@ class MemberRepositoryTest {
     }
 
     @Test
-    @DisplayName("회원 비밀번호 조회")
-    void getPassword() {
-        // given
-        memberRepository.save(member);
-
-        // when
-        Optional<Member> found = memberRepository.findByName("customer1");
-
-        // then
-        assertThat(found).isNotEmpty();
-        assertThat(found.get().getPassword()).isEqualTo("password");
-    }
-
-    @Test
     @DisplayName("회원 주소 변경되어서 저장되는지 확인")
     void changeAndSaveAddressTest() throws Exception {
         // given
@@ -188,22 +175,26 @@ class MemberRepositoryTest {
 
 
     private Member createMember() {
-        return Member.builder()
+        Member member = Member.builder()
                 .name("customer1")
                 .email("customer1@test.com")
                 .phone("010-1234-1234")
-                .password("password")
                 .memberRole(MemberRole.CUSTOMER)
+                .status(MemberStatus.NORMAL)
                 .build();
+        member.changePassword("password");
+        return member;
     }
 
     private Member createLibrarian() {
-        return Member.builder()
+        Member member = Member.builder()
                 .name("librarian1")
                 .email("librarian1@test.com")
                 .phone("010-1234-1234")
-                .password("password")
                 .memberRole(MemberRole.LIBRARIAN)
+                .status(MemberStatus.NORMAL)
                 .build();
+        member.changePassword("password");
+        return member;
     }
 }

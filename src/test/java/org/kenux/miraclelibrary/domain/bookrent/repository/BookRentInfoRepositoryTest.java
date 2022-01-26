@@ -9,6 +9,7 @@ import org.kenux.miraclelibrary.domain.book.repository.BookRepository;
 import org.kenux.miraclelibrary.domain.bookrent.domain.BookRentInfo;
 import org.kenux.miraclelibrary.domain.member.domain.Member;
 import org.kenux.miraclelibrary.domain.member.domain.MemberRole;
+import org.kenux.miraclelibrary.domain.member.domain.MemberStatus;
 import org.kenux.miraclelibrary.domain.member.repository.MemberRepository;
 import org.kenux.miraclelibrary.global.config.QueryDslConfig;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -143,8 +144,8 @@ class BookRentInfoRepositoryTest {
                 .name("member1")
                 .email("member1@test.com")
                 .phone("010-1234-1234")
-                .password("password")
                 .memberRole(MemberRole.CUSTOMER)
+                .status(MemberStatus.NORMAL)
                 .build();
         return memberRepository.save(member);
     }

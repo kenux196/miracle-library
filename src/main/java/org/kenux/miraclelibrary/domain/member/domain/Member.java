@@ -1,9 +1,6 @@
 package org.kenux.miraclelibrary.domain.member.domain;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.kenux.miraclelibrary.global.entity.BaseTimeEntity;
 
 import javax.persistence.*;
@@ -11,8 +8,10 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "member")
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Builder
 public class Member extends BaseTimeEntity {
 
     @Id
@@ -28,11 +27,7 @@ public class Member extends BaseTimeEntity {
     @Column(name = "phone", nullable = false)
     private String phone;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "member_password_id")
-    private MemberPassword password;
-
-    @Column(name = "member_role", nullable = false)
+    @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private MemberRole memberRole;
 
@@ -40,16 +35,18 @@ public class Member extends BaseTimeEntity {
 
     private LocalDateTime lastAccessTime;
 
-    @Builder
-    public Member(String name, String email, String phone, String password, MemberRole memberRole) {
-        this.name = name;
-        this.email = email;
-        this.phone = phone;
-        this.password = new MemberPassword(password);
-        this.memberRole = memberRole;
-    }
+    @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private MemberStatus status;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "password_id")
+    private Password password;
 
     public void changePassword(String password) {
+        if (this.password == null) {
+            this.password = new Password();
+        }
         this.password.change(password);
     }
 
@@ -71,6 +68,10 @@ public class Member extends BaseTimeEntity {
 
     public void updateLastAccessTime(LocalDateTime accessTime) {
         this.lastAccessTime = accessTime;
+    }
+
+    public void changeStatus(MemberStatus status) {
+        this.status = status;
     }
 
     public String getPassword() {

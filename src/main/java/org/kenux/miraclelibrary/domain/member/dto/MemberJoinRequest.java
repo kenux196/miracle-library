@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.kenux.miraclelibrary.domain.member.domain.Member;
 import org.kenux.miraclelibrary.domain.member.domain.MemberRole;
+import org.kenux.miraclelibrary.domain.member.domain.MemberStatus;
 
 import javax.validation.constraints.NotBlank;
 
@@ -27,11 +28,13 @@ public class MemberJoinRequest {
     }
 
     public Member toEntity() {
-        return Member.builder()
+        Member member = Member.builder()
                 .name(name)
                 .email(email)
-                .password(password)
                 .memberRole(MemberRole.CUSTOMER)
+                .status(MemberStatus.NORMAL)
                 .build();
+        member.changePassword(password);
+        return member;
     }
 }
