@@ -1,5 +1,6 @@
 package org.kenux.miraclelibrary.domain.member.dto;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -7,11 +8,26 @@ import org.kenux.miraclelibrary.domain.member.domain.Member;
 import org.kenux.miraclelibrary.domain.member.domain.MemberRole;
 import org.kenux.miraclelibrary.domain.member.domain.MemberStatus;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+import java.util.Set;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 class MemberJoinRequestTest {
 
+    private static ValidatorFactory factory;
+    private static Validator validator;
+
     private MemberJoinRequest memberJoinRequest;
+
+    @BeforeAll
+    public static void init() {
+        factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
+    }
 
     @BeforeEach
     void setup() {
@@ -19,12 +35,25 @@ class MemberJoinRequestTest {
     }
 
     @Test
-    @DisplayName("회원 가입 요청 검증")
-    void create() throws Exception {
-        assertThat(memberJoinRequest.getEmail()).isNotNull();
-        assertThat(memberJoinRequest.getName()).isNotNull();
-        assertThat(memberJoinRequest.getPassword()).isNotNull();
-        assertThat(memberJoinRequest.getPhone()).isNotNull();
+    @DisplayName("회원 가입 요청 검증: 정상")
+    void validation_정상() throws Exception {
+        final Set<ConstraintViolation<MemberJoinRequest>> violations = validator.validate(memberJoinRequest);
+        
+        assertThat(violations).isEmpty();
+    }
+
+    @Test
+    @DisplayName("Validation: 에러")
+    void validation_에러() throws Exception {
+
+        final MemberJoinRequest request = MemberJoinRequest.builder()
+                .name("user")
+                .email("user@test.com")
+                .password("password")
+                .build();
+        final Set<ConstraintViolation<MemberJoinRequest>> violations = validator.validate(request);
+
+        assertThat(violations).isNotEmpty();
     }
 
     @Test
