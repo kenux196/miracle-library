@@ -21,7 +21,7 @@ public class BookDetailResponse {
     private String cover;
     private BookStatus status;
 
-    public static BookDetailResponse of(Book book) {
+    public static BookDetailResponse from(Book book) {
         return BookDetailResponse.builder()
                 .id(book.getId())
                 .title(book.getTitle())

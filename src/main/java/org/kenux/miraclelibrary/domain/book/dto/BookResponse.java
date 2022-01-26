@@ -19,7 +19,7 @@ public class BookResponse {
     private LocalDate publicationDate;
     private BookStatus status;
 
-    public static BookResponse of(Book book) {
+    public static BookResponse from(Book book) {
         return BookResponse.builder()
                 .bookId(book.getId())
                 .title(book.getTitle())

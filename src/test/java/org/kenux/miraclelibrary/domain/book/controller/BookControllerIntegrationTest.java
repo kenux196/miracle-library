@@ -86,7 +86,7 @@ class BookControllerIntegrationTest extends BaseIntegrationTest {
                     .publicationDate(LocalDate.of(2020, 1, 11).plusDays(i))
                     .build();
             final Book book = bookSetup.saveBook(bookRegisterRequest);
-            bookResponses.add(BookResponse.of(book));
+            bookResponses.add(BookResponse.from(book));
         }
 
         // when
@@ -111,7 +111,7 @@ class BookControllerIntegrationTest extends BaseIntegrationTest {
                     .publicationDate(LocalDate.of(2020, 1, 11).plusDays(i))
                     .build();
             final Book book = bookSetup.saveBook(bookRegisterRequest);
-            bookResponses.add(BookResponse.of(book));
+            bookResponses.add(BookResponse.from(book));
         }
 
         // when
@@ -139,7 +139,7 @@ class BookControllerIntegrationTest extends BaseIntegrationTest {
                     .publicationDate(publicationDateLessThanOneMonth)
                     .build();
             final Book book = bookSetup.saveBook(bookRegisterRequest);
-            bookResponses.add(BookResponse.of(book));
+            bookResponses.add(BookResponse.from(book));
         }
 
         for (int i = 0; i < 5; i++) {

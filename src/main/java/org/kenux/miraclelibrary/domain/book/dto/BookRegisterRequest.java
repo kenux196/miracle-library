@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.kenux.miraclelibrary.domain.book.domain.Book;
 import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
+import org.kenux.miraclelibrary.domain.book.domain.BookStatus;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -41,6 +42,7 @@ public class BookRegisterRequest {
                 .isbn(isbn)
                 .publicationDate(publicationDate)
                 .category(category)
+                .status(BookStatus.RENTABLE)
                 .build();
     }
 }

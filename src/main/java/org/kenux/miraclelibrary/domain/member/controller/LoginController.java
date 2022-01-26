@@ -1,10 +1,10 @@
 package org.kenux.miraclelibrary.domain.member.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.kenux.miraclelibrary.domain.member.service.LoginService;
+import org.kenux.miraclelibrary.domain.member.domain.Member;
 import org.kenux.miraclelibrary.domain.member.dto.LoginRequest;
 import org.kenux.miraclelibrary.domain.member.dto.LoginResponse;
-import org.kenux.miraclelibrary.domain.member.domain.Member;
+import org.kenux.miraclelibrary.domain.member.service.LoginService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +23,6 @@ public class LoginController {
     @PostMapping
     public ResponseEntity<?> login(@RequestBody @Valid LoginRequest loginRequest) throws Exception {
         final Member member = loginService.login(loginRequest);
-        return ResponseEntity.ok(LoginResponse.of(member));
+        return ResponseEntity.ok(LoginResponse.from(member));
     }
 }

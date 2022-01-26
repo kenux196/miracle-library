@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.kenux.miraclelibrary.domain.book.domain.Book;
+import org.kenux.miraclelibrary.domain.book.domain.BookStatus;
 
 import java.time.LocalDate;
 
@@ -27,6 +28,7 @@ class BookRegisterRequestTest {
         assertThat(book.getTitle()).isEqualTo(bookRegisterRequest.getTitle());
         assertThat(book.getAuthor()).isEqualTo(bookRegisterRequest.getAuthor());
         assertThat(book.getIsbn()).isEqualTo(bookRegisterRequest.getIsbn());
+        assertThat(book.getStatus()).isEqualTo(BookStatus.RENTABLE);
         assertThat(book.getPublicationDate()).isNotNull();
     }
 

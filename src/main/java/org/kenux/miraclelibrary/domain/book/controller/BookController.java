@@ -56,7 +56,7 @@ public class BookController {
 
     private List<BookResponse> bookListResponsesOf(List<Book> books) {
         return books.stream()
-                .map(BookResponse::of)
+                .map(BookResponse::from)
                 .collect(Collectors.toList());
     }
 }
