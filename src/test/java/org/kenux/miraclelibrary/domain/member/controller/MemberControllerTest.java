@@ -7,11 +7,13 @@ import org.junit.jupiter.api.Test;
 import org.kenux.miraclelibrary.domain.member.dto.MemberJoinRequest;
 import org.kenux.miraclelibrary.domain.member.dto.MemberJoinRequestBuilder;
 import org.kenux.miraclelibrary.domain.member.service.MemberService;
+import org.kenux.miraclelibrary.testutils.TestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.servlet.HttpEncodingAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -37,13 +39,37 @@ class MemberControllerTest {
     @Autowired
     ObjectMapper mapper;
 
+    @Autowired
+    ResourceLoader resourceLoader;
+
     @Test
-    @DisplayName("회원 가입")
-    void joinMember() throws Exception {
+    @DisplayName("joinMember - 회원 가입(from json)")
+    void joinMember_fromJson() throws Exception {
+        // given
+        final String requestBody = TestUtils.readJson(
+                resourceLoader,
+                "classpath:requests/MemberJoinRequest-success.json");
+        given(memberService.join(any())).willReturn(1L);
+
+        // when
+        RequestBuilder request = MockMvcRequestBuilders.post("/member")
+                .content(requestBody)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        // then
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(content().string("1"));
+    }
+
+    @Test
+    @DisplayName("joinMember - 회원 가입(from Object)")
+    void joinMember_fromObject() throws Exception {
         // given
         MemberJoinRequest memberJoinRequest =
                 MemberJoinRequestBuilder.build(
-                        "user", "user@test.com", "010-1234-1234", "password");
+                        "member1", "member1@test.com", "010-1234-1234", "password");
         given(memberService.join(any())).willReturn(1L);
 
         // when
