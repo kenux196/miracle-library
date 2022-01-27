@@ -1,6 +1,6 @@
 package org.kenux.miraclelibrary.domain.member.dto;
 
-import lombok.Builder;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.kenux.miraclelibrary.domain.member.domain.Member;
@@ -9,7 +9,7 @@ import org.kenux.miraclelibrary.domain.member.domain.MemberStatus;
 
 import javax.validation.constraints.NotBlank;
 
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public class LibrarianAddRequest {
 
@@ -20,17 +20,16 @@ public class LibrarianAddRequest {
     private String email;
 
     @NotBlank
-    private String password;
-
-    @NotBlank
     private String phone;
 
-    @Builder
-    public LibrarianAddRequest(String name, String email, String password, String phone) {
+    @NotBlank
+    private String password;
+
+    LibrarianAddRequest(String name, String email, String phone, String password) {
         this.name = name;
         this.email = email;
-        this.password = password;
         this.phone = phone;
+        this.password = password;
     }
 
     public Member toEntity() {

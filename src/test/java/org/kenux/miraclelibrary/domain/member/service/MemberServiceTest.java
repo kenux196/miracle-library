@@ -5,9 +5,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kenux.miraclelibrary.domain.member.domain.Member;
+import org.kenux.miraclelibrary.domain.member.domain.MemberPassword;
 import org.kenux.miraclelibrary.domain.member.domain.MemberRole;
 import org.kenux.miraclelibrary.domain.member.domain.MemberStatus;
 import org.kenux.miraclelibrary.domain.member.dto.MemberJoinRequest;
+import org.kenux.miraclelibrary.domain.member.dto.MemberJoinRequestBuilder;
 import org.kenux.miraclelibrary.domain.member.repository.MemberRepository;
 import org.kenux.miraclelibrary.global.exception.CustomException;
 import org.kenux.miraclelibrary.global.exception.ErrorCode;
@@ -44,32 +46,12 @@ class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("회원 가입을 한다.")
-    void test_joinMember() {
+    @DisplayName("join: 회원 가입시 이메일 중복인 경우, 이메일중복 예외 발생")
+    void join_이메일중복인경우_이메일중복_예외반환() {
         // given
-        when(memberRepository.save(any())).thenReturn(member);
-
-        // when
-        MemberJoinRequest memberJoinRequest = MemberJoinRequest.builder()
-                .name("customer1")
-                .email("customer1@test.com")
-                .password("password")
-                .build();
-        Long savedId = memberService.join(memberJoinRequest);
-
-        // then
-        assertThat(savedId).isEqualTo(1);
-    }
-
-    @Test
-    @DisplayName("회원 가입시 이메일 중복인 경우, exception 발생")
-    void test_duplicateEmail() {
-        // given
-        MemberJoinRequest memberJoinRequest = MemberJoinRequest.builder()
-                .name("customer1")
-                .email("customer1@test.com")
-                .password("password")
-                .build();
+        MemberJoinRequest memberJoinRequest =
+                MemberJoinRequestBuilder.build(
+                        "user", "user@test.com", "010-1234-1234", "password");
         given(memberRepository.existsByEmail(any())).willReturn(true);
 
         // when then
@@ -79,14 +61,12 @@ class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("회원 패스워드 검증 - 길이가 8자보다 작으면 예외 발생")
-    void test_validatePassword() {
+    @DisplayName("join: 회원 가입시 패스워드 길이가 8자보다 작으면 password short 예외 발생")
+    void join_패스워드길이가_8자미만이면_예외반환() {
         // given
-        MemberJoinRequest memberJoinRequest = MemberJoinRequest.builder()
-                .name("customer1")
-                .email("customer1@test.com")
-                .password("pass")
-                .build();
+        MemberJoinRequest memberJoinRequest =
+                MemberJoinRequestBuilder.build(
+                        "user", "user@test.com", "010-1234-1234", "passwd");
 
         // when then
         assertThatThrownBy(() -> memberService.join(memberJoinRequest))
@@ -95,21 +75,39 @@ class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("가입된 회원 전체를 조회할 수 있어야 한다.")
-    void test_findAllCustomer() {
+    @DisplayName("join: 회원 가입 성공시, 회원 번호 반환")
+    void join_회원가입성공시_회원번호반환() {
+        // given
+        MemberJoinRequest memberJoinRequest =
+                MemberJoinRequestBuilder.build(
+                        "user", "user@test.com", "010-1234-1234", "password");
+        when(memberRepository.save(any())).thenReturn(member);
+
+        // when
+        Long savedId = memberService.join(memberJoinRequest);
+
+        // then
+        assertThat(savedId).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("getMembers: 전체회원 조회")
+    void getMembers_전체회원조회() {
         // given
         List<Member> members = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
             String name = "customer" + 1;
-            String email = name +"@email.com";
+            String email = name + "@email.com";
             String password = "password";
             members.add(Member.builder()
                     .name(name)
                     .email(email)
+                    .memberPassword(new MemberPassword(password))
+                    .phone("010-1234-5647")
                     .build());
         }
 
-        when(memberRepository.findAll()).thenReturn(members);
+        given(memberRepository.findAll()).willReturn(members);
 
         // when
         List<Member> memberList = memberService.getMembers();
@@ -119,10 +117,10 @@ class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("회원 이름으로 고객 조회가 가능해야 한다.")
-    void test_findByCustomerName() {
+    @DisplayName("getMembersByName: 회원 이름으로 조회")
+    void getMembersByName_회원이름으로조회() {
         // given
-        when(memberRepository.findByName(any())).thenReturn(Optional.of(member));
+        given(memberRepository.findByName(any())).willReturn(Optional.of(member));
 
         // when
         Optional<Member> result = memberService.getMembersByName("customer1");
@@ -133,10 +131,10 @@ class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("회원 아이디를 통한 회원 조회가 가능하다.")
-    void test_findByCustomerId() {
+    @DisplayName("getMember: 회원 아이디를 통한 회원 조회")
+    void getMember_회원아이디로조회() {
         // given
-        when(memberRepository.findById(any())).thenReturn(Optional.of(member));
+        given(memberRepository.findById(any())).willReturn(Optional.of(member));
 
         // when
         Optional<Member> result = memberService.getMember(1L);

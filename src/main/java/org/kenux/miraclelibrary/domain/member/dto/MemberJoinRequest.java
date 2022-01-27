@@ -1,30 +1,36 @@
 package org.kenux.miraclelibrary.domain.member.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.kenux.miraclelibrary.domain.member.domain.Member;
 import org.kenux.miraclelibrary.domain.member.domain.MemberRole;
 import org.kenux.miraclelibrary.domain.member.domain.MemberStatus;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-@Builder
 public class MemberJoinRequest {
 
-    @NotBlank(message = "이름값이 비었습니다.")
+    @NotBlank
     private String name;
-    @NotBlank(message = "이메일 주소를 입력하세요")
+    @Email
     private String email;
-    @NotBlank(message = "패스워드를 입력하세요.")
-    private String password;
-    
-    @NotBlank(message = "전화번호를 입력하세요")
+    @NotBlank
     private String phone;
+
+    @NotBlank
+    private String password;
+
+
+    MemberJoinRequest(String name, String email, String phone, String password) {
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.password = password;
+    }
 
     public Member toEntity() {
         Member member = Member.builder()

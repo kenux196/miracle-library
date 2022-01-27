@@ -28,12 +28,9 @@ class LibrarianAddRequestTest {
 
     @Test
     void validation_정상인경우() {
-        LibrarianAddRequest request = LibrarianAddRequest.builder()
-                .name("librarian1")
-                .email("librarian1@miraclelibrary.com")
-                .password("password")
-                .phone("010-1234-1234")
-                .build();
+        LibrarianAddRequest request =
+                LibrarianAddRequestBuilder.build(
+                        "user1", "user1@test.com", "010-1234-1234", "password");
 
         final Set<ConstraintViolation<LibrarianAddRequest>> violations = validator.validate(request);
         assertThat(violations).isEmpty();
@@ -41,7 +38,8 @@ class LibrarianAddRequestTest {
 
     @Test
     void validation_비정상인경우() {
-        LibrarianAddRequest request = LibrarianAddRequest.builder().build();
+        LibrarianAddRequest request =
+                LibrarianAddRequestBuilder.build(null, null, null, null);
 
         final Set<ConstraintViolation<LibrarianAddRequest>> violations = validator.validate(request);
         assertThat(violations).isNotEmpty();
@@ -52,12 +50,9 @@ class LibrarianAddRequestTest {
 
     @Test
     void toEntity() {
-        LibrarianAddRequest request = LibrarianAddRequest.builder()
-                .name("librarian1")
-                .email("librarian1@miraclelibrary.com")
-                .password("password")
-                .phone("010-1234-1234")
-                .build();
+        LibrarianAddRequest request =
+                LibrarianAddRequestBuilder.build(
+                        "user1", "user1@test.com", "010-1234-1234", "password");
 
         final Member member = request.toEntity();
 
@@ -68,7 +63,5 @@ class LibrarianAddRequestTest {
         assertThat(member.getMemberPassword()).isEqualTo(request.getPassword());
         assertThat(member.getStatus()).isEqualTo(MemberStatus.NORMAL);
         assertThat(member.getMemberRole()).isEqualTo(MemberRole.LIBRARIAN);
-
-
     }
 }

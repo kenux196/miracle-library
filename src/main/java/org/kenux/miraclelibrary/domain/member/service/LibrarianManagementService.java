@@ -17,12 +17,12 @@ public class LibrarianManagementService {
 
     private final MemberRepository memberRepository;
 
-    public Member addLibrarian(LibrarianAddRequest librarianAddRequest) {
+    public Long addLibrarian(LibrarianAddRequest librarianAddRequest) {
         if (memberRepository.existsByEmail(librarianAddRequest.getEmail())) {
             throw new CustomException(EMAIL_DUPLICATION);
         }
 
         Member member = librarianAddRequest.toEntity();
-        return memberRepository.save(member);
+        return memberRepository.save(member).getId();
     }
 }

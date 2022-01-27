@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.kenux.miraclelibrary.domain.member.dto.MemberJoinRequest;
+import org.kenux.miraclelibrary.domain.member.dto.MemberJoinRequestBuilder;
 import org.kenux.miraclelibrary.domain.member.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.servlet.HttpEncodingAutoConfiguration;
@@ -40,12 +41,9 @@ class MemberControllerTest {
     @DisplayName("회원 가입")
     void joinMember() throws Exception {
         // given
-        MemberJoinRequest memberJoinRequest = MemberJoinRequest.builder()
-                .name("user")
-                .email("user@test.com")
-                .phone("010-1234-1234")
-                .password("password")
-                .build();
+        MemberJoinRequest memberJoinRequest =
+                MemberJoinRequestBuilder.build(
+                        "user", "user@test.com", "010-1234-1234", "password");
         given(memberService.join(any())).willReturn(1L);
 
         // when
@@ -64,10 +62,9 @@ class MemberControllerTest {
     @DisplayName("사용자 정보 누락 시, 예외 발생")
     void test_validateRequest_whenJoinMember() throws Exception {
         // given
-        MemberJoinRequest memberJoinRequest = MemberJoinRequest.builder()
-                .email("user@test.com")
-                .password("password")
-                .build();
+        MemberJoinRequest memberJoinRequest =
+                MemberJoinRequestBuilder.build(
+                        null, null, null, null);
 
         // when
         RequestBuilder request = MockMvcRequestBuilders.post("/member")
