@@ -14,7 +14,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class LibrarianAddRequestTest {
+class LibrarianJoinRequestTest {
 
     private static ValidatorFactory validatorFactory;
     private static Validator validator;
@@ -28,29 +28,29 @@ class LibrarianAddRequestTest {
 
     @Test
     void validation_정상인경우() {
-        LibrarianAddRequest request =
+        LibrarianJoinRequest request =
                 LibrarianAddRequestBuilder.build(
                         "user1", "user1@test.com", "010-1234-1234", "password");
 
-        final Set<ConstraintViolation<LibrarianAddRequest>> violations = validator.validate(request);
+        final Set<ConstraintViolation<LibrarianJoinRequest>> violations = validator.validate(request);
         assertThat(violations).isEmpty();
     }
 
     @Test
     void validation_비정상인경우() {
-        LibrarianAddRequest request =
+        LibrarianJoinRequest request =
                 LibrarianAddRequestBuilder.build(null, null, null, null);
 
-        final Set<ConstraintViolation<LibrarianAddRequest>> violations = validator.validate(request);
+        final Set<ConstraintViolation<LibrarianJoinRequest>> violations = validator.validate(request);
         assertThat(violations).isNotEmpty();
-        for (ConstraintViolation<LibrarianAddRequest> violation : violations) {
+        for (ConstraintViolation<LibrarianJoinRequest> violation : violations) {
             System.out.println("violation = " + violation.getPropertyPath());
         }
     }
 
     @Test
     void toEntity() {
-        LibrarianAddRequest request =
+        LibrarianJoinRequest request =
                 LibrarianAddRequestBuilder.build(
                         "user1", "user1@test.com", "010-1234-1234", "password");
 
@@ -62,6 +62,6 @@ class LibrarianAddRequestTest {
         assertThat(member.getPhone()).isEqualTo(request.getPhone());
         assertThat(member.getMemberPassword()).isEqualTo(request.getPassword());
         assertThat(member.getStatus()).isEqualTo(MemberStatus.NORMAL);
-        assertThat(member.getMemberRole()).isEqualTo(MemberRole.LIBRARIAN);
+        assertThat(member.getRole()).isEqualTo(MemberRole.LIBRARIAN);
     }
 }

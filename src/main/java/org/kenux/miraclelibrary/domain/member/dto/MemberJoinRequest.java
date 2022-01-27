@@ -4,8 +4,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.kenux.miraclelibrary.domain.member.domain.Member;
-import org.kenux.miraclelibrary.domain.member.domain.MemberRole;
-import org.kenux.miraclelibrary.domain.member.domain.MemberStatus;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -24,7 +22,6 @@ public class MemberJoinRequest {
     @NotBlank
     private String password;
 
-
     MemberJoinRequest(String name, String email, String phone, String password) {
         this.name = name;
         this.email = email;
@@ -33,14 +30,6 @@ public class MemberJoinRequest {
     }
 
     public Member toEntity() {
-        Member member = Member.builder()
-                .name(name)
-                .email(email)
-                .phone(phone)
-                .memberRole(MemberRole.CUSTOMER)
-                .status(MemberStatus.NORMAL)
-                .build();
-        member.changePassword(password);
-        return member;
+        return Member.createCustomer(name, email, phone, password);
     }
 }

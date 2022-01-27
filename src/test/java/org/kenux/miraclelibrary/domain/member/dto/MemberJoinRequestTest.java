@@ -76,7 +76,7 @@ class MemberJoinRequestTest {
         Member member = memberJoinRequest.toEntity();
 
         // then
-        assertThat(member.getMemberRole()).isEqualTo(MemberRole.CUSTOMER);
+        assertThat(member.getRole()).isEqualTo(MemberRole.CUSTOMER);
     }
 
     @Test

@@ -4,8 +4,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kenux.miraclelibrary.domain.member.domain.Member;
-import org.kenux.miraclelibrary.domain.member.dto.LibrarianAddRequest;
 import org.kenux.miraclelibrary.domain.member.dto.LibrarianAddRequestBuilder;
+import org.kenux.miraclelibrary.domain.member.dto.LibrarianJoinRequest;
 import org.kenux.miraclelibrary.domain.member.repository.MemberRepository;
 import org.kenux.miraclelibrary.global.exception.CustomException;
 import org.kenux.miraclelibrary.global.exception.ErrorCode;
@@ -32,14 +32,14 @@ class LibrarianManagementServiceTest {
     @DisplayName("관리자는 매니저 추가 시, 이메일 중복 체크되어야 한다.")
     void emailDuplicateTest_whenAddLibrarian() throws Exception {
         // given
-        LibrarianAddRequest librarianAddRequest =
+        LibrarianJoinRequest librarianJoinRequest =
                 LibrarianAddRequestBuilder.build(
                         "user1", "user1@test.com", "010-1234-1234", "password");
 
         given(memberRepository.existsByEmail(any())).willReturn(true);
 
         // when then
-        assertThatThrownBy(() -> librarianManagementService.addLibrarian(librarianAddRequest))
+        assertThatThrownBy(() -> librarianManagementService.addLibrarian(librarianJoinRequest))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.EMAIL_DUPLICATION.getMessage());
     }
@@ -48,7 +48,7 @@ class LibrarianManagementServiceTest {
     @DisplayName("addLibrarian: 사서 추가 성공시, 회원번호 반환")
     void addLibrarian() throws Exception {
         // given
-        LibrarianAddRequest librarianAddRequest =
+        LibrarianJoinRequest librarianJoinRequest =
                 LibrarianAddRequestBuilder.build(
                         "user1", "user1@test.com", "010-1234-1234", "password");
         Member member = Member.builder().build();
@@ -56,7 +56,7 @@ class LibrarianManagementServiceTest {
         given(memberRepository.save(any())).willReturn(member);
 
         // when
-        Long id = librarianManagementService.addLibrarian(librarianAddRequest);
+        Long id = librarianManagementService.addLibrarian(librarianJoinRequest);
 
         // then
         assertThat(id).isEqualTo(1L);

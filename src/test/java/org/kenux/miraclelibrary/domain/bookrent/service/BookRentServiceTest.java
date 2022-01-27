@@ -12,7 +12,6 @@ import org.kenux.miraclelibrary.domain.bookrent.dto.BookRentRequest;
 import org.kenux.miraclelibrary.domain.bookrent.dto.BookReturnRequest;
 import org.kenux.miraclelibrary.domain.bookrent.repository.BookRentInfoRepository;
 import org.kenux.miraclelibrary.domain.member.domain.Member;
-import org.kenux.miraclelibrary.domain.member.domain.MemberRole;
 import org.kenux.miraclelibrary.domain.member.repository.MemberRepository;
 import org.kenux.miraclelibrary.global.exception.CustomException;
 import org.kenux.miraclelibrary.global.exception.ErrorCode;
@@ -230,12 +229,8 @@ class BookRentServiceTest {
     }
 
     private Member getMember() {
-        Member member = Member.builder()
-                .name("member1")
-                .email("member1@test.com")
-                .phone("010-1234-1234")
-                .memberRole(MemberRole.CUSTOMER)
-                .build();
+        Member member = Member.createCustomer(
+                "member1", "member1@test.com", "010-1234-5678", "password");
         ReflectionTestUtils.setField(member, "id", 1L);
         return member;
     }

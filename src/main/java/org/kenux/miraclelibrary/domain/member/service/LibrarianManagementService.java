@@ -2,7 +2,7 @@ package org.kenux.miraclelibrary.domain.member.service;
 
 import lombok.RequiredArgsConstructor;
 import org.kenux.miraclelibrary.domain.member.domain.Member;
-import org.kenux.miraclelibrary.domain.member.dto.LibrarianAddRequest;
+import org.kenux.miraclelibrary.domain.member.dto.LibrarianJoinRequest;
 import org.kenux.miraclelibrary.domain.member.repository.MemberRepository;
 import org.kenux.miraclelibrary.global.exception.CustomException;
 import org.springframework.stereotype.Service;
@@ -17,12 +17,12 @@ public class LibrarianManagementService {
 
     private final MemberRepository memberRepository;
 
-    public Long addLibrarian(LibrarianAddRequest librarianAddRequest) {
-        if (memberRepository.existsByEmail(librarianAddRequest.getEmail())) {
+    public Long addLibrarian(LibrarianJoinRequest librarianJoinRequest) {
+        if (memberRepository.existsByEmail(librarianJoinRequest.getEmail())) {
             throw new CustomException(EMAIL_DUPLICATION);
         }
 
-        Member member = librarianAddRequest.toEntity();
+        Member member = librarianJoinRequest.toEntity();
         return memberRepository.save(member).getId();
     }
 }

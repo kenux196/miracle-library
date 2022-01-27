@@ -23,7 +23,7 @@ public class LoginResponse {
                 .id(member.getId())
                 .name(member.getName())
                 .email(member.getEmail())
-                .role(member.getMemberRole())
+                .role(member.getRole())
                 .build();
     }
 }

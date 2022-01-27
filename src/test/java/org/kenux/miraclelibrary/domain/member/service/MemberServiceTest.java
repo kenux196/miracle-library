@@ -5,9 +5,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kenux.miraclelibrary.domain.member.domain.Member;
-import org.kenux.miraclelibrary.domain.member.domain.MemberPassword;
-import org.kenux.miraclelibrary.domain.member.domain.MemberRole;
-import org.kenux.miraclelibrary.domain.member.domain.MemberStatus;
 import org.kenux.miraclelibrary.domain.member.dto.MemberJoinRequest;
 import org.kenux.miraclelibrary.domain.member.dto.MemberJoinRequestBuilder;
 import org.kenux.miraclelibrary.domain.member.repository.MemberRepository;
@@ -98,15 +95,9 @@ class MemberServiceTest {
         for (int i = 0; i < 100; i++) {
             String name = "customer" + 1;
             String email = name + "@email.com";
-            String password = "password";
-            members.add(Member.builder()
-                    .name(name)
-                    .email(email)
-                    .memberPassword(new MemberPassword(password))
-                    .phone("010-1234-5647")
-                    .build());
+            final Member member = Member.createCustomer(name, email, "010-1234-5678", "password");
+            members.add(member);
         }
-
         given(memberRepository.findAll()).willReturn(members);
 
         // when
@@ -145,13 +136,8 @@ class MemberServiceTest {
     }
 
     private Member getMember() {
-        Member member = Member.builder()
-                .name("customer1")
-                .email("customer1@test.com")
-                .phone("010-1234-1234")
-                .status(MemberStatus.NORMAL)
-                .memberRole(MemberRole.CUSTOMER)
-                .build();
+        Member member = Member.createCustomer(
+                "customer1", "customer1@test.com", "010-1234-5678", "password");
         ReflectionTestUtils.setField(member, "id", 1L);
         return member;
     }

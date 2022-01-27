@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.kenux.miraclelibrary.domain.member.domain.Member;
-import org.kenux.miraclelibrary.domain.member.domain.MemberRole;
 import org.kenux.miraclelibrary.domain.member.dto.LoginRequest;
 import org.kenux.miraclelibrary.domain.member.dto.LoginResponse;
 import org.kenux.miraclelibrary.domain.member.service.LoginService;
@@ -47,11 +46,8 @@ class LoginControllerTest {
     void loginSuccess() throws Exception {
         // given
         LoginRequest loginRequest = new LoginRequest("user@test.com", "password");
-        Member member = Member.builder()
-                .name("user")
-                .email("user@test.com")
-                .memberRole(MemberRole.CUSTOMER)
-                .build();
+        Member member = Member.createCustomer(
+                "member1", "member1@test.com", "010-1234-5678", "password");
         ReflectionTestUtils.setField(member, "id", 1L);
         given(loginService.login(any())).willReturn(member);
 
