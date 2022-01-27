@@ -6,7 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.kenux.miraclelibrary.domain.member.dto.MemberJoinRequest;
 import org.kenux.miraclelibrary.domain.member.dto.MemberJoinRequestBuilder;
-import org.kenux.miraclelibrary.domain.member.service.MemberService;
+import org.kenux.miraclelibrary.domain.member.service.MemberJoinService;
 import org.kenux.miraclelibrary.testutils.TestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.servlet.HttpEncodingAutoConfiguration;
@@ -34,7 +34,7 @@ class MemberControllerTest {
     MockMvc mockMvc;
 
     @MockBean
-    MemberService memberService;
+    MemberJoinService memberJoinService;
 
     @Autowired
     ObjectMapper mapper;
@@ -49,10 +49,10 @@ class MemberControllerTest {
         final String requestBody = TestUtils.readJson(
                 resourceLoader,
                 "classpath:requests/MemberJoinRequest-success.json");
-        given(memberService.join(any())).willReturn(1L);
+        given(memberJoinService.join(any())).willReturn(1L);
 
         // when
-        RequestBuilder request = MockMvcRequestBuilders.post("/member")
+        RequestBuilder request = MockMvcRequestBuilders.post("/members")
                 .content(requestBody)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
@@ -70,10 +70,10 @@ class MemberControllerTest {
         MemberJoinRequest memberJoinRequest =
                 MemberJoinRequestBuilder.build(
                         "member1", "member1@test.com", "010-1234-1234", "password");
-        given(memberService.join(any())).willReturn(1L);
+        given(memberJoinService.join(any())).willReturn(1L);
 
         // when
-        RequestBuilder request = MockMvcRequestBuilders.post("/member")
+        RequestBuilder request = MockMvcRequestBuilders.post("/members")
                 .content(convertToJson(memberJoinRequest))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
@@ -93,7 +93,7 @@ class MemberControllerTest {
                         null, null, null, null);
 
         // when
-        RequestBuilder request = MockMvcRequestBuilders.post("/member")
+        RequestBuilder request = MockMvcRequestBuilders.post("/members")
                 .content(convertToJson(memberJoinRequest))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
