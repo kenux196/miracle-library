@@ -13,11 +13,11 @@ import static org.kenux.miraclelibrary.global.exception.ErrorCode.EMAIL_DUPLICAT
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class LibrarianManagementService {
+public class LibrarianJoinService {
 
     private final MemberRepository memberRepository;
 
-    public Long addLibrarian(LibrarianJoinRequest librarianJoinRequest) {
+    public Long add(LibrarianJoinRequest librarianJoinRequest) {
         if (memberRepository.existsByEmail(librarianJoinRequest.getEmail())) {
             throw new CustomException(EMAIL_DUPLICATION);
         }

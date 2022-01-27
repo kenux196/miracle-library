@@ -29,7 +29,7 @@ class LibrarianJoinRequestTest {
     @Test
     void validation_정상인경우() {
         LibrarianJoinRequest request =
-                LibrarianAddRequestBuilder.build(
+                LibrarianJoinRequestBuilder.build(
                         "user1", "user1@test.com", "010-1234-1234", "password");
 
         final Set<ConstraintViolation<LibrarianJoinRequest>> violations = validator.validate(request);
@@ -39,7 +39,7 @@ class LibrarianJoinRequestTest {
     @Test
     void validation_비정상인경우() {
         LibrarianJoinRequest request =
-                LibrarianAddRequestBuilder.build(null, null, null, null);
+                LibrarianJoinRequestBuilder.build(null, null, null, null);
 
         final Set<ConstraintViolation<LibrarianJoinRequest>> violations = validator.validate(request);
         assertThat(violations).isNotEmpty();
@@ -51,7 +51,7 @@ class LibrarianJoinRequestTest {
     @Test
     void toEntity() {
         LibrarianJoinRequest request =
-                LibrarianAddRequestBuilder.build(
+                LibrarianJoinRequestBuilder.build(
                         "user1", "user1@test.com", "010-1234-1234", "password");
 
         final Member member = request.toEntity();
