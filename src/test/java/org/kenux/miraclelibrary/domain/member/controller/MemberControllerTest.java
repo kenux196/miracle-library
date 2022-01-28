@@ -4,8 +4,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.kenux.miraclelibrary.domain.member.domain.MemberRole;
+import org.kenux.miraclelibrary.domain.member.domain.MemberStatus;
+import org.kenux.miraclelibrary.domain.member.dto.MemberBasicInfoResponse;
 import org.kenux.miraclelibrary.domain.member.dto.MemberJoinRequest;
 import org.kenux.miraclelibrary.domain.member.dto.MemberJoinRequestBuilder;
+import org.kenux.miraclelibrary.domain.member.service.MemberFindService;
 import org.kenux.miraclelibrary.domain.member.service.MemberJoinService;
 import org.kenux.miraclelibrary.testutils.TestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +22,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -30,11 +38,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import(HttpEncodingAutoConfiguration.class)
 class MemberControllerTest {
 
+
     @Autowired
     MockMvc mockMvc;
 
     @MockBean
     MemberJoinService memberJoinService;
+
+    @MockBean
+    MemberFindService memberFindService;
 
     @Autowired
     ObjectMapper mapper;
@@ -103,6 +115,38 @@ class MemberControllerTest {
                 .andExpect(status().is4xxClientError())
                 .andExpect(status().is(HttpStatus.BAD_REQUEST.value()))
                 .andDo(print());
+    }
+
+    @Test
+    @DisplayName("전체 사용자 리스트 가져오기")
+    void getAllMembers() throws Exception {
+        // given
+        List<MemberBasicInfoResponse> response = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            MemberBasicInfoResponse basicInfoResponse = MemberBasicInfoResponse.builder()
+                    .id((long) i)
+                    .name("user" + i)
+                    .email("user" + i + "@email.com")
+                    .role(MemberRole.CUSTOMER)
+                    .status(MemberStatus.NORMAL)
+                    .build();
+            response.add(basicInfoResponse);
+        }
+
+        given(memberFindService.getMembers()).willReturn(response);
+        RequestBuilder request = MockMvcRequestBuilders.get("/members")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        // when
+        ResultActions result = mockMvc.perform(request);
+
+        // then
+        result.andExpect(status().isOk())
+//                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().string(convertToJson(response)))
+                .andDo(print());
+
     }
 
     private String convertToJson(Object value) throws JsonProcessingException {
