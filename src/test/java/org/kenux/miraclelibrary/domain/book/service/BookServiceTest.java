@@ -144,7 +144,31 @@ class BookServiceTest {
     }
 
     @Test
-    @DisplayName("책 업데이트")
+    @DisplayName("책 업데이트: 변경 항목이 없는 경우")
+    void updateBook_변경항목없는경우() throws Exception {
+        // given
+        BookUpdateRequest bookUpdateRequest = new BookUpdateRequest();
+        bookUpdateRequest.setId(1L);
+
+        final Book expectedBook = createBookForTest();
+        given(bookRepository.findById(any())).willReturn(Optional.of(expectedBook));
+
+        // when
+        Book updatedBook = bookService.updateBook(bookUpdateRequest);
+
+        // then
+        assertThat(updatedBook.getId()).isEqualTo(expectedBook.getId());
+        assertThat(updatedBook.getTitle()).isEqualTo(expectedBook.getTitle());
+        assertThat(updatedBook.getAuthor()).isEqualTo(expectedBook.getAuthor());
+        assertThat(updatedBook.getIsbn()).isEqualTo(expectedBook.getIsbn());
+        assertThat(updatedBook.getPublicationDate()).isEqualTo(expectedBook.getPublicationDate());
+        assertThat(updatedBook.getContent()).isEqualTo(expectedBook.getContent());
+        assertThat(updatedBook.getCover()).isEqualTo(expectedBook.getCover());
+        assertThat(updatedBook.getCategory()).isEqualTo(expectedBook.getCategory());
+    }
+
+    @Test
+    @DisplayName("책 업데이트: 전체 항목")
     void updateBook_정상인경우() throws Exception {
         // given
         BookUpdateRequest bookUpdateRequest = new BookUpdateRequest();

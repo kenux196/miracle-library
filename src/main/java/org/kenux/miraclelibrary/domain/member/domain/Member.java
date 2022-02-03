@@ -1,6 +1,9 @@
 package org.kenux.miraclelibrary.domain.member.domain;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.kenux.miraclelibrary.global.entity.BaseTimeEntity;
 
 import javax.persistence.*;
@@ -8,10 +11,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "member")
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Builder
 public class Member extends BaseTimeEntity {
 
     @Id
@@ -21,7 +22,7 @@ public class Member extends BaseTimeEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Column(name = "phone", nullable = false)
@@ -29,7 +30,7 @@ public class Member extends BaseTimeEntity {
 
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
-    private MemberRole memberRole;
+    private MemberRole role;
 
     private String address;
 
@@ -43,15 +44,18 @@ public class Member extends BaseTimeEntity {
     @JoinColumn(name = "password_id")
     private MemberPassword memberPassword;
 
+    @Builder
+    public Member(String name, String email, String phone) {
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+    }
+
     public void changePassword(String password) {
         if (this.memberPassword == null) {
             this.memberPassword = new MemberPassword();
         }
         this.memberPassword.change(password);
-    }
-
-    public void changeEmail(String email) {
-        this.email = email;
     }
 
     public void changeName(String name) {
@@ -74,7 +78,27 @@ public class Member extends BaseTimeEntity {
         this.status = status;
     }
 
+    public void changeRole(MemberRole role) {
+        this.role = role;
+    }
+
     public String getMemberPassword() {
         return this.memberPassword.getPassword();
+    }
+
+    public static Member createCustomer(String name, String email, String phone, String password) {
+        final Member member = new Member(name, email, phone);
+        member.changePassword(password);
+        member.changeStatus(MemberStatus.NORMAL);
+        member.changeRole(MemberRole.CUSTOMER);
+        return member;
+    }
+
+    public static Member createLibrarian(String name, String email, String phone, String password) {
+        final Member member = new Member(name, email, phone);
+        member.changePassword(password);
+        member.changeStatus(MemberStatus.NORMAL);
+        member.changeRole(MemberRole.LIBRARIAN);
+        return member;
     }
 }

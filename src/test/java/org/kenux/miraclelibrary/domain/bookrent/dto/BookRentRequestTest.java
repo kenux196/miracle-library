@@ -13,7 +13,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class BookReturnRequestTest {
+class BookRentRequestTest {
 
     private static ValidatorFactory validatorFactory;
     private static Validator validator;
@@ -25,28 +25,30 @@ class BookReturnRequestTest {
     }
 
     @Test
-    @DisplayName("validation: 에러")
+    @DisplayName("validation: 입력값 누락")
     void validation_에러() throws Exception {
-        // given
-        final BookReturnRequest returnRequest = new BookReturnRequest(null, null);
+        BookRentRequest bookRentRequest = new BookRentRequest(null, List.of());
 
         // when
-        final Set<ConstraintViolation<BookReturnRequest>> violations = validator.validate(returnRequest);
+        final Set<ConstraintViolation<BookRentRequest>> violations = validator.validate(bookRentRequest);
 
         // then
         assertThat(violations).isNotEmpty();
     }
 
     @Test
-    @DisplayName("validation: 정상")
+    @DisplayName("validation: 입력값 정상")
     void validation_정상() throws Exception {
-        // given
-        final BookReturnRequest returnRequest = new BookReturnRequest(1L, List.of(1L));
+        BookRentRequest bookRentRequest = new BookRentRequest(1L, List.of(1L));
 
         // when
-        final Set<ConstraintViolation<BookReturnRequest>> violations = validator.validate(returnRequest);
+        final Set<ConstraintViolation<BookRentRequest>> violations = validator.validate(bookRentRequest);
 
         // then
         assertThat(violations).isEmpty();
     }
+
+
+
+
 }

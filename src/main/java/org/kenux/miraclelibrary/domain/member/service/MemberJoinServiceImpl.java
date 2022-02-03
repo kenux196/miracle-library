@@ -8,19 +8,17 @@ import org.kenux.miraclelibrary.global.exception.CustomException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-
 import static org.kenux.miraclelibrary.global.exception.ErrorCode.EMAIL_DUPLICATION;
 import static org.kenux.miraclelibrary.global.exception.ErrorCode.PASSWORD_SHORT;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class MemberService {
+public class MemberJoinServiceImpl implements MemberJoinService {
 
     private final MemberRepository memberRepository;
 
+    @Override
     public Long join(MemberJoinRequest memberJoinRequest) {
         validateEmail(memberJoinRequest.getEmail());
         validatePassword(memberJoinRequest.getPassword());
@@ -38,17 +36,5 @@ public class MemberService {
         if (password.length() < 8) {
             throw new CustomException(PASSWORD_SHORT);
         }
-    }
-
-    public List<Member> getMembers() {
-        return memberRepository.findAll();
-    }
-
-    public Optional<Member> getMembersByName(String name) {
-        return memberRepository.findByName(name);
-    }
-
-    public Optional<Member> getMember(Long id) {
-        return memberRepository.findById(id);
     }
 }

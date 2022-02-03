@@ -5,24 +5,25 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.kenux.miraclelibrary.domain.member.domain.Member;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-public class MemberJoinRequest {
+public class LibrarianJoinRequest {
 
     @NotBlank
     private String name;
-    @Email
+
+    @NotBlank
     private String email;
+
     @NotBlank
     private String phone;
 
     @NotBlank
     private String password;
 
-    MemberJoinRequest(String name, String email, String phone, String password) {
+    LibrarianJoinRequest(String name, String email, String phone, String password) {
         this.name = name;
         this.email = email;
         this.phone = phone;
@@ -30,6 +31,6 @@ public class MemberJoinRequest {
     }
 
     public Member toEntity() {
-        return Member.createCustomer(name, email, phone, password);
+        return Member.createLibrarian(name, email, phone, password);
     }
 }

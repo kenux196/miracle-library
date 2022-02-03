@@ -6,16 +6,14 @@ import org.junit.jupiter.api.Test;
 import org.kenux.miraclelibrary.domain.member.domain.Member;
 import org.kenux.miraclelibrary.domain.member.domain.MemberRole;
 import org.kenux.miraclelibrary.domain.member.domain.MemberStatus;
+import org.kenux.miraclelibrary.domain.member.dto.MemberFindFilter;
 import org.kenux.miraclelibrary.global.config.JpaAuditingConfig;
 import org.kenux.miraclelibrary.global.config.QueryDslConfig;
-import org.kenux.miraclelibrary.global.exception.CustomException;
-import org.kenux.miraclelibrary.global.exception.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
 import javax.persistence.EntityManager;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,59 +29,41 @@ class MemberRepositoryTest {
     @Autowired
     EntityManager em;
 
-    private Member member;
+    private Member memberNormal;
+    private Member memberDormancy;
     private Member librarian;
 
     @BeforeEach
     void setup() {
-        member = createMember();
+        memberNormal = Member.createCustomer(
+                "member1", "member1@test.com", "010-1234-5678", "password");
+        memberDormancy = Member.createCustomer(
+                "member2", "member2@test.com", "010-1234-5678", "password");
+        memberDormancy.changeStatus(MemberStatus.DORMANCY);
         librarian = createLibrarian();
+
+        memberRepository.save(memberNormal);
+        memberRepository.save(memberDormancy);
+        memberRepository.save(librarian);
+        em.flush();
+        em.clear();
     }
 
     @Test
     @DisplayName("회원 저장: 기본 저장")
     void save() {
-        Member saved = memberRepository.save(member);
-
-        assertThat(member.getId()).isNotNull();
-        assertThat(saved.getId()).isEqualTo(member.getId());
-    }
-
-    @Test
-    @DisplayName("회원 저장: 생성일(가입일) 저장")
-    void test_savedMemberHasCreateDate() {
-        Member saved = memberRepository.save(member);
-
-        assertThat(saved.getCreateDate()).isNotNull();
-        assertThat(saved.getCreateDate()).isAfter(
-                LocalDateTime.of(2022, 1, 1, 1,1,1));
-    }
-    
-    @Test
-    @DisplayName("회원 정보 변경: UpdateDate 갱신")
-    void test_updateDate() {
-        // given
-        Member saved = memberRepository.save(member);
-
         // when
-        saved.changeEmail("kenux@test.com");
-        Long id = saved.getId();
-        em.flush();
-        em.clear();
-
-        final Member findMember = memberRepository.findById(id)
-                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        final Optional<Member> result = memberRepository.findById(memberNormal.getId());
 
         // then
-        assertThat(findMember.getUpdateDate()).isAfter(findMember.getCreateDate());
+        assertThat(result).isNotEmpty();
+        assertThat(result.get().getId()).isEqualTo(memberNormal.getId());
     }
 
     @Test
-    @DisplayName("회원 이메일이 존재하는지 검사한다.")
-    void test_existEmail() {
-        memberRepository.save(member);
-
-        boolean result = memberRepository.existsByEmail("customer1@test.com");
+    @DisplayName("동일한 이메일이 존재하는지 조회")
+    void existByEmail() {
+        boolean result = memberRepository.existsByEmail(memberNormal.getEmail());
         assertThat(result).isTrue();
 
         result = memberRepository.existsByEmail("test1@test.com");
@@ -92,109 +72,143 @@ class MemberRepositoryTest {
 
     @Test
     @DisplayName("전체 멤버 조회")
-    void test_findAll() {
+    void findAll() {
+        List<Member> members = memberRepository.findAll();
+        assertThat(members).isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("findById: id로 조회")
+    void findById() {
+        Optional<Member> found = memberRepository.findById(memberNormal.getId());
+        assertThat(found).isNotEmpty();
+        assertThat(found.get().getId()).isEqualTo(memberNormal.getId());
+    }
+
+    @Test
+    @DisplayName("findByName: 이름으로 조회")
+    void findByName() {
+        Optional<Member> found = memberRepository.findByName(memberNormal.getName());
+        assertThat(found).isNotEmpty();
+        assertThat(found.get().getName()).isEqualTo(memberNormal.getName());
+    }
+
+    @Test
+    @DisplayName("findByEmail: 이메일로 조회")
+    void findByEmail() throws Exception {
+        Optional<Member> found = memberRepository.findByEmail(memberNormal.getEmail());
+        assertThat(found).isNotEmpty();
+        assertThat(found.get().getEmail()).isEqualTo(memberNormal.getEmail());
+    }
+
+    @Test
+    @DisplayName("findCustomerByFilter: 전체 멤버에서 고객만 조회한다.")
+    void findCustomerByFilter() throws Exception {
         // given
-        memberRepository.save(member);
-        memberRepository.save(librarian);
+        MemberFindFilter filter = new MemberFindFilter();
 
         // when
-        List<Member> members = memberRepository.findAll();
+        List<Member> members = memberRepository.findCustomerByFilter(filter);
 
         // then
         assertThat(members).hasSize(2);
+        assertThat(members.get(0).getRole()).isEqualTo(MemberRole.CUSTOMER);
     }
 
     @Test
-    @DisplayName("회원 조회: id로 조회")
-    void test_findById() {
-        Member saved = memberRepository.save(member);
-
-        Optional<Member> found = memberRepository.findById(saved.getId());
-
-        assertThat(found).isNotEmpty();
-        assertThat(found.get().getId()).isEqualTo(saved.getId());
-    }
-
-    @Test
-    @DisplayName("회원 조회: 이름으로 조회")
-    void test_findByName() {
-        memberRepository.save(member);
-
-        Optional<Member> found = memberRepository.findByName(member.getName());
-
-        assertThat(found).isNotEmpty();
-        assertThat(found.get().getName()).isEqualTo(member.getName());
-    }
-
-    @Test
-    @DisplayName("회원 조회: 이메일로 조회")
-    void test_findByEmail() throws Exception {
+    void findCustomerByFilter_id값만_포함() throws Exception {
         // given
-        memberRepository.save(member);
-        
-        // when
-        Optional<Member> found = memberRepository.findByEmail(member.getEmail());
-
-        // then
-        assertThat(found).isNotEmpty();
-        assertThat(found.get().getEmail()).isEqualTo(member.getEmail());
-    }
-
-    @Test
-    @DisplayName("회원 주소 변경되어서 저장되는지 확인")
-    void changeAndSaveAddressTest() throws Exception {
-        // given
-        String address = "대구시 달성군";
-        member.changeAddress(address);
+        MemberFindFilter filter = new MemberFindFilter();
+        filter.setId(memberNormal.getId());
 
         // when
-        final Member save = memberRepository.save(member);
+        List<Member> members = memberRepository.findCustomerByFilter(filter);
 
         // then
-        assertThat(save.getAddress()).isEqualTo(address);
+        assertThat(members).hasSize(1);
+        assertThat(members.get(0).getId()).isEqualTo(memberNormal.getId());
     }
 
     @Test
-    @DisplayName("회원 최종 접속 시간 저장")
-    void updateLastAccessTime() throws Exception {
+    void findCustomerByFilter_이름만_포함() throws Exception {
         // given
-        LocalDateTime lastAccessTime = LocalDateTime.of(
-                2022, 1, 22, 12, 12, 23);
-        member.updateLastAccessTime(lastAccessTime);
-        memberRepository.save(member);
-        em.flush();
-        em.clear();
+        MemberFindFilter filter = new MemberFindFilter();
+        filter.setName(memberNormal.getName());
 
         // when
-        final Optional<Member> found = memberRepository.findById(member.getId());
+        List<Member> members = memberRepository.findCustomerByFilter(filter);
 
         // then
-        assertThat(found).isNotEmpty();
-        assertThat(found.get().getLastAccessTime()).isEqualTo(lastAccessTime);
+        assertThat(members).hasSize(1);
+        assertThat(members.get(0).getId()).isEqualTo(memberNormal.getId());
+    }
+
+    @Test
+    void findCustomerByFilter_이메일만_포함() throws Exception {
+        // given
+        MemberFindFilter filter = new MemberFindFilter();
+        filter.setEmail(memberNormal.getEmail());
+
+        // when
+        List<Member> members = memberRepository.findCustomerByFilter(filter);
+
+        // then
+        assertThat(members).hasSize(1);
+        assertThat(members.get(0).getEmail()).isEqualTo(memberNormal.getEmail());
+    }
+
+    @Test
+    void findCustomerByFilter_고객상태만_포함() throws Exception {
+        // given
+        MemberFindFilter filter = new MemberFindFilter();
+        filter.setStatus(memberNormal.getStatus());
+
+        // when
+        List<Member> members = memberRepository.findCustomerByFilter(filter);
+
+        // then
+        assertThat(members).hasSize(1);
+        assertThat(members.get(0).getStatus()).isEqualTo(memberNormal.getStatus());
+    }
+
+    @Test
+    void findCustomerByFilter_이름과이메일_포함() throws Exception {
+        // given
+        MemberFindFilter filter = new MemberFindFilter();
+        filter.setName(memberNormal.getName());
+        filter.setEmail(memberNormal.getEmail());
+
+        // when
+        List<Member> members = memberRepository.findCustomerByFilter(filter);
+
+        // then
+        assertThat(members).hasSize(1);
+        assertThat(members.get(0).getEmail()).isEqualTo(memberNormal.getEmail());
+        assertThat(members.get(0).getName()).isEqualTo(memberNormal.getName());
+    }
+
+    @Test
+    void findCustomerByFilter_이름과이메일_불일치_검색결과없음() throws Exception {
+        // given
+        MemberFindFilter filter = new MemberFindFilter();
+        filter.setName(memberNormal.getName());
+        filter.setEmail("notUser@test.com");
+
+        // when
+        List<Member> members = memberRepository.findCustomerByFilter(filter);
+
+        // then
+        assertThat(members).isEmpty();
     }
 
 
     private Member createMember() {
-        Member member = Member.builder()
-                .name("customer1")
-                .email("customer1@test.com")
-                .phone("010-1234-1234")
-                .memberRole(MemberRole.CUSTOMER)
-                .status(MemberStatus.NORMAL)
-                .build();
-        member.changePassword("password");
-        return member;
+        return Member.createCustomer(
+                "member1", "member1@test.com", "010-1234-5678", "password");
     }
 
     private Member createLibrarian() {
-        Member member = Member.builder()
-                .name("librarian1")
-                .email("librarian1@test.com")
-                .phone("010-1234-1234")
-                .memberRole(MemberRole.LIBRARIAN)
-                .status(MemberStatus.NORMAL)
-                .build();
-        member.changePassword("password");
-        return member;
+        return Member.createLibrarian(
+                "librarian", "librarian@test.com", "010-1234-5678", "password");
     }
 }

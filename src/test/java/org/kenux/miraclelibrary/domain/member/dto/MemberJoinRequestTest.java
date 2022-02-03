@@ -30,8 +30,20 @@ class MemberJoinRequestTest {
     }
 
     @BeforeEach
-    void setup() {
-        memberJoinRequest = createMemberJoinRequest();
+    void setUp() {
+        memberJoinRequest = MemberJoinRequestBuilder.build(
+                "user", "user@test.com", "010-1234-1234", "password");
+    }
+
+    @Test
+    @DisplayName("Validation: 에러")
+    void validation_에러() throws Exception {
+        final MemberJoinRequest request = MemberJoinRequestBuilder.build(
+                null, null, null, null);
+
+        final Set<ConstraintViolation<MemberJoinRequest>> violations = validator.validate(request);
+
+        assertThat(violations).isNotEmpty();
     }
 
     @Test
@@ -43,23 +55,8 @@ class MemberJoinRequestTest {
     }
 
     @Test
-    @DisplayName("Validation: 에러")
-    void validation_에러() throws Exception {
-
-        final MemberJoinRequest request = MemberJoinRequest.builder()
-                .name("user")
-                .email("user@test.com")
-                .password("password")
-                .build();
-        final Set<ConstraintViolation<MemberJoinRequest>> violations = validator.validate(request);
-
-        assertThat(violations).isNotEmpty();
-    }
-
-    @Test
     @DisplayName("멤버 조인 요청을 멤버 엔티티로 변환")
     void toEntity() throws Exception {
-        // given
         // when
         Member member = memberJoinRequest.toEntity();
 
@@ -68,38 +65,27 @@ class MemberJoinRequestTest {
         assertThat(member.getName()).isEqualTo(memberJoinRequest.getName());
         assertThat(member.getMemberPassword()).isEqualTo(memberJoinRequest.getPassword());
         assertThat(member.getEmail()).isEqualTo(memberJoinRequest.getEmail());
+        assertThat(member.getPhone()).isEqualTo(memberJoinRequest.getPhone());
         assertThat(member.getId()).isNull();
     }
 
     @Test
     @DisplayName("멤버 엔티티로 변화 시, 멤버의 롤이 지정되어야 한다.")
     void toEntity_MemberRole() throws Exception {
-        // given
         // when
         Member member = memberJoinRequest.toEntity();
 
         // then
-        assertThat(member.getMemberRole()).isEqualTo(MemberRole.CUSTOMER);
+        assertThat(member.getRole()).isEqualTo(MemberRole.CUSTOMER);
     }
 
     @Test
     @DisplayName("멤버 엔티티로 변화 시, 멤버 상태 노말 설정")
     void toEntity_hasStatus() throws Exception {
-        // given
         // when
         Member member = memberJoinRequest.toEntity();
 
         // then
         assertThat(member.getStatus()).isEqualTo(MemberStatus.NORMAL);
     }
-
-    private MemberJoinRequest createMemberJoinRequest() {
-        return MemberJoinRequest.builder()
-                .name("user")
-                .email("user@test.com")
-                .phone("010-1234-1234")
-                .password("password")
-                .build();
-    }
-
 }

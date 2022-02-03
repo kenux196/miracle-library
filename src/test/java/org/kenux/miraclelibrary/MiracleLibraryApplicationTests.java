@@ -9,7 +9,7 @@ class MiracleLibraryApplicationTests {
 	}
 
 	@Test
-	void test() {
+	void applicationRunTest() {
 		MiracleLibraryApplication.main(new String[] {
 
 		});
