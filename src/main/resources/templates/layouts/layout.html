@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lagn="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
@@ -15,7 +14,7 @@
       <!-- 상단바-->
       <th:block th:replace="fragments/topbar :: topbarFragment"></th:block>
       <!-- 본문-->
-      <th:block layout:fragment="content"></th:block>
+      <div layout:fragment="content"></div>
     </div>
     <!-- 공통 하단-->
     <th:block th:replace="fragments/footer :: footerFragment"></th:block>
