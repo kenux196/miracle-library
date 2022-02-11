@@ -14,7 +14,12 @@ import java.util.List;
 public class BoardTestController {
 
     @GetMapping
-    public String indexPage(Model model) {
+    public String indexPage() {
+        return "index";
+    }
+
+    @GetMapping("test1")
+    public String indexBackPage(Model model) {
         List<Board> boards = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             int number = i + 1;
@@ -22,6 +27,6 @@ public class BoardTestController {
             boards.add(board);
         }
         model.addAttribute("boardList", boards);
-        return "index";
+        return "index-back";
     }
 }
