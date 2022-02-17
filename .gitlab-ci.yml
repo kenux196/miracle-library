@@ -17,8 +17,8 @@ job-build:
     expire_in: 1 day
   # only:
     # - main
-  tags: 
-    - build.001
+  # tags: 
+    # - build.001
 
 job-test:
   image: gradle:7.3.1-jdk11
@@ -31,14 +31,14 @@ job-test:
   artifacts:
     paths:
       - build/reports/jacoco/test/*
-  tags: 
-    - build.001
+  # tags: 
+    # - build.001
 
 job-deploy:
   stage: deploy
   script:
     - echo 'Not used'
-  tags: 
-    - build.001 # gir-runner 이름
+  # tags: 
+    # - build.001 # gir-runner 이름
   only:
     - main
