@@ -107,7 +107,7 @@ class BookControllerTest {
                 .publicationDate(LocalDate.of(2022, 1, 1))
                 .build();
         List<BookResponse> bookResponses = Collections.singletonList(BookResponse.from(book));
-        given(bookService.searchBookByFilter(any())).willReturn(Collections.singletonList(book));
+        given(bookService.searchBookByFilter(any())).willReturn(bookResponses);
 
         // when
         final ResultActions resultActions = mockMvc.perform(get("/books"));
@@ -131,7 +131,7 @@ class BookControllerTest {
                 .publicationDate(LocalDate.of(2022, 1, 1))
                 .build();
         List<BookResponse> bookResponses = Collections.singletonList(BookResponse.from(book));
-        given(bookService.searchBookByFilter(any())).willReturn(Collections.singletonList(book));
+        given(bookService.searchBookByFilter(any())).willReturn(bookResponses);
 
         // when
         final ResultActions resultActions = mockMvc.perform(
@@ -157,7 +157,7 @@ class BookControllerTest {
                 .publicationDate(LocalDate.of(2022, 1, 1))
                 .build();
         List<BookResponse> bookResponses = Collections.singletonList(BookResponse.from(book));
-        given(bookService.searchBookByFilter(any())).willReturn(Collections.singletonList(book));
+        given(bookService.searchBookByFilter(any())).willReturn(bookResponses);
 
         // when
         final ResultActions resultActions = mockMvc.perform(
@@ -183,7 +183,7 @@ class BookControllerTest {
                 .publicationDate(LocalDate.of(2022, 1, 1))
                 .build();
         List<BookResponse> bookResponses = Collections.singletonList(BookResponse.from(book));
-        given(bookService.searchBookByFilter(any())).willReturn(Collections.singletonList(book));
+        given(bookService.searchBookByFilter(any())).willReturn(bookResponses);
 
         // when
         final ResultActions resultActions = mockMvc.perform(
