@@ -2,6 +2,7 @@ package org.kenux.miraclelibrary.domain.bookrent.domain;
 
 import lombok.*;
 import org.kenux.miraclelibrary.domain.book.domain.Book;
+import org.kenux.miraclelibrary.domain.book.domain.BookStatus;
 import org.kenux.miraclelibrary.domain.member.domain.Member;
 
 import javax.persistence.*;
@@ -49,6 +50,15 @@ public class BookRentInfo {
 
     public boolean isOverDue(LocalDate today) {
         return today.isAfter(getEndDate());
+    }
+
+    public static BookRentInfo rent(Member member, Book book) {
+        book.changeStatus(BookStatus.RENTED);
+        return BookRentInfo.builder()
+                .member(member)
+                .book(book)
+                .startDate(LocalDateTime.now())
+                .build();
     }
 
     @Override

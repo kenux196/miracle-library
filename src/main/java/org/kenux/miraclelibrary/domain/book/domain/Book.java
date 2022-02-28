@@ -2,7 +2,7 @@ package org.kenux.miraclelibrary.domain.book.domain;
 
 
 import lombok.*;
-import org.kenux.miraclelibrary.global.entity.BaseTimeEntity;
+import org.kenux.miraclelibrary.domain.base.BaseTimeEntity;
 
 import javax.persistence.*;
 import java.time.LocalDate;

@@ -1,4 +1,4 @@
-package org.kenux.miraclelibrary.global.entity;
+package org.kenux.miraclelibrary.domain.base;
 
 import lombok.Getter;
 import lombok.ToString;
