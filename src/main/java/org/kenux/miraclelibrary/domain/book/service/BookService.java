@@ -2,10 +2,7 @@ package org.kenux.miraclelibrary.domain.book.service;
 
 import lombok.RequiredArgsConstructor;
 import org.kenux.miraclelibrary.domain.book.domain.Book;
-import org.kenux.miraclelibrary.domain.book.dto.BookDetailResponse;
-import org.kenux.miraclelibrary.domain.book.dto.BookRegisterRequest;
-import org.kenux.miraclelibrary.domain.book.dto.BookSearchFilter;
-import org.kenux.miraclelibrary.domain.book.dto.BookUpdateRequest;
+import org.kenux.miraclelibrary.domain.book.dto.*;
 import org.kenux.miraclelibrary.domain.book.repository.BookRepository;
 import org.kenux.miraclelibrary.global.exception.CustomException;
 import org.kenux.miraclelibrary.global.exception.ErrorCode;
@@ -28,13 +25,17 @@ public class BookService {
         return bookRepository.save(book).getId();
     }
 
-    public List<Book> getNewBooks() {
-        return bookRepository.findNewBookWithinOneMonth(LocalDate.now());
+    public List<BookResponse> getNewBooks() {
+        final List<Book> newBooks = bookRepository.findNewBookWithinOneMonth(LocalDate.now());
+        return newBooks.stream()
+                .map(BookResponse::from)
+                .collect(Collectors.toList());
     }
 
-    public List<Book> searchBookByFilter(BookSearchFilter filter) {
+    public List<BookResponse> searchBookByFilter(BookSearchFilter filter) {
         return bookRepository.findBookByFilter(filter).stream()
                 .filter(Book::isHeldBook)
+                .map(BookResponse::from)
                 .collect(Collectors.toList());
     }
 

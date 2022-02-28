@@ -1,7 +1,6 @@
 package org.kenux.miraclelibrary.domain.book.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.kenux.miraclelibrary.domain.book.domain.Book;
 import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
 import org.kenux.miraclelibrary.domain.book.dto.BookDetailResponse;
 import org.kenux.miraclelibrary.domain.book.dto.BookRegisterRequest;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/books")
@@ -36,8 +34,7 @@ public class BookController {
                 .keyword(keyword)
                 .category(category != null ? BookCategory.getBookCategory(category) : null)
                 .build();
-        final List<Book> books = bookService.searchBookByFilter(searchFilter);
-        final List<BookResponse> bookListResponse = bookListResponsesOf(books);
+        final List<BookResponse> bookListResponse = bookService.searchBookByFilter(searchFilter);
         return ResponseEntity.ok(bookListResponse);
     }
 
@@ -49,14 +46,6 @@ public class BookController {
 
     @GetMapping("/new-book")
     public ResponseEntity<?> getNewBooks() {
-        final List<Book> books = bookService.getNewBooks();
-        final List<BookResponse> bookListResponse = bookListResponsesOf(books);
-        return ResponseEntity.ok(bookListResponse);
-    }
-
-    private List<BookResponse> bookListResponsesOf(List<Book> books) {
-        return books.stream()
-                .map(BookResponse::from)
-                .collect(Collectors.toList());
+        return ResponseEntity.ok(bookService.getNewBooks());
     }
 }
