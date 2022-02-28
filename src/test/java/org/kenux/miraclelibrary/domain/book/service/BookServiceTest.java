@@ -6,10 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.kenux.miraclelibrary.domain.book.domain.Book;
 import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
 import org.kenux.miraclelibrary.domain.book.domain.BookStatus;
-import org.kenux.miraclelibrary.domain.book.dto.BookDetailResponse;
-import org.kenux.miraclelibrary.domain.book.dto.BookRegisterRequest;
-import org.kenux.miraclelibrary.domain.book.dto.BookSearchFilter;
-import org.kenux.miraclelibrary.domain.book.dto.BookUpdateRequest;
+import org.kenux.miraclelibrary.domain.book.dto.*;
 import org.kenux.miraclelibrary.domain.book.repository.BookRepository;
 import org.kenux.miraclelibrary.global.exception.CustomException;
 import org.mockito.InjectMocks;
@@ -106,7 +103,7 @@ class BookServiceTest {
         given(bookRepository.findNewBookWithinOneMonth(any())).willReturn(Collections.singletonList(book));
         
         // when
-        List<Book> newBooks = bookService.getNewBooks();
+        List<BookResponse> newBooks = bookService.getNewBooks();
 
         // then
         assertThat(newBooks).hasSize(1);

@@ -236,7 +236,7 @@ class BookControllerTest {
                 .build();
 
         List<BookResponse> bookResponses = Collections.singletonList(BookResponse.from(book));
-        given(bookService.getNewBooks()).willReturn(Collections.singletonList(book));
+        given(bookService.getNewBooks()).willReturn(bookResponses);
 
         // when
         final ResultActions resultActions = mockMvc.perform(get("/books/new-book"));
