@@ -22,6 +22,12 @@ public class BoardTestController {
             boards.add(board);
         }
         model.addAttribute("boardList", boards);
-        return "index";
+        return "main";
+    }
+
+    @GetMapping("/me")
+    public String myInfoTest(Model model) {
+        model.addAttribute("name", "kenux");
+        return "/myinfo";
     }
 }
