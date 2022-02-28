@@ -39,6 +39,12 @@ public class BookService {
                 .collect(Collectors.toList());
     }
 
+    public List<BookResponse> getAllBooks() {
+        return bookRepository.findAll().stream()
+                .map(BookResponse::from)
+                .collect(Collectors.toList());
+    }
+
     public Book updateBook(BookUpdateRequest bookUpdateRequest) {
         final Book book = getBook(bookUpdateRequest.getId());
 

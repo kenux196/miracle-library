@@ -33,9 +33,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = {BookController.class})
+@WebMvcTest(controllers = {BookRestController.class})
 @Import(HttpEncodingAutoConfiguration.class)
-class BookControllerTest {
+class BookRestControllerTest {
 
     @Autowired
     MockMvc mockMvc;

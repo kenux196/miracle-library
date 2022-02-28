@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class BookControllerIntegrationTest extends BaseIntegrationTest {
+class BookRestControllerIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
     private BookSetup bookSetup;
