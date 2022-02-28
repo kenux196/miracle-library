@@ -4,6 +4,7 @@ import org.kenux.miraclelibrary.domain.boardtest.web.dto.Board;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
@@ -22,12 +23,12 @@ public class BoardTestController {
             boards.add(board);
         }
         model.addAttribute("boardList", boards);
-        return "main";
+        return "/views/main";
     }
 
-    @GetMapping("/me")
-    public String myInfoTest(Model model) {
+    @GetMapping("/members/{id}")
+    public String myInfoTest(@PathVariable Long id, Model model) {
         model.addAttribute("name", "kenux");
-        return "/myinfo";
+        return "views/members/member-info";
     }
 }
