@@ -1,12 +1,14 @@
 package org.kenux.miraclelibrary.domain.boardtest.web.controller;
 
 import org.kenux.miraclelibrary.domain.boardtest.web.dto.Board;
+import org.kenux.miraclelibrary.domain.boardtest.web.dto.Notice;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +18,16 @@ public class BoardTestController {
 
     @GetMapping
     public String indexPage(Model model) {
+
+        List<Notice> notices = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            long number = i + 1;
+            Notice notice = new Notice(
+                    number, "공지 사항 1..." + number , "윤상규", "내용", LocalDateTime.now());
+            notices.add(notice);
+        }
+        model.addAttribute("notices", notices);
+
         List<Board> boards = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             int number = i + 1;
