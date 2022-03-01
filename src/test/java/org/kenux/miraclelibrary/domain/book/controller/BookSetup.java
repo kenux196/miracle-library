@@ -2,7 +2,7 @@ package org.kenux.miraclelibrary.domain.book.controller;
 
 import org.kenux.miraclelibrary.domain.book.domain.Book;
 import org.kenux.miraclelibrary.domain.book.domain.BookStatus;
-import org.kenux.miraclelibrary.domain.book.dto.BookRegisterRequest;
+import org.kenux.miraclelibrary.domain.book.controller.request.BookRegisterRequest;
 import org.kenux.miraclelibrary.domain.book.repository.BookRepository;
 import org.springframework.stereotype.Component;
 

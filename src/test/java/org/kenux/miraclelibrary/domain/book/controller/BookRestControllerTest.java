@@ -4,12 +4,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.kenux.miraclelibrary.domain.book.controller.response.NewBookResponse;
+import org.kenux.miraclelibrary.domain.book.controller.rest.BookRestController;
 import org.kenux.miraclelibrary.domain.book.domain.Book;
 import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
 import org.kenux.miraclelibrary.domain.book.domain.BookStatus;
-import org.kenux.miraclelibrary.domain.book.dto.BookDetailResponse;
-import org.kenux.miraclelibrary.domain.book.dto.BookRegisterRequest;
-import org.kenux.miraclelibrary.domain.book.dto.BookResponse;
+import org.kenux.miraclelibrary.domain.book.controller.response.BookDetailResponse;
+import org.kenux.miraclelibrary.domain.book.controller.request.BookRegisterRequest;
+import org.kenux.miraclelibrary.domain.book.controller.response.BookResponse;
 import org.kenux.miraclelibrary.domain.book.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.servlet.HttpEncodingAutoConfiguration;
@@ -226,16 +228,13 @@ class BookRestControllerTest {
     @Test
     @DisplayName("GET /api/books/new-book : 신간 서적 리스트 조회 요청처리")
     void getNewBooks() throws Exception {
-        Book book = Book.builder()
-                .id(1L)
+        NewBookResponse newBook = NewBookResponse.builder()
+                .bookId(1L)
                 .title("title")
                 .author("author")
-                .isbn("isbn")
-                .status(BookStatus.RENTABLE)
-                .publicationDate(LocalDate.of(2022, 1, 1))
                 .build();
 
-        List<BookResponse> bookResponses = Collections.singletonList(BookResponse.from(book));
+        List<NewBookResponse> bookResponses = Collections.singletonList(newBook);
         given(bookService.getNewBooks()).willReturn(bookResponses);
 
         // when

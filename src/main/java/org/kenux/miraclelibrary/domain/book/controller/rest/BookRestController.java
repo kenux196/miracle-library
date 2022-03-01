@@ -1,11 +1,11 @@
-package org.kenux.miraclelibrary.domain.book.controller;
+package org.kenux.miraclelibrary.domain.book.controller.rest;
 
 import lombok.RequiredArgsConstructor;
 import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
-import org.kenux.miraclelibrary.domain.book.dto.BookDetailResponse;
-import org.kenux.miraclelibrary.domain.book.dto.BookRegisterRequest;
-import org.kenux.miraclelibrary.domain.book.dto.BookResponse;
-import org.kenux.miraclelibrary.domain.book.dto.BookSearchFilter;
+import org.kenux.miraclelibrary.domain.book.controller.response.BookDetailResponse;
+import org.kenux.miraclelibrary.domain.book.controller.request.BookRegisterRequest;
+import org.kenux.miraclelibrary.domain.book.controller.response.BookResponse;
+import org.kenux.miraclelibrary.domain.book.controller.request.BookSearchFilter;
 import org.kenux.miraclelibrary.domain.book.service.BookService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

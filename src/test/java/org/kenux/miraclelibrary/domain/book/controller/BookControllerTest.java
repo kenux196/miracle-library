@@ -3,9 +3,10 @@ package org.kenux.miraclelibrary.domain.book.controller;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.kenux.miraclelibrary.domain.book.controller.response.NewBookResponse;
 import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
 import org.kenux.miraclelibrary.domain.book.domain.BookStatus;
-import org.kenux.miraclelibrary.domain.book.dto.BookResponse;
+import org.kenux.miraclelibrary.domain.book.controller.response.BookResponse;
 import org.kenux.miraclelibrary.domain.book.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -42,12 +43,11 @@ class BookControllerTest {
     @DisplayName("/books 요청에 대해 /views/books/book-main 응답")
     void bookMainTest() throws Exception {
         // given
-        BookResponse bookResponse = BookResponse.builder()
+        NewBookResponse bookResponse = NewBookResponse.builder()
                 .bookId(1L)
                 .title("title")
                 .author("author")
                 .category(BookCategory.ESSAY)
-                .status(BookStatus.RENTABLE)
                 .build();
         given(bookService.getNewBooks()).willReturn(Collections.singletonList(bookResponse));
 

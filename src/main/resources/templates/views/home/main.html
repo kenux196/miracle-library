@@ -5,7 +5,6 @@
       layout:decorate="~{layouts/layout}">
 
 <div layout:fragment="content">
-  <!-- Begin Page Content -->
   <div class="text-center">
     <h1>신간 서적</h1>
     <table class="table">
@@ -13,16 +12,14 @@
       <tr>
         <th>번호</th>
         <th>제목</th>
-        <th>작성자</th>
-        <th>날짜</th>
+        <th>작가</th>
       </tr>
       </thead>
       <tbody>
-      <tr th:each="board : ${boardList}">
-        <td><span th:text="${board.no}"></span></td>
-        <td><span th:text="${board.title}"></span></td>
-        <td><span th:text="${board.writer}"></span></td>
-        <td><span th:text="${#temporals.format(board.updateTime, 'yyyy-MM-dd HH:mm:ss')}"></span></td>
+      <tr th:each="newBook : ${newBooks}">
+        <td><span th:text="${newBook.bookId}"></span></td>
+        <td><span th:text="${newBook.title}"></span></td>
+        <td><span th:text="${newBook.author}"></span></td>
       </tr>
       </tbody>
     </table>
