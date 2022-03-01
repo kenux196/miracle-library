@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+
+<div layout:fragment="content">
+  <div class="text-center">
+    <h1>전체 책 리스트</h1>
+    <div>
+      <button type="button" class="btn btn-primary"
+              th:onclick="|location.href='@{/books/add}'|"
+              onclick="location.href='./book-add-form.html'">도서 추가</button>
+    </div>
+    <hr class="my-4">
+    <div>
+      <table class="table table-striped table-hover">
+        <thead class="table-dark">
+        <tr>
+          <th>번호</th>
+          <th>제목</th>
+          <th>작가</th>
+          <th>상태</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="book : ${books}">
+          <td><span th:text="${book.bookId}">bookId</span></td>
+          <td><span th:text="${book.title}">book title</span></td>
+          <td><span th:text="${book.author}">book author</span></td>
+          <td><span th:text="${book.status}">book status</span></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</html>

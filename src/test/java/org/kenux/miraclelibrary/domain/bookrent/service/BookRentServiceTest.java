@@ -205,7 +205,7 @@ class BookRentServiceTest {
                     .title("title-" + i)
                     .author("author")
                     .isbn("isbn-" + i)
-                    .publicationDate(LocalDate.of(2022, 1, 1).plusMonths(i))
+                    .publishDate(LocalDate.of(2022, 1, 1).plusMonths(i))
                     .status(BookStatus.RENTED)
                     .build();
             BookRentInfo bookRentInfo = BookRentInfo.builder()
@@ -242,7 +242,7 @@ class BookRentServiceTest {
                 .author("author")
                 .isbn("isbn")
                 .status(BookStatus.RENTABLE)
-                .publicationDate(LocalDate.of(2022, 1, 1))
+                .publishDate(LocalDate.of(2022, 1, 1))
                 .build();
     }
 

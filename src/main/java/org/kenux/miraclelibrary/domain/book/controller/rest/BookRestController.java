@@ -3,7 +3,7 @@ package org.kenux.miraclelibrary.domain.book.controller.rest;
 import lombok.RequiredArgsConstructor;
 import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
 import org.kenux.miraclelibrary.domain.book.controller.response.BookDetailResponse;
-import org.kenux.miraclelibrary.domain.book.controller.request.BookRegisterRequest;
+import org.kenux.miraclelibrary.domain.book.controller.request.BookAddRequest;
 import org.kenux.miraclelibrary.domain.book.controller.response.BookResponse;
 import org.kenux.miraclelibrary.domain.book.controller.request.BookSearchFilter;
 import org.kenux.miraclelibrary.domain.book.service.BookService;
@@ -21,8 +21,8 @@ public class BookRestController {
     private final BookService bookService;
 
     @PostMapping(value = "/register")
-    public ResponseEntity<Long> registerBook(@Valid @RequestBody BookRegisterRequest bookRegisterRequest) {
-        final Long bookId = bookService.registerNewBook(bookRegisterRequest);
+    public ResponseEntity<Long> registerBook(@Valid @RequestBody BookAddRequest bookAddRequest) {
+        final Long bookId = bookService.registerNewBook(bookAddRequest);
         return ResponseEntity.ok(bookId);
     }
 

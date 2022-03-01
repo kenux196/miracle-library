@@ -10,7 +10,7 @@ import org.kenux.miraclelibrary.domain.book.domain.Book;
 import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
 import org.kenux.miraclelibrary.domain.book.domain.BookStatus;
 import org.kenux.miraclelibrary.domain.book.controller.response.BookDetailResponse;
-import org.kenux.miraclelibrary.domain.book.controller.request.BookRegisterRequest;
+import org.kenux.miraclelibrary.domain.book.controller.request.BookAddRequest;
 import org.kenux.miraclelibrary.domain.book.controller.response.BookResponse;
 import org.kenux.miraclelibrary.domain.book.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,14 +52,14 @@ class BookRestControllerTest {
     @DisplayName("POST /api/books/register : 입력 정보 부족 실패이면 400 리턴")
     void registerBook_failed() throws Exception {
         // given
-        BookRegisterRequest bookRegisterRequest = BookRegisterRequest.builder()
+        BookAddRequest bookAddRequest = BookAddRequest.builder()
                 .author("author")
                 .isbn("isbn")
                 .build();
 
         // when
         RequestBuilder request = MockMvcRequestBuilders.post("/api/books/register")
-                .content(convertToJson(bookRegisterRequest))
+                .content(convertToJson(bookAddRequest))
                 .contentType(MediaType.APPLICATION_JSON);
 
         ResultActions result = mockMvc.perform(request);
@@ -73,18 +73,18 @@ class BookRestControllerTest {
     @DisplayName("POST /api/books/register : 책 등록 요청처리 정상이면 status 200과 등록번호를 리턴한다.")
     void registerBook_success() throws Exception {
         // given
-        BookRegisterRequest bookRegisterRequest = BookRegisterRequest.builder()
+        BookAddRequest bookAddRequest = BookAddRequest.builder()
                 .title("title")
                 .author("author")
                 .isbn("isbn")
                 .category(BookCategory.ESSAY)
-                .publicationDate(LocalDate.now())
+                .publishDate(LocalDate.now())
                 .build();
         given(bookService.registerNewBook(any())).willReturn(1L);
 
         // when
         RequestBuilder request = MockMvcRequestBuilders.post("/api/books/register")
-                .content(convertToJson(bookRegisterRequest))
+                .content(convertToJson(bookAddRequest))
                 .contentType(MediaType.APPLICATION_JSON);
 
         ResultActions result = mockMvc.perform(request);
@@ -106,7 +106,7 @@ class BookRestControllerTest {
                 .isbn("isbn")
                 .status(BookStatus.RENTABLE)
                 .category(BookCategory.ESSAY)
-                .publicationDate(LocalDate.of(2022, 1, 1))
+                .publishDate(LocalDate.of(2022, 1, 1))
                 .build();
         List<BookResponse> bookResponses = Collections.singletonList(BookResponse.from(book));
         given(bookService.searchBookByFilter(any())).willReturn(bookResponses);
@@ -130,7 +130,7 @@ class BookRestControllerTest {
                 .isbn("isbn")
                 .status(BookStatus.RENTABLE)
                 .category(BookCategory.ESSAY)
-                .publicationDate(LocalDate.of(2022, 1, 1))
+                .publishDate(LocalDate.of(2022, 1, 1))
                 .build();
         List<BookResponse> bookResponses = Collections.singletonList(BookResponse.from(book));
         given(bookService.searchBookByFilter(any())).willReturn(bookResponses);
@@ -156,7 +156,7 @@ class BookRestControllerTest {
                 .isbn("isbn")
                 .status(BookStatus.RENTABLE)
                 .category(BookCategory.ESSAY)
-                .publicationDate(LocalDate.of(2022, 1, 1))
+                .publishDate(LocalDate.of(2022, 1, 1))
                 .build();
         List<BookResponse> bookResponses = Collections.singletonList(BookResponse.from(book));
         given(bookService.searchBookByFilter(any())).willReturn(bookResponses);
@@ -182,7 +182,7 @@ class BookRestControllerTest {
                 .isbn("isbn")
                 .status(BookStatus.RENTABLE)
                 .category(BookCategory.ESSAY)
-                .publicationDate(LocalDate.of(2022, 1, 1))
+                .publishDate(LocalDate.of(2022, 1, 1))
                 .build();
         List<BookResponse> bookResponses = Collections.singletonList(BookResponse.from(book));
         given(bookService.searchBookByFilter(any())).willReturn(bookResponses);
@@ -212,7 +212,7 @@ class BookRestControllerTest {
                 .category(BookCategory.ESSAY)
                 .content("책소개내용")
                 .cover("이미지경로")
-                .publicationDate(LocalDate.of(2022, 1, 1))
+                .publishDate(LocalDate.of(2022, 1, 1))
                 .build();
         BookDetailResponse bookDetailResponse = BookDetailResponse.from(book);
         given(bookService.getBookDetail(any())).willReturn(bookDetailResponse);

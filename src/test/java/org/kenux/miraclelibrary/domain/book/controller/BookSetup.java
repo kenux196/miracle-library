@@ -2,7 +2,7 @@ package org.kenux.miraclelibrary.domain.book.controller;
 
 import org.kenux.miraclelibrary.domain.book.domain.Book;
 import org.kenux.miraclelibrary.domain.book.domain.BookStatus;
-import org.kenux.miraclelibrary.domain.book.controller.request.BookRegisterRequest;
+import org.kenux.miraclelibrary.domain.book.controller.request.BookAddRequest;
 import org.kenux.miraclelibrary.domain.book.repository.BookRepository;
 import org.springframework.stereotype.Component;
 
@@ -14,8 +14,8 @@ public class BookSetup {
         this.bookRepository = bookRepository;
     }
 
-    public Book saveBook(BookRegisterRequest bookRegisterRequest) {
-        final Book book = bookRegisterRequest.toEntity();
+    public Book saveBook(BookAddRequest bookAddRequest) {
+        final Book book = bookAddRequest.toEntity();
         book.changeStatus(BookStatus.RENTABLE);
         return bookRepository.save(book);
     }

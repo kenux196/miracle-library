@@ -32,7 +32,7 @@ public class Book extends BaseTimeEntity {
     @Column(name = "isbn", nullable = false)
     private String isbn;
 
-    private LocalDate publicationDate;
+    private LocalDate publishDate;
 
 //    @Column(name = "category", nullable = false)
 //    @Enumerated(EnumType.STRING)
@@ -60,7 +60,7 @@ public class Book extends BaseTimeEntity {
     }
 
     public void changePublicationDate(LocalDate publicationDate) {
-        this.publicationDate = publicationDate;
+        this.publishDate = publicationDate;
     }
 
     public void changeStatus(BookStatus status) {

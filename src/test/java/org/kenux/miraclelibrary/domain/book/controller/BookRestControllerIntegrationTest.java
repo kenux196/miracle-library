@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.kenux.miraclelibrary.BaseIntegrationTest;
 import org.kenux.miraclelibrary.domain.book.domain.Book;
 import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
-import org.kenux.miraclelibrary.domain.book.controller.request.BookRegisterRequest;
+import org.kenux.miraclelibrary.domain.book.controller.request.BookAddRequest;
 import org.kenux.miraclelibrary.domain.book.controller.response.BookResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -32,14 +32,14 @@ class BookRestControllerIntegrationTest extends BaseIntegrationTest {
     @DisplayName("POST /api/books/register : 입력 정보 부족 실패이면 400 리턴")
     void registerBook_failed() throws Exception {
         // given
-        BookRegisterRequest bookRegisterRequest = BookRegisterRequest.builder()
+        BookAddRequest bookAddRequest = BookAddRequest.builder()
                 .author("author")
                 .isbn("isbn")
                 .build();
 
         // when
         RequestBuilder request = MockMvcRequestBuilders.post("/api/books/register")
-                .content(convertToJson(bookRegisterRequest))
+                .content(convertToJson(bookAddRequest))
                 .contentType(MediaType.APPLICATION_JSON);
 
         ResultActions result = mockMvc.perform(request);
@@ -53,17 +53,17 @@ class BookRestControllerIntegrationTest extends BaseIntegrationTest {
     @DisplayName("POST /api/books/register : 책 등록 요청처리 정상이면 status 200과 등록번호를 리턴한다.")
     void registerBook_success() throws Exception {
         // given
-        BookRegisterRequest bookRegisterRequest = BookRegisterRequest.builder()
+        BookAddRequest bookAddRequest = BookAddRequest.builder()
                 .title("title")
                 .author("author")
                 .isbn("isbn")
-                .publicationDate(LocalDate.now())
+                .publishDate(LocalDate.now())
                 .category(BookCategory.ESSAY)
                 .build();
 
         // when
         RequestBuilder request = MockMvcRequestBuilders.post("/api/books/register")
-                .content(convertToJson(bookRegisterRequest))
+                .content(convertToJson(bookAddRequest))
                 .contentType(MediaType.APPLICATION_JSON);
 
         ResultActions result = mockMvc.perform(request);
@@ -79,13 +79,13 @@ class BookRestControllerIntegrationTest extends BaseIntegrationTest {
         // given
         List<BookResponse> bookResponses = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            BookRegisterRequest bookRegisterRequest = BookRegisterRequest.builder()
+            BookAddRequest bookAddRequest = BookAddRequest.builder()
                     .title("title" + i)
                     .author("author")
                     .isbn("isbn"+ i)
-                    .publicationDate(LocalDate.of(2020, 1, 11).plusDays(i))
+                    .publishDate(LocalDate.of(2020, 1, 11).plusDays(i))
                     .build();
-            final Book book = bookSetup.saveBook(bookRegisterRequest);
+            final Book book = bookSetup.saveBook(bookAddRequest);
             bookResponses.add(BookResponse.from(book));
         }
 
@@ -103,13 +103,13 @@ class BookRestControllerIntegrationTest extends BaseIntegrationTest {
         // given
         List<BookResponse> bookResponses = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            BookRegisterRequest bookRegisterRequest = BookRegisterRequest.builder()
+            BookAddRequest bookAddRequest = BookAddRequest.builder()
                     .title("title" + i)
                     .author("author")
                     .isbn("isbn"+ i)
-                    .publicationDate(LocalDate.of(2020, 1, 11).plusDays(i))
+                    .publishDate(LocalDate.of(2020, 1, 11).plusDays(i))
                     .build();
-            final Book book = bookSetup.saveBook(bookRegisterRequest);
+            final Book book = bookSetup.saveBook(bookAddRequest);
             bookResponses.add(BookResponse.from(book));
         }
 
@@ -131,24 +131,24 @@ class BookRestControllerIntegrationTest extends BaseIntegrationTest {
         List<BookResponse> bookResponses = new ArrayList<>();
         final LocalDate publicationDateLessThanOneMonth = LocalDate.now().minusDays(15);
         for (int i = 0; i < 5; i++) {
-            BookRegisterRequest bookRegisterRequest = BookRegisterRequest.builder()
+            BookAddRequest bookAddRequest = BookAddRequest.builder()
                     .title("title" + i)
                     .author("author")
                     .isbn("isbn"+ i)
-                    .publicationDate(publicationDateLessThanOneMonth)
+                    .publishDate(publicationDateLessThanOneMonth)
                     .build();
-            final Book book = bookSetup.saveBook(bookRegisterRequest);
+            final Book book = bookSetup.saveBook(bookAddRequest);
             bookResponses.add(BookResponse.from(book));
         }
 
         for (int i = 0; i < 5; i++) {
-            BookRegisterRequest bookRegisterRequest = BookRegisterRequest.builder()
+            BookAddRequest bookAddRequest = BookAddRequest.builder()
                     .title("title" + i)
                     .author("author")
                     .isbn("isbn"+ i)
-                    .publicationDate(LocalDate.of(2021, 1, 1))
+                    .publishDate(LocalDate.of(2021, 1, 1))
                     .build();
-            bookSetup.saveBook(bookRegisterRequest);
+            bookSetup.saveBook(bookAddRequest);
         }
         // when
         final ResultActions resultActions = mockMvc.perform(get("/api/books/new-book"));

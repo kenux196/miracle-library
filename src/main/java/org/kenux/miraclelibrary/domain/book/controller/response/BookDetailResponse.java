@@ -27,7 +27,7 @@ public class BookDetailResponse {
                 .title(book.getTitle())
                 .author(book.getAuthor())
                 .isbn(book.getIsbn())
-                .publicationDate(book.getPublicationDate())
+                .publicationDate(book.getPublishDate())
                 .category(book.getCategory())
                 .content(book.getContent())
                 .cover(book.getCover())

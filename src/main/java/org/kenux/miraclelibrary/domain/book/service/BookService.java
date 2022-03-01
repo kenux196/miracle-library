@@ -1,7 +1,7 @@
 package org.kenux.miraclelibrary.domain.book.service;
 
 import lombok.RequiredArgsConstructor;
-import org.kenux.miraclelibrary.domain.book.controller.request.BookRegisterRequest;
+import org.kenux.miraclelibrary.domain.book.controller.request.BookAddRequest;
 import org.kenux.miraclelibrary.domain.book.controller.request.BookSearchFilter;
 import org.kenux.miraclelibrary.domain.book.controller.request.BookUpdateRequest;
 import org.kenux.miraclelibrary.domain.book.controller.response.BookDetailResponse;
@@ -37,15 +37,15 @@ public class BookService {
                     .author("김작가")
                     .category(BookCategory.ESSAY)
                     .isbn("isbn-" + i)
-                    .publicationDate(LocalDate.of(2021, 12, i + 1))
+                    .publishDate(LocalDate.of(2021, 12, i + 1))
                     .build();
             newBook.changeStatus(BookStatus.RENTABLE);
             bookRepository.save(newBook);
         }
     }
 
-    public Long registerNewBook(BookRegisterRequest bookRegisterRequest) {
-        final Book book = bookRegisterRequest.toEntity();
+    public Long registerNewBook(BookAddRequest bookAddRequest) {
+        final Book book = bookAddRequest.toEntity();
         return bookRepository.save(book).getId();
     }
 

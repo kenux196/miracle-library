@@ -3,7 +3,7 @@ package org.kenux.miraclelibrary.domain.book.service;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.kenux.miraclelibrary.domain.book.controller.request.BookRegisterRequest;
+import org.kenux.miraclelibrary.domain.book.controller.request.BookAddRequest;
 import org.kenux.miraclelibrary.domain.book.controller.request.BookSearchFilter;
 import org.kenux.miraclelibrary.domain.book.controller.request.BookUpdateRequest;
 import org.kenux.miraclelibrary.domain.book.controller.response.BookDetailResponse;
@@ -49,7 +49,7 @@ class BookServiceTest {
         given(bookRepository.save(any())).willReturn(book);
 
         // when
-        Long result = bookService.registerNewBook(new BookRegisterRequest());
+        Long result = bookService.registerNewBook(new BookAddRequest());
 
         // then
         assertThat(result).isEqualTo(1L);
@@ -163,7 +163,7 @@ class BookServiceTest {
         assertThat(updatedBook.getTitle()).isEqualTo(expectedBook.getTitle());
         assertThat(updatedBook.getAuthor()).isEqualTo(expectedBook.getAuthor());
         assertThat(updatedBook.getIsbn()).isEqualTo(expectedBook.getIsbn());
-        assertThat(updatedBook.getPublicationDate()).isEqualTo(expectedBook.getPublicationDate());
+        assertThat(updatedBook.getPublishDate()).isEqualTo(expectedBook.getPublishDate());
         assertThat(updatedBook.getContent()).isEqualTo(expectedBook.getContent());
         assertThat(updatedBook.getCover()).isEqualTo(expectedBook.getCover());
         assertThat(updatedBook.getCategory()).isEqualTo(expectedBook.getCategory());
@@ -188,7 +188,7 @@ class BookServiceTest {
                 .title(bookUpdateRequest.getTitle())
                 .author(bookUpdateRequest.getAuthor())
                 .isbn(bookUpdateRequest.getIsbn())
-                .publicationDate(bookUpdateRequest.getPublicationDate())
+                .publishDate(bookUpdateRequest.getPublicationDate())
                 .category(bookUpdateRequest.getCategory())
                 .content(bookUpdateRequest.getContent())
                 .cover(bookUpdateRequest.getCover())
@@ -206,7 +206,7 @@ class BookServiceTest {
         assertThat(updatedBook.getTitle()).isEqualTo(expectedBook.getTitle());
         assertThat(updatedBook.getAuthor()).isEqualTo(expectedBook.getAuthor());
         assertThat(updatedBook.getIsbn()).isEqualTo(expectedBook.getIsbn());
-        assertThat(updatedBook.getPublicationDate()).isEqualTo(expectedBook.getPublicationDate());
+        assertThat(updatedBook.getPublishDate()).isEqualTo(expectedBook.getPublishDate());
         assertThat(updatedBook.getContent()).isEqualTo(expectedBook.getContent());
         assertThat(updatedBook.getCover()).isEqualTo(expectedBook.getCover());
         assertThat(updatedBook.getCategory()).isEqualTo(expectedBook.getCategory());
@@ -221,7 +221,7 @@ class BookServiceTest {
                     .title("book" + i)
                     .author("author" + i)
                     .isbn("ABC" + i)
-                    .publicationDate(LocalDate.of(2022, 1, 1))
+                    .publishDate(LocalDate.of(2022, 1, 1))
                     .build();
             if (i % 2 == 1) {
                 book.changeStatus(BookStatus.RENTED);
@@ -241,7 +241,7 @@ class BookServiceTest {
                 .isbn("isbn")
                 .category(BookCategory.ESSAY)
                 .status(BookStatus.RENTABLE)
-                .publicationDate(LocalDate.of(2022, 1, 1))
+                .publishDate(LocalDate.of(2022, 1, 1))
                 .build();
     }
 

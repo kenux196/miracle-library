@@ -1,13 +1,11 @@
 package org.kenux.miraclelibrary.domain.book.controller.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.kenux.miraclelibrary.domain.book.domain.Book;
 import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
 import org.kenux.miraclelibrary.domain.book.domain.BookStatus;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -17,7 +15,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Data
 @Builder
-public class BookRegisterRequest {
+@ToString
+public class BookAddRequest {
 
     @NotBlank
     private String title;
@@ -29,8 +28,8 @@ public class BookRegisterRequest {
     private String isbn;
 
     @NotNull
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-    private LocalDate publicationDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate publishDate;
 
     @NotNull
     private BookCategory category;
@@ -40,7 +39,7 @@ public class BookRegisterRequest {
                 .title(title)
                 .author(author)
                 .isbn(isbn)
-                .publicationDate(publicationDate)
+                .publishDate(publishDate)
                 .category(category)
                 .status(BookStatus.RENTABLE)
                 .build();

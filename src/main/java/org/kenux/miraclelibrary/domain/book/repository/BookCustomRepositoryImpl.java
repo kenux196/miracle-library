@@ -31,7 +31,7 @@ public class BookCustomRepositoryImpl implements BookCustomRepository {
     public List<Book> findNewBookWithinOneMonth(LocalDate time) {
         LocalDate findDate = time.minusMonths(1);
         return jpaQueryFactory.selectFrom(book)
-                .where(book.publicationDate.after(findDate))
+                .where(book.publishDate.after(findDate))
                 .fetch();
     }
 
