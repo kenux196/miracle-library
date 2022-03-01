@@ -29,7 +29,7 @@ class BookRestControllerIntegrationTest extends BaseIntegrationTest {
     private BookSetup bookSetup;
 
     @Test
-    @DisplayName("POST /books/register : 입력 정보 부족 실패이면 400 리턴")
+    @DisplayName("POST /api/books/register : 입력 정보 부족 실패이면 400 리턴")
     void registerBook_failed() throws Exception {
         // given
         BookRegisterRequest bookRegisterRequest = BookRegisterRequest.builder()
@@ -38,7 +38,7 @@ class BookRestControllerIntegrationTest extends BaseIntegrationTest {
                 .build();
 
         // when
-        RequestBuilder request = MockMvcRequestBuilders.post("/books/register")
+        RequestBuilder request = MockMvcRequestBuilders.post("/api/books/register")
                 .content(convertToJson(bookRegisterRequest))
                 .contentType(MediaType.APPLICATION_JSON);
 
@@ -50,7 +50,7 @@ class BookRestControllerIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    @DisplayName("POST /books/register : 책 등록 요청처리 정상이면 status 200과 등록번호를 리턴한다.")
+    @DisplayName("POST /api/books/register : 책 등록 요청처리 정상이면 status 200과 등록번호를 리턴한다.")
     void registerBook_success() throws Exception {
         // given
         BookRegisterRequest bookRegisterRequest = BookRegisterRequest.builder()
@@ -62,7 +62,7 @@ class BookRestControllerIntegrationTest extends BaseIntegrationTest {
                 .build();
 
         // when
-        RequestBuilder request = MockMvcRequestBuilders.post("/books/register")
+        RequestBuilder request = MockMvcRequestBuilders.post("/api/books/register")
                 .content(convertToJson(bookRegisterRequest))
                 .contentType(MediaType.APPLICATION_JSON);
 
@@ -74,7 +74,7 @@ class BookRestControllerIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    @DisplayName("GET /books : 책 전체 리스트 요청 처리 정상")
+    @DisplayName("GET /api/books : 책 전체 리스트 요청 처리 정상")
     void getAllBooks() throws Exception {
         // given
         List<BookResponse> bookResponses = new ArrayList<>();
@@ -90,16 +90,15 @@ class BookRestControllerIntegrationTest extends BaseIntegrationTest {
         }
 
         // when
-        final ResultActions resultActions = mockMvc.perform(get("/books"));
+        final ResultActions resultActions = mockMvc.perform(get("/api/books"));
 
         // then
         resultActions.andExpect(status().isOk())
-                .andExpect(content().string(convertToJson(bookResponses)))
                 .andDo(print());
     }
 
     @Test
-    @DisplayName("GET /books?keyword='xxx' : 키워드 검색 요청처리")
+    @DisplayName("GET /api/books?keyword='xxx' : 키워드 검색 요청처리")
     void searchBook() throws Exception {
         // given
         List<BookResponse> bookResponses = new ArrayList<>();
@@ -116,7 +115,7 @@ class BookRestControllerIntegrationTest extends BaseIntegrationTest {
 
         // when
         final ResultActions resultActions = mockMvc.perform(
-                get("/books")
+                get("/api/books")
                         .param("keyword", "title"));
 
         // then
@@ -126,7 +125,7 @@ class BookRestControllerIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    @DisplayName("GET /books/new-book : 신간 서적 리스트 조회 요청처리")
+    @DisplayName("GET /api/books/new-book : 신간 서적 리스트 조회 요청처리")
     void getNewBooks() throws Exception {
         // given
         List<BookResponse> bookResponses = new ArrayList<>();
@@ -152,7 +151,7 @@ class BookRestControllerIntegrationTest extends BaseIntegrationTest {
             bookSetup.saveBook(bookRegisterRequest);
         }
         // when
-        final ResultActions resultActions = mockMvc.perform(get("/books/new-book"));
+        final ResultActions resultActions = mockMvc.perform(get("/api/books/new-book"));
 
         // then
         resultActions.andExpect(status().isOk())

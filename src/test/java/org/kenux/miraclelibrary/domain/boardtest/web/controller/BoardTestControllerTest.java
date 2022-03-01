@@ -34,7 +34,7 @@ class BoardTestControllerTest {
         // then
         resultActions.andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(view().name("index"))
-                .andExpect(model().size(1));
+                .andExpect(view().name("/views/main"))
+                .andExpect(model().size(2));
     }
 }

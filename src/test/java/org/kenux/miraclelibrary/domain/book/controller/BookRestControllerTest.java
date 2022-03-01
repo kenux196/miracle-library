@@ -47,7 +47,7 @@ class BookRestControllerTest {
     ObjectMapper mapper;
 
     @Test
-    @DisplayName("POST /books/register : 입력 정보 부족 실패이면 400 리턴")
+    @DisplayName("POST /api/books/register : 입력 정보 부족 실패이면 400 리턴")
     void registerBook_failed() throws Exception {
         // given
         BookRegisterRequest bookRegisterRequest = BookRegisterRequest.builder()
@@ -56,7 +56,7 @@ class BookRestControllerTest {
                 .build();
 
         // when
-        RequestBuilder request = MockMvcRequestBuilders.post("/books/register")
+        RequestBuilder request = MockMvcRequestBuilders.post("/api/books/register")
                 .content(convertToJson(bookRegisterRequest))
                 .contentType(MediaType.APPLICATION_JSON);
 
@@ -68,7 +68,7 @@ class BookRestControllerTest {
     }
 
     @Test
-    @DisplayName("POST /books/register : 책 등록 요청처리 정상이면 status 200과 등록번호를 리턴한다.")
+    @DisplayName("POST /api/books/register : 책 등록 요청처리 정상이면 status 200과 등록번호를 리턴한다.")
     void registerBook_success() throws Exception {
         // given
         BookRegisterRequest bookRegisterRequest = BookRegisterRequest.builder()
@@ -81,7 +81,7 @@ class BookRestControllerTest {
         given(bookService.registerNewBook(any())).willReturn(1L);
 
         // when
-        RequestBuilder request = MockMvcRequestBuilders.post("/books/register")
+        RequestBuilder request = MockMvcRequestBuilders.post("/api/books/register")
                 .content(convertToJson(bookRegisterRequest))
                 .contentType(MediaType.APPLICATION_JSON);
 
@@ -94,7 +94,7 @@ class BookRestControllerTest {
     }
 
     @Test
-    @DisplayName("GET /books : parameter 없는 경우")
+    @DisplayName("GET /api/books : parameter 없는 경우")
     void searchBook() throws Exception {
         // given
         Book book = Book.builder()
@@ -110,7 +110,7 @@ class BookRestControllerTest {
         given(bookService.searchBookByFilter(any())).willReturn(bookResponses);
 
         // when
-        final ResultActions resultActions = mockMvc.perform(get("/books"));
+        final ResultActions resultActions = mockMvc.perform(get("/api/books"));
 
         // then
         resultActions.andExpect(status().isOk())
@@ -119,7 +119,7 @@ class BookRestControllerTest {
     }
 
     @Test
-    @DisplayName("GET /books?keyword='xxx' : 키워드만 있는 경우")
+    @DisplayName("GET /api/books?keyword='xxx' : 키워드만 있는 경우")
     void searchBook_키워드만있는경우() throws Exception {
         Book book = Book.builder()
                 .id(1L)
@@ -135,7 +135,7 @@ class BookRestControllerTest {
 
         // when
         final ResultActions resultActions = mockMvc.perform(
-                get("/books")
+                get("/api/books")
                         .param("keyword", "title"));
 
         // then
@@ -145,7 +145,7 @@ class BookRestControllerTest {
     }
 
     @Test
-    @DisplayName("GET /books?category='xxx' : 카테고리만 있는 경우")
+    @DisplayName("GET /api/books?category='xxx' : 카테고리만 있는 경우")
     void searchBook_카테고리만있는경우() throws Exception {
         Book book = Book.builder()
                 .id(1L)
@@ -161,7 +161,7 @@ class BookRestControllerTest {
 
         // when
         final ResultActions resultActions = mockMvc.perform(
-                get("/books")
+                get("/api/books")
                         .param("category", "essay"));
 
         // then
@@ -171,7 +171,7 @@ class BookRestControllerTest {
     }
 
     @Test
-    @DisplayName("GET /books?category='xxx' : 키워드,카테고리 모두있는 경우")
+    @DisplayName("GET /api/books?category='xxx' : 키워드,카테고리 모두있는 경우")
     void searchBook_키워드와카테고리모두있는경우() throws Exception {
         Book book = Book.builder()
                 .id(1L)
@@ -187,7 +187,7 @@ class BookRestControllerTest {
 
         // when
         final ResultActions resultActions = mockMvc.perform(
-                get("/books")
+                get("/api/books")
                         .param("keyword", "title")
                         .param("category", "essay"));
 
@@ -198,7 +198,7 @@ class BookRestControllerTest {
     }
 
     @Test
-    @DisplayName("GET /books/detail/xx: 정상이면, 책의 상세정보 반환")
+    @DisplayName("GET /api/books/detail/xx: 정상이면, 책의 상세정보 반환")
     void getBookDetail() throws Exception {
         // given
         Book book = Book.builder()
@@ -215,7 +215,7 @@ class BookRestControllerTest {
         BookDetailResponse bookDetailResponse = BookDetailResponse.from(book);
         given(bookService.getBookDetail(any())).willReturn(bookDetailResponse);
         // when
-        final ResultActions resultActions = mockMvc.perform(get("/books/detail/1"));
+        final ResultActions resultActions = mockMvc.perform(get("/api/books/detail/1"));
 
         // then
         resultActions.andExpect(status().isOk())
@@ -224,7 +224,7 @@ class BookRestControllerTest {
     }
 
     @Test
-    @DisplayName("GET /books/new-book : 신간 서적 리스트 조회 요청처리")
+    @DisplayName("GET /api/books/new-book : 신간 서적 리스트 조회 요청처리")
     void getNewBooks() throws Exception {
         Book book = Book.builder()
                 .id(1L)
@@ -239,7 +239,7 @@ class BookRestControllerTest {
         given(bookService.getNewBooks()).willReturn(bookResponses);
 
         // when
-        final ResultActions resultActions = mockMvc.perform(get("/books/new-book"));
+        final ResultActions resultActions = mockMvc.perform(get("/api/books/new-book"));
 
         // then
         resultActions.andExpect(status().isOk())
