@@ -166,6 +166,12 @@ class BookServiceTest {
         BookUpdateRequest bookUpdateRequest = new BookUpdateRequest();
         bookUpdateRequest.setId(1L);
         bookUpdateRequest.setTitle("title1");
+        bookUpdateRequest.setAuthor("author1");
+        bookUpdateRequest.setCategory(BookCategory.ECONOMY);
+        bookUpdateRequest.setContent("");
+        bookUpdateRequest.setIsbn("isbn-123");
+        bookUpdateRequest.setPublicationDate(LocalDate.now());
+        bookUpdateRequest.setCover(null);
 
         final Book book = createBookForTest();
         given(bookRepository.findById(any())).willReturn(Optional.of(book));
