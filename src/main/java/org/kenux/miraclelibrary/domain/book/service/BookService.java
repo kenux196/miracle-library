@@ -69,7 +69,7 @@ public class BookService {
                 .collect(Collectors.toList());
     }
 
-    public Book updateBook(BookUpdateRequest bookUpdateRequest) {
+    public Long updateBook(BookUpdateRequest bookUpdateRequest) {
         final Book book = getBook(bookUpdateRequest.getId());
 
         if (bookUpdateRequest.getTitle() != null) {
@@ -93,7 +93,7 @@ public class BookService {
         if (bookUpdateRequest.getPublicationDate() != null) {
             book.changePublicationDate(bookUpdateRequest.getPublicationDate());
         }
-        return book;
+        return bookUpdateRequest.getId();
     }
 
     public BookDetailResponse getBookDetail(Long id) {

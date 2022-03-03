@@ -146,72 +146,28 @@ class BookServiceTest {
     }
 
     @Test
-    @DisplayName("책 업데이트: 변경 항목이 없는 경우")
-    void updateBook_변경항목없는경우() throws Exception {
-        // given
-        BookUpdateRequest bookUpdateRequest = new BookUpdateRequest();
-        bookUpdateRequest.setId(1L);
-
-        final Book expectedBook = createBookForTest();
-        given(bookRepository.findById(any())).willReturn(Optional.of(expectedBook));
-
-        // when
-        Book updatedBook = bookService.updateBook(bookUpdateRequest);
-
-        // then
-        assertThat(updatedBook.getId()).isEqualTo(expectedBook.getId());
-        assertThat(updatedBook.getTitle()).isEqualTo(expectedBook.getTitle());
-        assertThat(updatedBook.getAuthor()).isEqualTo(expectedBook.getAuthor());
-        assertThat(updatedBook.getIsbn()).isEqualTo(expectedBook.getIsbn());
-        assertThat(updatedBook.getPublishDate()).isEqualTo(expectedBook.getPublishDate());
-        assertThat(updatedBook.getContent()).isEqualTo(expectedBook.getContent());
-        assertThat(updatedBook.getCover()).isEqualTo(expectedBook.getCover());
-        assertThat(updatedBook.getCategory()).isEqualTo(expectedBook.getCategory());
-    }
-
-    @Test
-    @DisplayName("책 업데이트: 전체 항목")
+    @DisplayName("책 수정 테스트")
     void updateBook_정상인경우() throws Exception {
         // given
         BookUpdateRequest bookUpdateRequest = new BookUpdateRequest();
-        bookUpdateRequest.setId(1L);
-        bookUpdateRequest.setTitle("title1");
-        bookUpdateRequest.setAuthor("author1");
-        bookUpdateRequest.setIsbn("isbn1");
-        bookUpdateRequest.setPublicationDate(LocalDate.of(2022, 1, 24));
-        bookUpdateRequest.setCategory(BookCategory.FICTION);
-        bookUpdateRequest.setContent("content");
-        bookUpdateRequest.setCover("cover11");
-
-        Book expectedBook = Book.builder()
-                .id(bookUpdateRequest.getId())
-                .title(bookUpdateRequest.getTitle())
-                .author(bookUpdateRequest.getAuthor())
-                .isbn(bookUpdateRequest.getIsbn())
-                .publishDate(bookUpdateRequest.getPublicationDate())
-                .category(bookUpdateRequest.getCategory())
-                .content(bookUpdateRequest.getContent())
-                .cover(bookUpdateRequest.getCover())
-                .status(BookStatus.RENTABLE)
-                .build();
+//        bookUpdateRequest.setId(1L);
+//        bookUpdateRequest.setTitle("title1");
+//        bookUpdateRequest.setAuthor("author1");
+//        bookUpdateRequest.setIsbn("isbn1");
+//        bookUpdateRequest.setPublicationDate(LocalDate.of(2022, 1, 24));
+//        bookUpdateRequest.setCategory(BookCategory.FICTION);
+//        bookUpdateRequest.setContent("content");
+//        bookUpdateRequest.setCover("cover11");
 
         final Book book = createBookForTest();
         given(bookRepository.findById(any())).willReturn(Optional.ofNullable(book));
 
         // when
-        Book updatedBook = bookService.updateBook(bookUpdateRequest);
+        Long updateId = bookService.updateBook(bookUpdateRequest);
 
         // then
-        assertThat(updatedBook.getId()).isEqualTo(expectedBook.getId());
-        assertThat(updatedBook.getTitle()).isEqualTo(expectedBook.getTitle());
-        assertThat(updatedBook.getAuthor()).isEqualTo(expectedBook.getAuthor());
-        assertThat(updatedBook.getIsbn()).isEqualTo(expectedBook.getIsbn());
-        assertThat(updatedBook.getPublishDate()).isEqualTo(expectedBook.getPublishDate());
-        assertThat(updatedBook.getContent()).isEqualTo(expectedBook.getContent());
-        assertThat(updatedBook.getCover()).isEqualTo(expectedBook.getCover());
-        assertThat(updatedBook.getCategory()).isEqualTo(expectedBook.getCategory());
+        assertThat(updateId).isEqualTo(bookUpdateRequest.getId());
     }
-
 
     private List<Book> createBookListForTest(int count) {
         List<Book> bookList = new ArrayList<>();

@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.kenux.miraclelibrary.domain.book.controller.request.BookAddRequest;
+import org.kenux.miraclelibrary.domain.book.controller.response.BookDetailResponse;
+import org.kenux.miraclelibrary.domain.book.controller.response.BookResponse;
 import org.kenux.miraclelibrary.domain.book.controller.response.NewBookResponse;
 import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
 import org.kenux.miraclelibrary.domain.book.service.BookService;
@@ -97,7 +99,58 @@ class BookControllerTest {
 
         // then
         resultActions.andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/books"));
-
+                .andExpect(redirectedUrl("/books/1"));
     }
+
+    @Test
+    @DisplayName("GET /books/{id} 요청은 /views/books/book 상세 페이지로 이동")
+    void test_getBookDetail() throws Exception {
+        // given
+        final long bookId = 1L;
+
+        BookDetailResponse bookDetailResponse = BookDetailResponse.builder()
+                .id(1L)
+                .title("제목")
+                .author("작가")
+                .category(BookCategory.ESSAY)
+                .isbn("isbn-1234")
+                .publicationDate(LocalDate.now())
+                .build();
+
+        given(bookService.getBookDetail(any())).willReturn(bookDetailResponse);
+
+        // when
+        final ResultActions resultActions = mockMvc.perform(get("/books/" + bookId));
+
+        // then
+        resultActions.andExpect(status().isOk())
+                .andExpect(view().name("/views/books/book"));
+    }
+
+    @Test
+    @DisplayName("GET /books/{id}/edit 요청은 /views/books/edit-book-form 으로 이동")
+    void test_edit_book_form() throws Exception {
+        // given
+        final long bookId = 1L;
+
+        BookDetailResponse bookDetailResponse = BookDetailResponse.builder()
+                .id(1L)
+                .title("제목")
+                .author("작가")
+                .category(BookCategory.ESSAY)
+                .isbn("isbn-1234")
+                .publicationDate(LocalDate.now())
+                .build();
+        given(bookService.getBookDetail(any())).willReturn(bookDetailResponse);
+        given(bookService.updateBook(any())).willReturn(bookId);
+
+        // when
+        final ResultActions resultActions = mockMvc.perform(get("/books/" + bookId + "/edit"));
+
+        // then
+        resultActions.andExpect(status().isOk())
+                .andExpect(view().name("/views/books/book-edit-form"));
+    }
+
+
 }
