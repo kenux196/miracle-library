@@ -44,7 +44,7 @@ public class BookService {
         }
     }
 
-    public Long registerNewBook(BookAddRequest bookAddRequest) {
+    public Long addNewBook(BookAddRequest bookAddRequest) {
         final Book book = bookAddRequest.toEntity();
         return bookRepository.save(book).getId();
     }
@@ -71,29 +71,8 @@ public class BookService {
 
     public Long updateBook(BookUpdateRequest bookUpdateRequest) {
         final Book book = getBook(bookUpdateRequest.getId());
-
-        if (bookUpdateRequest.getTitle() != null) {
-            book.changeTitle(bookUpdateRequest.getTitle());
-        }
-        if (bookUpdateRequest.getAuthor() != null) {
-            book.changeAuthor(bookUpdateRequest.getAuthor());
-        }
-        if (bookUpdateRequest.getIsbn() != null) {
-            book.changeIsbn(bookUpdateRequest.getIsbn());
-        }
-        if (bookUpdateRequest.getCategory() != null) {
-            book.changeCategory(bookUpdateRequest.getCategory());
-        }
-        if (bookUpdateRequest.getContent() != null) {
-            book.changeContent(bookUpdateRequest.getContent());
-        }
-        if (bookUpdateRequest.getCover() != null) {
-            book.changeCover(bookUpdateRequest.getCover());
-        }
-        if (bookUpdateRequest.getPublicationDate() != null) {
-            book.changePublicationDate(bookUpdateRequest.getPublicationDate());
-        }
-        return bookUpdateRequest.getId();
+        book.update(bookUpdateRequest.toEntity());
+        return book.getId();
     }
 
     public BookDetailResponse getBookDetail(Long id) {

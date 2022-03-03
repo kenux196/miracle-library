@@ -22,7 +22,7 @@ public class BookRestController {
 
     @PostMapping(value = "/register")
     public ResponseEntity<Long> registerBook(@Valid @RequestBody BookAddRequest bookAddRequest) {
-        final Long bookId = bookService.registerNewBook(bookAddRequest);
+        final Long bookId = bookService.addNewBook(bookAddRequest);
         return ResponseEntity.ok(bookId);
     }
 

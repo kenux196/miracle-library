@@ -80,7 +80,7 @@ class BookRestControllerTest {
                 .category(BookCategory.ESSAY)
                 .publishDate(LocalDate.now())
                 .build();
-        given(bookService.registerNewBook(any())).willReturn(1L);
+        given(bookService.addNewBook(any())).willReturn(1L);
 
         // when
         RequestBuilder request = MockMvcRequestBuilders.post("/api/books/register")

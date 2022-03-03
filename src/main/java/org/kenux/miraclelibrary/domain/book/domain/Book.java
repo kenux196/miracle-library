@@ -104,4 +104,29 @@ public class Book extends BaseTimeEntity {
         result = 31 * result + isbn.hashCode();
         return result;
     }
+
+    public void update(Book updateBook) {
+
+        if (updateBook.getTitle() != null) {
+            changeTitle(updateBook.getTitle());
+        }
+        if (updateBook.getAuthor() != null) {
+            changeAuthor(updateBook.getAuthor());
+        }
+        if (updateBook.getIsbn() != null) {
+            changeIsbn(updateBook.getIsbn());
+        }
+        if (updateBook.getCategory() != null) {
+            changeCategory(updateBook.getCategory());
+        }
+        if (updateBook.getContent() != null) {
+            changeContent(updateBook.getContent());
+        }
+        if (updateBook.getCover() != null) {
+            changeCover(updateBook.getCover());
+        }
+        if (updateBook.getPublishDate() != null) {
+            changePublicationDate(updateBook.getPublishDate());
+        }
+    }
 }

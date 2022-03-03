@@ -5,7 +5,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.kenux.miraclelibrary.domain.book.controller.request.BookAddRequest;
 import org.kenux.miraclelibrary.domain.book.controller.response.BookDetailResponse;
-import org.kenux.miraclelibrary.domain.book.controller.response.BookResponse;
 import org.kenux.miraclelibrary.domain.book.controller.response.NewBookResponse;
 import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
 import org.kenux.miraclelibrary.domain.book.service.BookService;
@@ -87,7 +86,7 @@ class BookControllerTest {
                 .publishDate(LocalDate.now())
                 .category(BookCategory.ESSAY)
                 .build();
-        given(bookService.registerNewBook(any())).willReturn(1L);
+        given(bookService.addNewBook(any())).willReturn(1L);
 
         // when
         ResultActions resultActions = mockMvc.perform(post("/books/add")

@@ -24,8 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.kenux.miraclelibrary.global.exception.ErrorCode.BOOK_NOT_FOUND;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -40,16 +39,31 @@ class BookServiceTest {
     @InjectMocks
     BookService bookService;
 
+    @Test
+    @DisplayName("전체 도서 목록 가져오기")
+    void getAllBooks() throws Exception {
+        // given
+        List<Book> books = createBookListForTest(10);
+        given(bookRepository.findAll()).willReturn(books);
+
+        // when
+        List<BookResponse> allBooks = bookService.getAllBooks();
+
+        // then
+        assertThat(allBooks).hasSize(10);
+
+    }
+
     // TODO : 관리자, 매니저인 경우에만 가능하도록 테스트 변경   - sky 2022/01/22
     @Test
     @DisplayName("신규 도서 등록")
-    void registerNewBook() throws Exception {
+    void addNewBook() throws Exception {
         // given
         Book book = createBookForTest();
         given(bookRepository.save(any())).willReturn(book);
 
         // when
-        Long result = bookService.registerNewBook(new BookAddRequest());
+        Long result = bookService.addNewBook(new BookAddRequest());
 
         // then
         assertThat(result).isEqualTo(1L);
@@ -146,27 +160,23 @@ class BookServiceTest {
     }
 
     @Test
-    @DisplayName("책 수정 테스트")
-    void updateBook_정상인경우() throws Exception {
+    @DisplayName("도서 정보 업데이트")
+    void updateBook() throws Exception {
         // given
         BookUpdateRequest bookUpdateRequest = new BookUpdateRequest();
-//        bookUpdateRequest.setId(1L);
-//        bookUpdateRequest.setTitle("title1");
-//        bookUpdateRequest.setAuthor("author1");
-//        bookUpdateRequest.setIsbn("isbn1");
-//        bookUpdateRequest.setPublicationDate(LocalDate.of(2022, 1, 24));
-//        bookUpdateRequest.setCategory(BookCategory.FICTION);
-//        bookUpdateRequest.setContent("content");
-//        bookUpdateRequest.setCover("cover11");
+        bookUpdateRequest.setId(1L);
+        bookUpdateRequest.setTitle("title1");
 
         final Book book = createBookForTest();
-        given(bookRepository.findById(any())).willReturn(Optional.ofNullable(book));
+        given(bookRepository.findById(any())).willReturn(Optional.of(book));
 
         // when
         Long updateId = bookService.updateBook(bookUpdateRequest);
 
         // then
         assertThat(updateId).isEqualTo(bookUpdateRequest.getId());
+        verify(bookRepository).findById(any());
+        assertThat(book.getTitle()).isEqualTo(bookUpdateRequest.getTitle());
     }
 
     private List<Book> createBookListForTest(int count) {

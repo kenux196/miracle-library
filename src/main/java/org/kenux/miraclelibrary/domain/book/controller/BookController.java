@@ -38,7 +38,7 @@ public class BookController {
     @PostMapping("/add")
     public String addNewBook(BookAddRequest bookAddRequest) {
         log.info("will add book info = {}", bookAddRequest);
-        Long bookId = bookService.registerNewBook(bookAddRequest);
+        Long bookId = bookService.addNewBook(bookAddRequest);
         return "redirect:/books/" + bookId;
     }
 
