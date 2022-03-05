@@ -7,21 +7,21 @@ import static org.kenux.miraclelibrary.global.exception.ErrorCode.PARAMETER_WRON
 
 @Getter
 public enum BookCategory {
-    FICTION("fiction"),
-    ESSAY("essay"),
-    ECONOMY("economy"),
-    IT("it"),
-    HUMANITIES("humanities");
+    FICTION("소설"),
+    ESSAY("에세이"),
+    ECONOMY("경제"),
+    IT("IT 기술"),
+    HUMANITIES("인문");
 
-    private final String value;
+    private final String description;
 
-    BookCategory(String value) {
-        this.value = value;
+    BookCategory(String description) {
+        this.description = description;
     }
 
     public static BookCategory getBookCategory(String category) {
         for (BookCategory bookCategory : BookCategory.values()) {
-            if (bookCategory.getValue().equals(category)) {
+            if (bookCategory.getDescription().equals(category)) {
                 return bookCategory;
             }
         }

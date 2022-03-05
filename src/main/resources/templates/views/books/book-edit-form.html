@@ -10,32 +10,30 @@
       <h2>도석 수정 폼</h2>
     </div>
     <h4 class="mb-3">책 정보 수정</h4>
-    <form action="books.html" th:action method="post" id="bookEditForm">
+    <form action="books.html" th:action th:object="${book}" method="post" id="bookEditForm">
       <div>
         <label for="title">책 제목</label>
-        <input type="text" id="title" name="title" class="form-control" th:value="${book.title}"/>
+        <input type="text" id="title" class="form-control" th:field="*{title}"/>
       </div>
       <div>
         <label for="author">작가</label>
-        <input type="text" id="author" name="author" class="form-control" th:value="${book.author}"/>
+        <input type="text" id="author" class="form-control" th:field="*{author}"/>
       </div>
       <div>
         <label for="isbn">ISBN</label>
-        <input type="text" id="isbn" name="isbn" class="form-control" th:value="${book.isbn}"/>
+        <input type="text" id="isbn" class="form-control" th:field="*{isbn}"/>
       </div>
       <div>
-        <label for="publishDate">출간일</label>
-        <input type="date" id="publishDate" name="publishDate" class="form-control" th:value="${book.publicationDate}"/>
+        <label for="publicationDate">출간일</label>
+        <input type="date" id="publicationDate" class="form-control" th:field="*{publicationDate}"/>
       </div>
       <div>
-<!--        todo:  카테고리는 전달받은 데이터를 기준으로 생성하도록 수정-->
-        <label for="categorySelect">카테고리</label>
-        <select class="form-select" id="categorySelect" name="category" form="bookEditForm">
-<!--          <option selected>카테고리를 선택하세요</option>-->
-          <option value="ESSAY" th:selected="${book.category}">에세이</option>
-          <option value="IT" th:selected="${book.category}">IT</option>
-          <option value="FICTION" th:selected="${book.category}">소설</option>
-          <option value="ECONOMY" th:selected="${book.category}">경제</option>
+        <label for="categorySelector">카테고리</label>
+        <select id="categorySelector" th:field="*{category}" class="form-select">
+          <option value="">== 카테고리를 선택하세요 ==</option>
+          <option th:each="category : ${bookCategories}"
+                  th:value="${category.name()}"
+                  th:text="${category.description}">에세이</option>
         </select>
       </div>
       <hr class="my-4">

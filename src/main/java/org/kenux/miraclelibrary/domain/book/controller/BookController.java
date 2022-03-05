@@ -3,15 +3,14 @@ package org.kenux.miraclelibrary.domain.book.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.kenux.miraclelibrary.domain.book.controller.request.BookAddRequest;
+import org.kenux.miraclelibrary.domain.book.controller.request.BookUpdateRequest;
 import org.kenux.miraclelibrary.domain.book.controller.response.BookDetailResponse;
 import org.kenux.miraclelibrary.domain.book.controller.response.BookResponse;
+import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
 import org.kenux.miraclelibrary.domain.book.service.BookService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,6 +22,11 @@ public class BookController {
 
     private final BookService bookService;
 
+    @ModelAttribute("bookCategories")
+    public static BookCategory[] bookCategories() {
+        return BookCategory.values();
+    }
+
     @GetMapping
     public String booksMainPage(Model model) {
         List<BookResponse> allBooks = bookService.getAllBooks();
@@ -31,7 +35,8 @@ public class BookController {
     }
 
     @GetMapping("/add")
-    public String bookAddForm() {
+    public String bookAddForm(Model model) {
+        model.addAttribute("book", new BookDetailResponse());
         return "/views/books/book-add-form";
     }
 
@@ -51,8 +56,14 @@ public class BookController {
 
     @GetMapping("/{id}/edit")
     public String getEditBookForm(@PathVariable("id") Long bookId, Model model) {
-        final BookDetailResponse bookDetail = bookService.getBookDetail(bookId);
-        model.addAttribute("book", bookDetail);
+        final BookDetailResponse book = bookService.getBookDetail(bookId);
+        model.addAttribute("book", book);
         return "/views/books/book-edit-form";
+    }
+
+    @PostMapping("/{id}/edit")
+    public String editBook(BookUpdateRequest bookUpdateRequest) {
+        Long bookId = bookService.updateBook(bookUpdateRequest);
+        return "redirect:/books/" + bookId;
     }
 }
