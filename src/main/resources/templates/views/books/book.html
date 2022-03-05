@@ -5,30 +5,30 @@
       layout:decorate="~{layouts/layout}">
 
 <div layout:fragment="content">
-  <div class="container">
+  <div class="container" th:object="${book}">
     <div class="py-5 text-center">
       <h2>책 상세 페이지</h2>
     </div>
     <div>
       <label for="title">책 제목</label>
-      <input type="text" id="title" name="title" class="form-control" th:value="${book.title}" readonly/>
+      <input type="text" id="title" name="title" class="form-control" th:value="*{title}" readonly/>
     </div>
     <div>
       <label for="author">작가</label>
-      <input type="text" id="author" name="author" class="form-control" th:value="${book.author}" readonly/>
+      <input type="text" id="author" name="author" class="form-control" th:value="*{author}" readonly/>
     </div>
     <div>
       <label for="isbn">ISBN</label>
-      <input type="text" id="isbn" name="isbn" class="form-control" th:value="${book.isbn}" readonly/>
+      <input type="text" id="isbn" name="isbn" class="form-control" th:value="*{isbn}" readonly/>
     </div>
     <div>
       <label for="publishDate">출간일</label>
-      <input type="date" id="publishDate" name="publishDate" class="form-control" th:value="${book.publicationDate}"
+      <input type="date" id="publishDate" name="publishDate" class="form-control" th:value="*{publicationDate}"
              readonly/>
     </div>
     <div>
       <label for="category">카테고리</label>
-      <input type="text" id="category" name="category" class="form-control" th:value="${book.category}" readonly/>
+      <input type="text" id="category" name="category" class="form-control" th:value="*{category}" readonly/>
     </div>
     <hr class="my-4">
     <div class="row">
