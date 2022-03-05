@@ -25,10 +25,10 @@
         </thead>
         <tbody>
         <tr th:each="book : ${books}">
-          <td><span th:text="${book.bookId}">bookId</span></td>
-          <td><span th:text="${book.title}">book title</span></td>
-          <td><span th:text="${book.author}">book author</span></td>
-          <td><span th:text="${book.status}">book status</span></td>
+          <td><a th:href="@{/books/{bookId}(bookId=${book.bookId})}" th:text="${book.bookId}">bookId</a></td>
+          <td><a th:href="@{/books/{bookId}(bookId=${book.bookId})}" th:text="${book.title}">title</a></td>
+          <td><span th:text="${book.author}">author</span></td>
+          <td><span th:text="${book.status}">status</span></td>
         </tr>
         </tbody>
       </table>
