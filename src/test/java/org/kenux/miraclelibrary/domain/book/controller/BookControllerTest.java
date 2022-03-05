@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.kenux.miraclelibrary.domain.book.controller.request.BookAddRequest;
 import org.kenux.miraclelibrary.domain.book.controller.response.BookDetailResponse;
+import org.kenux.miraclelibrary.domain.book.controller.response.BookResponse;
 import org.kenux.miraclelibrary.domain.book.controller.response.NewBookResponse;
 import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
 import org.kenux.miraclelibrary.domain.book.service.BookService;
@@ -46,20 +47,19 @@ class BookControllerTest {
     @DisplayName("/books 요청에 대해 /views/books/books 페이지로 이동")
     void GET_books() throws Exception {
         // given
-        NewBookResponse bookResponse = NewBookResponse.builder()
+        BookResponse bookResponse = BookResponse.builder()
                 .bookId(1L)
                 .title("title")
                 .author("author")
                 .category(BookCategory.ESSAY)
                 .build();
-        given(bookService.getNewBooks()).willReturn(Collections.singletonList(bookResponse));
+        given(bookService.getAllBooks()).willReturn(Collections.singletonList(bookResponse));
 
         // when
         ResultActions resultActions = mockMvc.perform(get("/books"));
 
         // then
         resultActions.andExpect(status().isOk())
-                .andExpect(model().size(1))
                 .andExpect(view().name("/views/books/books"))
                 .andDo(print());
     }
@@ -83,7 +83,7 @@ class BookControllerTest {
                 .title("title")
                 .author("author")
                 .isbn("isbn")
-                .publishDate(LocalDate.now())
+                .publishDate("2022-1-19")
                 .category(BookCategory.ESSAY)
                 .build();
         given(bookService.addNewBook(any())).willReturn(1L);
@@ -113,7 +113,7 @@ class BookControllerTest {
                 .author("작가")
                 .category(BookCategory.ESSAY)
                 .isbn("isbn-1234")
-                .publishDate(LocalDate.now())
+                .publishDate("2022-1-19")
                 .build();
 
         given(bookService.getBookDetail(any())).willReturn(bookDetailResponse);
@@ -138,7 +138,7 @@ class BookControllerTest {
                 .author("작가")
                 .category(BookCategory.ESSAY)
                 .isbn("isbn-1234")
-                .publishDate(LocalDate.now())
+                .publishDate("2022-1-19")
                 .build();
         given(bookService.getBookDetail(any())).willReturn(bookDetailResponse);
         given(bookService.updateBook(any())).willReturn(bookId);

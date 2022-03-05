@@ -9,12 +9,16 @@ import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
 import org.kenux.miraclelibrary.domain.book.controller.request.BookAddRequest;
 import org.kenux.miraclelibrary.domain.book.controller.response.BookResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.web.format.DateTimeFormatters;
+import org.springframework.format.datetime.DateFormatter;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.text.DateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,7 +61,7 @@ class BookRestControllerIntegrationTest extends BaseIntegrationTest {
                 .title("title")
                 .author("author")
                 .isbn("isbn")
-                .publishDate(LocalDate.now())
+                .publishDate("2020-12-11")
                 .category(BookCategory.ESSAY)
                 .build();
 
@@ -83,7 +87,7 @@ class BookRestControllerIntegrationTest extends BaseIntegrationTest {
                     .title("title" + i)
                     .author("author")
                     .isbn("isbn"+ i)
-                    .publishDate(LocalDate.of(2020, 1, 11).plusDays(i))
+                    .publishDate("2020-12-11")
                     .build();
             final Book book = bookSetup.saveBook(bookAddRequest);
             bookResponses.add(BookResponse.from(book));
@@ -107,7 +111,7 @@ class BookRestControllerIntegrationTest extends BaseIntegrationTest {
                     .title("title" + i)
                     .author("author")
                     .isbn("isbn"+ i)
-                    .publishDate(LocalDate.of(2020, 1, 11).plusDays(i))
+                    .publishDate("2020-12-11")
                     .build();
             final Book book = bookSetup.saveBook(bookAddRequest);
             bookResponses.add(BookResponse.from(book));
@@ -135,7 +139,7 @@ class BookRestControllerIntegrationTest extends BaseIntegrationTest {
                     .title("title" + i)
                     .author("author")
                     .isbn("isbn"+ i)
-                    .publishDate(publicationDateLessThanOneMonth)
+                    .publishDate(publicationDateLessThanOneMonth.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                     .build();
             final Book book = bookSetup.saveBook(bookAddRequest);
             bookResponses.add(BookResponse.from(book));
@@ -146,7 +150,7 @@ class BookRestControllerIntegrationTest extends BaseIntegrationTest {
                     .title("title" + i)
                     .author("author")
                     .isbn("isbn"+ i)
-                    .publishDate(LocalDate.of(2021, 1, 1))
+                    .publishDate("2022-01-19")
                     .build();
             bookSetup.saveBook(bookAddRequest);
         }

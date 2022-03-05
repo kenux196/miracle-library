@@ -38,7 +38,7 @@ class BookAddRequestTest {
                 .title("title")
                 .author("author")
                 .isbn("isbn")
-                .publishDate(LocalDate.of(2022, 1, 1))
+                .publishDate("2020-12-11")
                 .build();
     }
 

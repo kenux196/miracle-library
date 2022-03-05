@@ -60,10 +60,17 @@ class BookServiceTest {
     void addNewBook() throws Exception {
         // given
         Book book = createBookForTest();
+        BookAddRequest request = BookAddRequest.builder()
+                .title("title")
+                .author("author")
+                .isbn("isbn")
+                .publishDate("2020-10-10")
+                .category(BookCategory.ESSAY)
+                .build();
         given(bookRepository.save(any())).willReturn(book);
 
         // when
-        Long result = bookService.addNewBook(new BookAddRequest());
+        Long result = bookService.addNewBook(request);
 
         // then
         assertThat(result).isEqualTo(1L);
@@ -170,7 +177,7 @@ class BookServiceTest {
         bookUpdateRequest.setCategory(BookCategory.ECONOMY);
         bookUpdateRequest.setContent("");
         bookUpdateRequest.setIsbn("isbn-123");
-        bookUpdateRequest.setPublicationDate(LocalDate.now());
+        bookUpdateRequest.setPublishDate("2022-01-19");
         bookUpdateRequest.setCover(null);
 
         final Book book = createBookForTest();

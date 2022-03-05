@@ -29,10 +29,10 @@ public class BookRestController {
     @GetMapping
     public ResponseEntity<?> searchBook(
             @RequestParam(value = "keyword", required = false) String keyword,
-            @RequestParam(value = "category", required = false) String category) {
+            @RequestParam(value = "category", required = false) BookCategory category) {
         BookSearchFilter searchFilter = BookSearchFilter.builder()
                 .keyword(keyword)
-                .category(category != null ? BookCategory.getBookCategory(category) : null)
+                .category(category != null ? category : null)
                 .build();
         final List<BookResponse> bookListResponse = bookService.searchBookByFilter(searchFilter);
         return ResponseEntity.ok(bookListResponse);

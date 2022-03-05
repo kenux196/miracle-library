@@ -78,7 +78,7 @@ class BookRestControllerTest {
                 .author("author")
                 .isbn("isbn")
                 .category(BookCategory.ESSAY)
-                .publishDate(LocalDate.now())
+                .publishDate("2022-1-19")
                 .build();
         given(bookService.addNewBook(any())).willReturn(1L);
 
@@ -164,7 +164,7 @@ class BookRestControllerTest {
         // when
         final ResultActions resultActions = mockMvc.perform(
                 get("/api/books")
-                        .param("category", "essay"));
+                        .param("category", String.valueOf(BookCategory.ESSAY)));
 
         // then
         resultActions.andExpect(status().isOk())
@@ -191,7 +191,7 @@ class BookRestControllerTest {
         final ResultActions resultActions = mockMvc.perform(
                 get("/api/books")
                         .param("keyword", "title")
-                        .param("category", "essay"));
+                        .param("category", String.valueOf(BookCategory.ESSAY)));
 
         // then
         resultActions.andExpect(status().isOk())
