@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.kenux.miraclelibrary.domain.book.domain.Book;
 import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -15,8 +16,8 @@ public class BookUpdateRequest {
     private String author;
     private String isbn;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-    private LocalDate publicationDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private String publishDate;
     private BookCategory category;
     private String content;
     private String cover;
@@ -27,7 +28,7 @@ public class BookUpdateRequest {
                 .title(title)
                 .author(author)
                 .isbn(isbn)
-                .publishDate(publicationDate)
+                .publishDate(LocalDate.parse(publishDate))
                 .category(category)
                 .content(content)
                 .cover(cover)

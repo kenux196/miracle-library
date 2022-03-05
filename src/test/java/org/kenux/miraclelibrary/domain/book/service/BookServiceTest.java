@@ -156,7 +156,7 @@ class BookServiceTest {
         assertThat(response.getTitle()).isEqualTo(book.getTitle());
         assertThat(response.getAuthor()).isEqualTo(book.getAuthor());
         assertThat(response.getIsbn()).isEqualTo(book.getIsbn());
-        assertThat(response.getPublicationDate()).isEqualTo("2022-01-01");
+        assertThat(response.getPublishDate()).isEqualTo("2022-01-01");
     }
 
     @Test

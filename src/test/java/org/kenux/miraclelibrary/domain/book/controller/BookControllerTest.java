@@ -113,7 +113,7 @@ class BookControllerTest {
                 .author("작가")
                 .category(BookCategory.ESSAY)
                 .isbn("isbn-1234")
-                .publicationDate(LocalDate.now())
+                .publishDate(LocalDate.now())
                 .build();
 
         given(bookService.getBookDetail(any())).willReturn(bookDetailResponse);
@@ -138,7 +138,7 @@ class BookControllerTest {
                 .author("작가")
                 .category(BookCategory.ESSAY)
                 .isbn("isbn-1234")
-                .publicationDate(LocalDate.now())
+                .publishDate(LocalDate.now())
                 .build();
         given(bookService.getBookDetail(any())).willReturn(bookDetailResponse);
         given(bookService.updateBook(any())).willReturn(bookId);
