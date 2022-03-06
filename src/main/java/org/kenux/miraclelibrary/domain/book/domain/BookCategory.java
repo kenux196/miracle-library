@@ -18,13 +18,4 @@ public enum BookCategory {
     BookCategory(String description) {
         this.description = description;
     }
-
-    public static BookCategory getBookCategory(String category) {
-        for (BookCategory bookCategory : BookCategory.values()) {
-            if (bookCategory.getDescription().equals(category)) {
-                return bookCategory;
-            }
-        }
-        throw new CustomException(PARAMETER_WRONG);
-    }
 }
