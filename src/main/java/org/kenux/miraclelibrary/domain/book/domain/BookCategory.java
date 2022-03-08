@@ -1,9 +1,6 @@
 package org.kenux.miraclelibrary.domain.book.domain;
 
 import lombok.Getter;
-import org.kenux.miraclelibrary.global.exception.CustomException;
-
-import static org.kenux.miraclelibrary.global.exception.ErrorCode.PARAMETER_WRONG;
 
 @Getter
 public enum BookCategory {
