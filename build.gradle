@@ -23,7 +23,6 @@ configurations {
 
 repositories {
 	mavenCentral()
-//	gradlePluginPortal()
 }
 
 jacoco {
