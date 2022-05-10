@@ -15,13 +15,28 @@ public class BoardTestController {
 
     @GetMapping
     public String indexPage(Model model) {
+        return "dashboard";
+    }
+
+    @GetMapping("/utilities-color")
+    public String utilitiesColor() {
+        return "utilities-color";
+    }
+
+    @GetMapping("/dashboard")
+    public String dashboard() {
+        return "dashboard";
+    }
+
+    @GetMapping("/board")
+    public String books(Model model) {
         List<Board> boards = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             int number = i + 1;
-            Board board = new Board(number, "테스트 중..." + number , "윤상규");
+            Board board = new Board(number, "테스트 중..." + number, "윤상규");
             boards.add(board);
         }
         model.addAttribute("boardList", boards);
-        return "index";
+        return "board";
     }
 }
