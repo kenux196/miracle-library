@@ -61,10 +61,10 @@ class BookServiceTest {
         given(bookRepository.findBookByFilter(any())).willReturn(Collections.singletonList(book));
 
         // when
-        List<Book> books = bookService.searchBookByFilter(bookSearchFilter);
+        List<BookResponse> bookResponses = bookService.searchBookByFilter(bookSearchFilter);
 
         // then
-        assertThat(books).isNotEmpty();
+        assertThat(bookResponses).isNotEmpty();
 
         // verify
         verify(bookRepository).findBookByFilter(any());
@@ -88,10 +88,10 @@ class BookServiceTest {
         given(bookRepository.findBookByFilter(any())).willReturn(foundBook);
 
         // when
-        List<Book> books = bookService.searchBookByFilter(BookSearchFilter.builder().build());
+        List<BookResponse> bookResponses = bookService.searchBookByFilter(BookSearchFilter.builder().build());
 
         // then
-        assertThat(books).isEmpty();
+        assertThat(bookResponses).isEmpty();
     }
 
     @Test
