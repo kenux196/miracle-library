@@ -112,11 +112,11 @@ jacocoTestCoverageVerification {
 			element = 'CLASS'
 			// includes = []
 
-			limit {
-				counter = 'LINE'
-				value = 'COVEREDRATIO'
-				minimum = 0.80
-			}
+			//limit {
+			//	counter = 'LINE'
+			//	value = 'COVEREDRATIO'
+			//	minimum = 0.80
+			//}
 
 			excludes = ["**/config/*"] + Qdomains
 		}
