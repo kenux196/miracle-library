@@ -37,7 +37,7 @@ public class BookService {
                     .author("김작가")
                     .category(BookCategory.ESSAY)
                     .isbn("isbn-" + i)
-                    .publishDate(LocalDate.of(2021, 12, i + 1))
+                    .publishDate(LocalDate.of(2022, 5, i + 1))
                     .build();
             newBook.changeStatus(BookStatus.RENTABLE);
             bookRepository.save(newBook);
