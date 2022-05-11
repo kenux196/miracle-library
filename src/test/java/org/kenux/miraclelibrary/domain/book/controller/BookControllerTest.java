@@ -60,7 +60,7 @@ class BookControllerTest {
 
         // then
         resultActions.andExpect(status().isOk())
-                .andExpect(view().name("/views/books/books"))
+                .andExpect(view().name("views/books/books"))
                 .andDo(print());
     }
 
@@ -72,7 +72,7 @@ class BookControllerTest {
 
         // then
         resultActions.andExpect(status().isOk())
-                .andExpect(view().name("/views/books/book-add-form"));
+                .andExpect(view().name("views/books/book-add-form"));
     }
 
     @Test
@@ -123,11 +123,11 @@ class BookControllerTest {
 
         // then
         resultActions.andExpect(status().isOk())
-                .andExpect(view().name("/views/books/book"));
+                .andExpect(view().name("views/books/book"));
     }
 
     @Test
-    @DisplayName("GET /books/{id}/edit 요청은 /views/books/edit-book-form 으로 이동")
+    @DisplayName("GET /books/{id}/edit 요청은 views/books/edit-book-form 으로 이동")
     void test_edit_book_form() throws Exception {
         // given
         final long bookId = 1L;
@@ -148,7 +148,7 @@ class BookControllerTest {
 
         // then
         resultActions.andExpect(status().isOk())
-                .andExpect(view().name("/views/books/book-edit-form"));
+                .andExpect(view().name("views/books/book-edit-form"));
     }
 
 

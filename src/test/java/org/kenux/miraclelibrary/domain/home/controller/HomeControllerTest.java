@@ -52,7 +52,7 @@ class HomeControllerTest {
         // then
         resultActions.andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(view().name("/views/home/main"))
+                .andExpect(view().name("views/home/main"))
                 .andExpect(model().size(2));
     }
 }
