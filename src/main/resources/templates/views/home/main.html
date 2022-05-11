@@ -2,48 +2,52 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/layout}">
+      layout:decorate="layouts/layout">
 
-<div layout:fragment="content">
-  <div class="text-center">
-    <h1>신간 서적</h1>
-    <table class="table">
-      <thead>
-      <tr>
-        <th>번호</th>
-        <th>제목</th>
-        <th>작가</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr th:each="newBook : ${newBooks}">
-        <td><span th:text="${newBook.bookId}"></span></td>
-        <td><span th:text="${newBook.title}"></span></td>
-        <td><span th:text="${newBook.author}"></span></td>
-      </tr>
-      </tbody>
-    </table>
+<th:block layout:fragment="content">
+
+  <!-- Begin Page Content -->
+  <div class="container-fluid">
+    <div class="text-center">
+      <h1>신간 서적</h1>
+      <table class="table">
+        <thead>
+        <tr>
+          <th>번호</th>
+          <th>제목</th>
+          <th>작가</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="newBook : ${newBooks}">
+          <td><span th:text="${newBook.bookId}"></span></td>
+          <td><span th:text="${newBook.title}"></span></td>
+          <td><span th:text="${newBook.author}"></span></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="text-center">
+      <h1>공지 사항</h1>
+      <table class="table">
+        <thead>
+        <tr>
+          <th>번호</th>
+          <th>제목</th>
+          <th>작성자</th>
+          <th>날짜</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="notice : ${notices}">
+          <td><span th:text="${notice.id}"></span></td>
+          <td><span th:text="${notice.title}"></span></td>
+          <td><span th:text="${notice.createdBy}"></span></td>
+          <td><span th:text="${#temporals.format(notice.createdTime, 'yyyy-MM-dd HH:mm:ss')}"></span></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
-  <div class="text-center">
-    <h1>공지 사항</h1>
-    <table class="table">
-      <thead>
-      <tr>
-        <th>번호</th>
-        <th>제목</th>
-        <th>작성자</th>
-        <th>날짜</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr th:each="notice : ${notices}">
-        <td><span th:text="${notice.id}"></span></td>
-        <td><span th:text="${notice.title}"></span></td>
-        <td><span th:text="${notice.createdBy}"></span></td>
-        <td><span th:text="${#temporals.format(notice.createdTime, 'yyyy-MM-dd HH:mm:ss')}"></span></td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+</th:block>
 </html>
