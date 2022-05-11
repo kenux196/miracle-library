@@ -23,7 +23,7 @@ public class LibrarianJoinRequest {
     @NotBlank
     private String password;
 
-    LibrarianJoinRequest(String name, String email, String phone, String password) {
+    public LibrarianJoinRequest(String name, String email, String phone, String password) {
         this.name = name;
         this.email = email;
         this.phone = phone;

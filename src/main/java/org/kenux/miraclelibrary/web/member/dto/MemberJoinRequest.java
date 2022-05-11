@@ -22,7 +22,7 @@ public class MemberJoinRequest {
     @NotBlank
     private String password;
 
-    MemberJoinRequest(String name, String email, String phone, String password) {
+    public MemberJoinRequest(String name, String email, String phone, String password) {
         this.name = name;
         this.email = email;
         this.phone = phone;
