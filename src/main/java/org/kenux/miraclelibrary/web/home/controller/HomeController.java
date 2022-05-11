@@ -1,8 +1,8 @@
 package org.kenux.miraclelibrary.web.home.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.kenux.miraclelibrary.web.book.controller.dto.response.NewBookResponse;
 import org.kenux.miraclelibrary.domain.book.service.BookService;
+import org.kenux.miraclelibrary.web.book.dto.response.NewBookResponse;
 import org.kenux.miraclelibrary.web.notice.response.NoticeResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

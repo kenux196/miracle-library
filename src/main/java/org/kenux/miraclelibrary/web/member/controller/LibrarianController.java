@@ -1,8 +1,8 @@
 package org.kenux.miraclelibrary.web.member.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.kenux.miraclelibrary.web.member.dto.LibrarianJoinRequest;
 import org.kenux.miraclelibrary.domain.member.service.LibrarianJoinService;
+import org.kenux.miraclelibrary.web.member.dto.request.LibrarianJoinRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

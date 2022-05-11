@@ -2,9 +2,9 @@ package org.kenux.miraclelibrary.web.member.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.kenux.miraclelibrary.domain.member.domain.Member;
-import org.kenux.miraclelibrary.web.member.dto.LoginRequest;
-import org.kenux.miraclelibrary.web.member.dto.LoginResponse;
 import org.kenux.miraclelibrary.domain.member.service.LoginService;
+import org.kenux.miraclelibrary.web.member.dto.request.LoginRequest;
+import org.kenux.miraclelibrary.web.member.dto.response.LoginResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

@@ -2,12 +2,12 @@ package org.kenux.miraclelibrary.web.book.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.kenux.miraclelibrary.web.book.controller.dto.request.BookAddRequest;
-import org.kenux.miraclelibrary.web.book.controller.dto.request.BookUpdateRequest;
-import org.kenux.miraclelibrary.web.book.controller.dto.response.BookDetailResponse;
-import org.kenux.miraclelibrary.web.book.controller.dto.response.BookResponse;
 import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
 import org.kenux.miraclelibrary.domain.book.service.BookService;
+import org.kenux.miraclelibrary.web.book.dto.request.BookAddRequest;
+import org.kenux.miraclelibrary.web.book.dto.request.BookUpdateRequest;
+import org.kenux.miraclelibrary.web.book.dto.response.BookDetailResponse;
+import org.kenux.miraclelibrary.web.book.dto.response.BookResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;

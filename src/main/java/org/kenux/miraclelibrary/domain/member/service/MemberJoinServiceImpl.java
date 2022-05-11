@@ -2,9 +2,9 @@ package org.kenux.miraclelibrary.domain.member.service;
 
 import lombok.RequiredArgsConstructor;
 import org.kenux.miraclelibrary.domain.member.domain.Member;
-import org.kenux.miraclelibrary.web.member.dto.MemberJoinRequest;
 import org.kenux.miraclelibrary.domain.member.repository.MemberRepository;
 import org.kenux.miraclelibrary.global.exception.CustomException;
+import org.kenux.miraclelibrary.web.member.dto.request.MemberJoinRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

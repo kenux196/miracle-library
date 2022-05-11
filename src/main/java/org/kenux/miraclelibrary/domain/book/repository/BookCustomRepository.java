@@ -1,7 +1,7 @@
 package org.kenux.miraclelibrary.domain.book.repository;
 
 import org.kenux.miraclelibrary.domain.book.domain.Book;
-import org.kenux.miraclelibrary.web.book.controller.dto.request.BookSearchFilter;
+import org.kenux.miraclelibrary.web.book.dto.request.BookSearchFilter;
 
 import java.time.LocalDate;
 import java.util.List;
