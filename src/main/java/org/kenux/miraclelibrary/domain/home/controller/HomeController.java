@@ -37,7 +37,7 @@ public class HomeController {
 
         List<NewBookResponse> newBooks = bookService.getNewBooks();
         model.addAttribute("newBooks", newBooks);
-        return "/views/home/main";
+        return "views/home/main";
     }
 
     // TODO : member domain 으로 이동   - sky 2022/03/01
