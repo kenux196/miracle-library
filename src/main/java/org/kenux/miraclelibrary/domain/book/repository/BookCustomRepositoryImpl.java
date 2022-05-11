@@ -5,7 +5,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.kenux.miraclelibrary.domain.book.domain.Book;
 import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
-import org.kenux.miraclelibrary.domain.book.controller.request.BookSearchFilter;
+import org.kenux.miraclelibrary.web.book.controller.dto.request.BookSearchFilter;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;

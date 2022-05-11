@@ -4,7 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kenux.miraclelibrary.domain.member.domain.Member;
-import org.kenux.miraclelibrary.domain.member.dto.LibrarianJoinRequest;
+import org.kenux.miraclelibrary.web.member.dto.LibrarianJoinRequest;
 import org.kenux.miraclelibrary.domain.member.dto.LibrarianJoinRequestBuilder;
 import org.kenux.miraclelibrary.domain.member.repository.MemberRepository;
 import org.kenux.miraclelibrary.global.exception.CustomException;

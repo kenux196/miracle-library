@@ -3,11 +3,9 @@ package org.kenux.miraclelibrary.domain.book.dto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.kenux.miraclelibrary.domain.book.controller.request.BookAddRequest;
+import org.kenux.miraclelibrary.web.book.controller.dto.request.BookAddRequest;
 import org.kenux.miraclelibrary.domain.book.domain.Book;
 import org.kenux.miraclelibrary.domain.book.domain.BookStatus;
-
-import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

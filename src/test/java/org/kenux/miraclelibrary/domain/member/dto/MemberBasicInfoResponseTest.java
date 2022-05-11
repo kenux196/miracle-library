@@ -2,6 +2,7 @@ package org.kenux.miraclelibrary.domain.member.dto;
 
 import org.junit.jupiter.api.Test;
 import org.kenux.miraclelibrary.domain.member.domain.Member;
+import org.kenux.miraclelibrary.web.member.dto.MemberBasicInfoResponse;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;

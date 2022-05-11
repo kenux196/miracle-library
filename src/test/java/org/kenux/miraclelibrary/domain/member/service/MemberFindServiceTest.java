@@ -5,7 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kenux.miraclelibrary.domain.member.domain.Member;
-import org.kenux.miraclelibrary.domain.member.dto.MemberBasicInfoResponse;
+import org.kenux.miraclelibrary.web.member.dto.MemberBasicInfoResponse;
 import org.kenux.miraclelibrary.domain.member.repository.MemberRepository;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;

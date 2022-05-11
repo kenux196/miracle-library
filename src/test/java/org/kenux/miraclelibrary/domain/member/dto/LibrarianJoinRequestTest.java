@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.kenux.miraclelibrary.domain.member.domain.Member;
 import org.kenux.miraclelibrary.domain.member.domain.MemberRole;
 import org.kenux.miraclelibrary.domain.member.domain.MemberStatus;
+import org.kenux.miraclelibrary.web.member.dto.LibrarianJoinRequest;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;

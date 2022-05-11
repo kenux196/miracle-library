@@ -2,7 +2,7 @@ package org.kenux.miraclelibrary.domain.member.service;
 
 import lombok.RequiredArgsConstructor;
 import org.kenux.miraclelibrary.domain.member.domain.Member;
-import org.kenux.miraclelibrary.domain.member.dto.LoginRequest;
+import org.kenux.miraclelibrary.web.member.dto.LoginRequest;
 import org.kenux.miraclelibrary.domain.member.repository.MemberRepository;
 import org.kenux.miraclelibrary.global.exception.CustomException;
 import org.kenux.miraclelibrary.global.exception.ErrorCode;

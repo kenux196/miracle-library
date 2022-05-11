@@ -3,6 +3,7 @@ package org.kenux.miraclelibrary.domain.member.dto;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.kenux.miraclelibrary.web.member.dto.LoginRequest;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;

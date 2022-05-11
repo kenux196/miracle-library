@@ -3,9 +3,9 @@ package org.kenux.miraclelibrary.domain.home.controller;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.kenux.miraclelibrary.domain.book.controller.response.BookResponse;
-import org.kenux.miraclelibrary.domain.book.controller.response.NewBookResponse;
+import org.kenux.miraclelibrary.web.book.controller.dto.response.NewBookResponse;
 import org.kenux.miraclelibrary.domain.book.service.BookService;
+import org.kenux.miraclelibrary.web.home.controller.HomeController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -15,7 +15,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.BDDMockito.given;

@@ -1,7 +1,7 @@
 package org.kenux.miraclelibrary.domain.member.repository;
 
 import org.kenux.miraclelibrary.domain.member.domain.Member;
-import org.kenux.miraclelibrary.domain.member.dto.MemberFindFilter;
+import org.kenux.miraclelibrary.web.member.dto.MemberFindFilter;
 
 import java.util.List;
 

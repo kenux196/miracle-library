@@ -3,10 +3,10 @@ package org.kenux.miraclelibrary.domain.book.controller;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.kenux.miraclelibrary.domain.book.controller.request.BookAddRequest;
-import org.kenux.miraclelibrary.domain.book.controller.response.BookDetailResponse;
-import org.kenux.miraclelibrary.domain.book.controller.response.BookResponse;
-import org.kenux.miraclelibrary.domain.book.controller.response.NewBookResponse;
+import org.kenux.miraclelibrary.web.book.controller.BookController;
+import org.kenux.miraclelibrary.web.book.controller.dto.request.BookAddRequest;
+import org.kenux.miraclelibrary.web.book.controller.dto.response.BookDetailResponse;
+import org.kenux.miraclelibrary.web.book.controller.dto.response.BookResponse;
 import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
 import org.kenux.miraclelibrary.domain.book.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.time.LocalDate;
 import java.util.Collections;
 
 import static org.mockito.ArgumentMatchers.any;

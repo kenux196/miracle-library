@@ -2,7 +2,7 @@ package org.kenux.miraclelibrary.domain.member.service;
 
 import lombok.RequiredArgsConstructor;
 import org.kenux.miraclelibrary.domain.member.domain.Member;
-import org.kenux.miraclelibrary.domain.member.dto.MemberBasicInfoResponse;
+import org.kenux.miraclelibrary.web.member.dto.MemberBasicInfoResponse;
 import org.kenux.miraclelibrary.domain.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

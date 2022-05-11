@@ -5,7 +5,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.kenux.miraclelibrary.domain.member.domain.Member;
 import org.kenux.miraclelibrary.domain.member.domain.MemberRole;
-import org.kenux.miraclelibrary.domain.member.dto.MemberFindFilter;
+import org.kenux.miraclelibrary.web.member.dto.MemberFindFilter;
 
 import java.util.List;
 
