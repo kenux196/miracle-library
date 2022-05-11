@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.kenux.miraclelibrary.global.entity.BaseTimeEntity;
+import org.kenux.miraclelibrary.domain.base.BaseTimeEntity;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

@@ -26,7 +26,7 @@ class BookTest {
         assertThat(book.getTitle()).isEqualTo("제목");
         assertThat(book.getAuthor()).isEqualTo("저자");
         assertThat(book.getIsbn()).isEqualTo("isbn");
-        assertThat(book.getPublicationDate())
+        assertThat(book.getPublishDate())
                 .isEqualTo(LocalDate.of(2022, 1,1));
     }
 
@@ -98,7 +98,7 @@ class BookTest {
         book.changePublicationDate(publicationDate);
 
         // then
-        assertThat(book.getPublicationDate()).isEqualTo(publicationDate);
+        assertThat(book.getPublishDate()).isEqualTo(publicationDate);
     }
 
 
@@ -183,7 +183,7 @@ class BookTest {
                 .title("제목")
                 .author("저자")
                 .isbn("isbn")
-                .publicationDate(LocalDate.of(2022, 1,1))
+                .publishDate(LocalDate.of(2022, 1,1))
                 .category(BookCategory.FICTION)
                 .build();
     }

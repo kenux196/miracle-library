@@ -1,21 +1,28 @@
-package org.kenux.miraclelibrary.domain.book.dto;
+package org.kenux.miraclelibrary.domain.book.controller.response;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.kenux.miraclelibrary.domain.book.domain.Book;
 import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
 import org.kenux.miraclelibrary.domain.book.domain.BookStatus;
+import org.springframework.format.datetime.standard.DateTimeFormatterFactory;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class BookDetailResponse {
     private Long id;
     private String title;
     private String author;
     private String isbn;
-    private LocalDate publicationDate;
+    private String publishDate;
     private BookCategory category;
     private String content;
     private String cover;
@@ -27,7 +34,7 @@ public class BookDetailResponse {
                 .title(book.getTitle())
                 .author(book.getAuthor())
                 .isbn(book.getIsbn())
-                .publicationDate(book.getPublicationDate())
+                .publishDate(book.getPublishDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                 .category(book.getCategory())
                 .content(book.getContent())
                 .cover(book.getCover())

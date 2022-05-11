@@ -1,4 +1,4 @@
-package org.kenux.miraclelibrary.domain.book.dto;
+package org.kenux.miraclelibrary.domain.book.controller.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,20 +10,18 @@ import org.kenux.miraclelibrary.domain.book.domain.BookStatus;
 @Data
 @Builder
 @AllArgsConstructor
-public class BookResponse {
+public class NewBookResponse {
     private Long bookId;
     private String title;
     private String author;
     private BookCategory category;
-    private BookStatus status;
     private String cover;
 
-    public static BookResponse from(Book book) {
-        return BookResponse.builder()
+    public static NewBookResponse from(Book book) {
+        return NewBookResponse.builder()
                 .bookId(book.getId())
                 .title(book.getTitle())
                 .author(book.getAuthor())
-                .status(book.getStatus())
                 .cover(book.getCover())
                 .category(book.getCategory())
                 .build();

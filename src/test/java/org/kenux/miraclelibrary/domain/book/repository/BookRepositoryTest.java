@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.kenux.miraclelibrary.domain.book.domain.Book;
 import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
 import org.kenux.miraclelibrary.domain.book.domain.BookStatus;
-import org.kenux.miraclelibrary.domain.book.dto.BookSearchFilter;
+import org.kenux.miraclelibrary.domain.book.controller.request.BookSearchFilter;
 import org.kenux.miraclelibrary.global.config.QueryDslConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -213,7 +213,7 @@ class BookRepositoryTest {
                 .author("author1")
                 .isbn("123")
                 .status(BookStatus.RENTABLE)
-                .publicationDate(LocalDate.of(2020, 1, 1))
+                .publishDate(LocalDate.of(2020, 1, 1))
                 .build();
         bookRepository.save(book1);
         final Book book2 = Book.builder()
@@ -221,7 +221,7 @@ class BookRepositoryTest {
                 .author("author2")
                 .isbn("123")
                 .status(BookStatus.RENTABLE)
-                .publicationDate(LocalDate.of(2022, 1, 1))
+                .publishDate(LocalDate.of(2022, 1, 1))
                 .build();
         bookRepository.save(book2);
 
@@ -265,7 +265,7 @@ class BookRepositoryTest {
                 .title("title")
                 .author("author")
                 .isbn("isbn")
-                .publicationDate(LocalDate.of(2022, 1,1))
+                .publishDate(LocalDate.of(2022, 1,1))
                 .category(BookCategory.ESSAY)
                 .status(BookStatus.RENTABLE)
                 .build();

@@ -13,10 +13,10 @@ import java.util.List;
 @RequestMapping("/")
 public class BoardTestController {
 
-    @GetMapping
-    public String indexPage(Model model) {
-        return "dashboard";
-    }
+//    @GetMapping
+//    public String indexPage() {
+//        return "dashboard";
+//    }
 
     @GetMapping("/utilities-color")
     public String utilitiesColor() {

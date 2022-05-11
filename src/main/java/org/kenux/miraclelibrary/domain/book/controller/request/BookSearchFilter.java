@@ -1,4 +1,4 @@
-package org.kenux.miraclelibrary.domain.book.dto;
+package org.kenux.miraclelibrary.domain.book.controller.request;
 
 import lombok.Builder;
 import lombok.Data;

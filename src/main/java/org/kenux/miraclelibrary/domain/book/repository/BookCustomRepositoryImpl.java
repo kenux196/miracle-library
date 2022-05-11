@@ -5,7 +5,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.kenux.miraclelibrary.domain.book.domain.Book;
 import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
-import org.kenux.miraclelibrary.domain.book.dto.BookSearchFilter;
+import org.kenux.miraclelibrary.domain.book.controller.request.BookSearchFilter;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -31,7 +31,7 @@ public class BookCustomRepositoryImpl implements BookCustomRepository {
     public List<Book> findNewBookWithinOneMonth(LocalDate time) {
         LocalDate findDate = time.minusMonths(1);
         return jpaQueryFactory.selectFrom(book)
-                .where(book.publicationDate.after(findDate))
+                .where(book.publishDate.after(findDate))
                 .fetch();
     }
 

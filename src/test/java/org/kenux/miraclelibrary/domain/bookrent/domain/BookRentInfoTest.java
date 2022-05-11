@@ -3,6 +3,7 @@ package org.kenux.miraclelibrary.domain.bookrent.domain;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.kenux.miraclelibrary.domain.book.domain.Book;
+import org.kenux.miraclelibrary.domain.book.domain.BookStatus;
 import org.kenux.miraclelibrary.domain.member.domain.Member;
 
 import java.time.LocalDate;
@@ -75,6 +76,25 @@ class BookRentInfoTest {
         assertThat(bookRentInfo.isOverDue(rentalStartDate.plusWeeks(2).toLocalDate())).isFalse();
         assertThat(bookRentInfo.isOverDue(rentalStartDate.plusWeeks(3).toLocalDate())).isTrue();
     }
+
+    @Test
+    @DisplayName("대출된 도서는 상태가 변경된다.")
+    void test_() throws Exception {
+        // given
+        Member member = Member.builder()
+                .name("userA")
+                .build();
+        Book book = Book.builder()
+                .title("bookA")
+                .build();
+
+        // when
+        BookRentInfo rentInfo = BookRentInfo.rent(member, book);
+
+        // then
+        assertThat(rentInfo.getBook().getStatus()).isEqualTo(BookStatus.RENTED);
+    }
+
 
     private Book createBook() {
         return Book.builder().build();

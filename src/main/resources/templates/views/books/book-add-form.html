@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+
+<div layout:fragment="content">
+  <div class="container">
+    <div class="py-5 text-center">
+      <h2>도석 등록 폼</h2>
+    </div>
+    <h4 class="mb-3">책 정보 입력</h4>
+    <form action="books.html" th:action th:object="${book}" method="post" id="bookAddForm">
+      <div>
+        <label for="title">책 제목</label>
+        <input type="text" id="title" th:field="*{title}" class="form-control" placeholder="첵 제목을 입력하세요"/>
+      </div>
+      <div>
+        <label for="author">작가</label>
+        <input type="text" id="author" th:field="*{author}" class="form-control" placeholder="작가를 입력하세요"/>
+      </div>
+      <div>
+        <label for="isbn">ISBN</label>
+        <input type="text" id="isbn" th:field="*{isbn}" class="form-control" placeholder="ISBN을 입력하세요"/>
+      </div>
+      <div>
+        <label for="publishDate">출간일</label>
+        <input type="text" id="publishDate" th:field="*{publishDate}" class="form-control" placeholder="출간일을 입력하세요 ex)2020-12-25"/>
+      </div>
+      <div>
+        <label for="categorySelector">카테고리</label>
+        <select id="categorySelector" th:field="*{category}" class="form-select">
+          <option value="">== 카테고리를 선택하세요 ==</option>
+          <option th:each="category : ${bookCategories}"
+                  th:value="${category.name()}"
+                  th:text="${category.description}">에세이</option>
+        </select>
+      </div>
+      <hr class="my-4">
+      <div class="row">
+        <div class="col">
+          <button type="submit" class="w-100 btn btn-primary btn-lg">등록하기</button>
+        </div>
+        <div class="col">
+          <button type="button" class="w-100 btn btn-secondary btn-lg"
+                  th:onclick="|location.href='@{/books}'|"
+                  onclick="location.href='books.html'">취소</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+</html>

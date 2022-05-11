@@ -2,7 +2,7 @@ package org.kenux.miraclelibrary.domain.book.domain;
 
 
 import lombok.*;
-import org.kenux.miraclelibrary.global.entity.BaseTimeEntity;
+import org.kenux.miraclelibrary.domain.base.BaseTimeEntity;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -32,7 +32,7 @@ public class Book extends BaseTimeEntity {
     @Column(name = "isbn", nullable = false)
     private String isbn;
 
-    private LocalDate publicationDate;
+    private LocalDate publishDate;
 
 //    @Column(name = "category", nullable = false)
 //    @Enumerated(EnumType.STRING)
@@ -60,7 +60,7 @@ public class Book extends BaseTimeEntity {
     }
 
     public void changePublicationDate(LocalDate publicationDate) {
-        this.publicationDate = publicationDate;
+        this.publishDate = publicationDate;
     }
 
     public void changeStatus(BookStatus status) {
@@ -81,6 +81,31 @@ public class Book extends BaseTimeEntity {
 
     public boolean isHeldBook() {
         return status.equals(RENTABLE) || status.equals(RENTED);
+    }
+
+    public void update(Book updateBook) {
+
+        if (updateBook.getTitle() != null) {
+            changeTitle(updateBook.getTitle());
+        }
+        if (updateBook.getAuthor() != null) {
+            changeAuthor(updateBook.getAuthor());
+        }
+        if (updateBook.getIsbn() != null) {
+            changeIsbn(updateBook.getIsbn());
+        }
+        if (updateBook.getCategory() != null) {
+            changeCategory(updateBook.getCategory());
+        }
+        if (updateBook.getContent() != null) {
+            changeContent(updateBook.getContent());
+        }
+        if (updateBook.getCover() != null) {
+            changeCover(updateBook.getCover());
+        }
+        if (updateBook.getPublishDate() != null) {
+            changePublicationDate(updateBook.getPublishDate());
+        }
     }
 
     @Override
@@ -104,4 +129,5 @@ public class Book extends BaseTimeEntity {
         result = 31 * result + isbn.hashCode();
         return result;
     }
+
 }
