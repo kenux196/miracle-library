@@ -85,7 +85,7 @@ class BookRentInfoTest {
                 .name("userA")
                 .build();
         Book book = Book.builder()
-                .title("bookA")
+                .status(BookStatus.RENTABLE)
                 .build();
 
         // when

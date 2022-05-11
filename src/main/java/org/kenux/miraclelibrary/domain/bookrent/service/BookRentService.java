@@ -4,10 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.kenux.miraclelibrary.domain.book.domain.Book;
 import org.kenux.miraclelibrary.domain.book.domain.BookStatus;
 import org.kenux.miraclelibrary.domain.book.repository.BookRepository;
-import org.kenux.miraclelibrary.domain.bookrent.repository.BookRentInfoRepository;
+import org.kenux.miraclelibrary.domain.bookrent.domain.BookRentInfo;
 import org.kenux.miraclelibrary.domain.bookrent.dto.BookRentRequest;
 import org.kenux.miraclelibrary.domain.bookrent.dto.BookReturnRequest;
-import org.kenux.miraclelibrary.domain.bookrent.domain.BookRentInfo;
+import org.kenux.miraclelibrary.domain.bookrent.repository.BookRentInfoRepository;
 import org.kenux.miraclelibrary.domain.member.domain.Member;
 import org.kenux.miraclelibrary.domain.member.repository.MemberRepository;
 import org.kenux.miraclelibrary.global.exception.CustomException;
@@ -35,7 +35,7 @@ public class BookRentService {
         List<BookRentInfo> bookRentInfos = new ArrayList<>();
         bookRentRequest.getBookIds().forEach(id -> {
             Book book = getBookNotRented(id);
-            book.changeStatus(BookStatus.RENTED);
+            book.changeBookStatus(BookStatus.RENTED);
             bookRepository.save(book);
 
             BookRentInfo bookRentInfo = BookRentInfo.builder()
@@ -74,7 +74,7 @@ public class BookRentService {
 
         for (BookRentInfo bookRentInfo : bookRentInfoList) {
             bookRentInfo.setReturnDate(LocalDateTime.now());
-            bookRentInfo.getBook().changeStatus(BookStatus.RENTABLE);
+            bookRentInfo.getBook().changeBookStatus(BookStatus.RENTABLE);
             bookRentInfoRepository.save(bookRentInfo);
         }
     }

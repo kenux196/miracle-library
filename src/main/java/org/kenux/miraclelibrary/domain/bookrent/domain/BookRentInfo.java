@@ -53,7 +53,7 @@ public class BookRentInfo {
     }
 
     public static BookRentInfo rent(Member member, Book book) {
-        book.changeStatus(BookStatus.RENTED);
+        book.changeBookStatus(BookStatus.RENTED);
         return BookRentInfo.builder()
                 .member(member)
                 .book(book)

@@ -2,7 +2,6 @@ package org.kenux.miraclelibrary.domain.book.domain;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDate;
 
@@ -11,17 +10,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 class BookTest {
 
     @Test
-    @DisplayName("생성")
+    @DisplayName("BookInfo 생성")
     void create() {
-        Book book = createBookForTest();
-        assertThat(book).isNotNull()
-                        .isInstanceOf(Book.class);
+
+        BookInfo bookInfo = createBook();
+        assertThat(bookInfo).isNotNull()
+                        .isInstanceOf(BookInfo.class);
     }
 
     @Test
-    @DisplayName("책 필수 정보: 제목, 작가, ISBN, 출간일을 꼭 가져야 한다.")
+    @DisplayName("책 필수 정보: 제목, 작가, ISBN, 출판일은 필수")
     void bookBasicInfo() throws Exception {
-        Book book = createBookForTest();
+        BookInfo book = createBook();
 
         assertThat(book.getTitle()).isEqualTo("제목");
         assertThat(book.getAuthor()).isEqualTo("저자");
@@ -31,160 +31,70 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("Equals And HashCode 테스트")
-    void equalAndHashCode() throws Exception {
-        // given
-        Book book1 = createBookForTest();
-        ReflectionTestUtils.setField(book1, "id", 1L);
-        Book book2 = createBookForTest();
-        ReflectionTestUtils.setField(book2, "id", 1L);
+    @DisplayName("책 정보 변경")
+    void updateBookInfo() {
+        BookInfo bookInfo = createBook();
 
-        // when
-        boolean equalsResult = book1.equals(book2);
-        boolean hashCodeResult = (book1.hashCode() == book2.hashCode());
+        BookInfo newInfo = BookInfo.builder()
+                .title("new title")
+                .build();
 
-        // then
-        assertThat(equalsResult).isTrue();
-        assertThat(hashCodeResult).isTrue();
-    }
+        bookInfo.update(newInfo);
 
-    @Test
-    @DisplayName("책 제목 변경")
-    void changeTitle() throws Exception {
-        // given
-        Book book = createBookForTest();
-
-        // when
-        book.changeTitle("책제목수정");
-
-        // then
-        assertThat(book.getTitle()).isEqualTo("책제목수정");
-    }
-
-    @Test
-    @DisplayName("책 작가 변경")
-    void changeAuthor() throws Exception {
-        // given
-        Book book = createBookForTest();
-
-        // when
-        book.changeAuthor("김작가");
-
-        // then
-        assertThat(book.getAuthor()).isEqualTo("김작가");
-    }
-
-    @Test
-    @DisplayName("책 isbn 변경")
-    void changeIsbn() throws Exception {
-        // given
-        Book book = createBookForTest();
-
-        // when
-        book.changeIsbn("isbn1234");
-
-        // then
-        assertThat(book.getIsbn()).isEqualTo("isbn1234");
-    }
-
-    @Test
-    @DisplayName("책 출간일 변경")
-    void changePublicationDate() throws Exception {
-        // given
-        Book book = createBookForTest();
-        LocalDate publicationDate = LocalDate.of(2021, 12, 11);
-
-        // when
-        book.changePublicationDate(publicationDate);
-
-        // then
-        assertThat(book.getPublishDate()).isEqualTo(publicationDate);
+        assertThat(bookInfo.getTitle()).isEqualTo(newInfo.getTitle());
     }
 
 
     @Test
     @DisplayName("책 필수정보 추가: 카테고리")
     void hasCategory() {
-        Book book = createBookForTest();
-        assertThat(book.getCategory()).isEqualTo(BookCategory.FICTION);
-    }
-
-    @Test
-    @DisplayName("카테고리 변경")
-    void changeBookCategory() {
-        Book book = createBookForTest();
-        book.changeCategory(BookCategory.ESSAY);
-        assertThat(book.getCategory()).isEqualTo(BookCategory.ESSAY);
+        BookInfo bookInfo = createBook();
+        assertThat(bookInfo.getCategory()).isEqualTo(BookCategory.FICTION);
     }
 
     @Test
     @DisplayName("상태 변경 : 보유, 대여중, 유실, 파기")
     void changeStatus() {
-        Book book = createBookForTest();
-        book.changeStatus(BookStatus.RENTABLE);
+        Book book = new Book();
+        book.changeBookStatus(BookStatus.RENTABLE);
         assertThat(book.getStatus()).isEqualTo(BookStatus.RENTABLE);
 
-        book.changeStatus(BookStatus.RENTED);
+        book.changeBookStatus(BookStatus.RENTED);
         assertThat(book.getStatus()).isEqualTo(BookStatus.RENTED);
 
-        book.changeStatus(BookStatus.REMOVED);
+        book.changeBookStatus(BookStatus.REMOVED);
         assertThat(book.getStatus()).isEqualTo(BookStatus.REMOVED);
 
-        book.changeStatus(BookStatus.LOST);
+        book.changeBookStatus(BookStatus.LOST);
         assertThat(book.getStatus()).isEqualTo(BookStatus.LOST);
-    }
-
-    @Test
-    @DisplayName("책소개 정보 수정")
-    void changeContent() throws Exception {
-        // given
-        Book book = createBookForTest();
-        String content = "책은 소개글이 있다.";
-
-        // when
-        book.changeContent(content);
-
-        // then
-        assertThat(book.getContent()).isEqualTo(content);
-    }
-
-    @Test
-    @DisplayName("표지 이미지 변경")
-    void changeCover() throws Exception {
-        // given
-        Book book = createBookForTest();
-        String cover = "/cover/book_id";
-
-        // when
-        book.changeCover(cover);
-
-        // then
-        assertThat(book.getCover()).isEqualTo(cover);
     }
 
     @Test
     @DisplayName("보유책인지 확인")
     void heldBook() throws Exception {
         // given
-        Book book1 = createBookForTest();
-        Book book2 = createBookForTest();
+        Book book1 = Book.createBook();
+        Book book2 = Book.createBook();
 
         // when
-        book1.changeStatus(BookStatus.RENTED);
-        book2.changeStatus(BookStatus.REMOVED);
+        book1.changeBookStatus(BookStatus.RENTED);
+        book2.changeBookStatus(BookStatus.REMOVED);
 
         // then
         assertThat(book1.isHeldBook()).isTrue();
         assertThat(book2.isHeldBook()).isFalse();
     }
 
-    private Book createBookForTest() {
-        return Book.builder()
+    private BookInfo createBook() {
+        return BookInfo.builder()
                 .title("제목")
                 .author("저자")
                 .isbn("isbn")
+                .subTitle("부제목")
                 .publishDate(LocalDate.of(2022, 1,1))
                 .category(BookCategory.FICTION)
+                .summary("요약")
+                .cover("표지")
                 .build();
     }
 }

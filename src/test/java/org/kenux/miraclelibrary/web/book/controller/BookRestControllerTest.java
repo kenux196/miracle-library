@@ -4,9 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.kenux.miraclelibrary.domain.book.domain.Book;
 import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
-import org.kenux.miraclelibrary.domain.book.domain.BookStatus;
+import org.kenux.miraclelibrary.domain.book.domain.BookInfo;
 import org.kenux.miraclelibrary.domain.book.service.BookService;
 import org.kenux.miraclelibrary.web.book.api.BookRestController;
 import org.kenux.miraclelibrary.web.book.dto.request.BookAddRequest;
@@ -99,12 +98,12 @@ class BookRestControllerTest {
     @DisplayName("GET /api/books : parameter 없는 경우")
     void searchBook() throws Exception {
         // given
-        Book book = Book.builder()
-                .id(1L)
+        BookInfo book = BookInfo.builder()
+//                .id(1L)
                 .title("title")
                 .author("author")
                 .isbn("isbn")
-                .status(BookStatus.RENTABLE)
+//                .status(BookStatus.RENTABLE)
                 .category(BookCategory.ESSAY)
                 .publishDate(LocalDate.of(2022, 1, 1))
                 .build();
@@ -123,12 +122,12 @@ class BookRestControllerTest {
     @Test
     @DisplayName("GET /api/books?keyword='xxx' : 키워드만 있는 경우")
     void searchBook_키워드만있는경우() throws Exception {
-        Book book = Book.builder()
-                .id(1L)
+        BookInfo book = BookInfo.builder()
+//                .id(1L)
                 .title("title")
                 .author("author")
                 .isbn("isbn")
-                .status(BookStatus.RENTABLE)
+//                .status(BookStatus.RENTABLE)
                 .category(BookCategory.ESSAY)
                 .publishDate(LocalDate.of(2022, 1, 1))
                 .build();
@@ -149,12 +148,12 @@ class BookRestControllerTest {
     @Test
     @DisplayName("GET /api/books?category='xxx' : 카테고리만 있는 경우")
     void searchBook_카테고리만있는경우() throws Exception {
-        Book book = Book.builder()
-                .id(1L)
+        BookInfo book = BookInfo.builder()
+//                .id(1L)
                 .title("title")
                 .author("author")
                 .isbn("isbn")
-                .status(BookStatus.RENTABLE)
+//                .status(BookStatus.RENTABLE)
                 .category(BookCategory.ESSAY)
                 .publishDate(LocalDate.of(2022, 1, 1))
                 .build();
@@ -175,12 +174,12 @@ class BookRestControllerTest {
     @Test
     @DisplayName("GET /api/books?category='xxx' : 키워드,카테고리 모두있는 경우")
     void searchBook_키워드와카테고리모두있는경우() throws Exception {
-        Book book = Book.builder()
-                .id(1L)
+        BookInfo book = BookInfo.builder()
+//                .id(1L)
                 .title("title")
                 .author("author")
                 .isbn("isbn")
-                .status(BookStatus.RENTABLE)
+//                .status(BookStatus.RENTABLE)
                 .category(BookCategory.ESSAY)
                 .publishDate(LocalDate.of(2022, 1, 1))
                 .build();
@@ -203,14 +202,14 @@ class BookRestControllerTest {
     @DisplayName("GET /api/books/detail/xx: 정상이면, 책의 상세정보 반환")
     void getBookDetail() throws Exception {
         // given
-        Book book = Book.builder()
-                .id(1L)
+        BookInfo book = BookInfo.builder()
+//                .id(1L)
                 .title("title")
                 .author("author")
                 .isbn("isbn")
-                .status(BookStatus.RENTABLE)
+//                .status(BookStatus.RENTABLE)
                 .category(BookCategory.ESSAY)
-                .content("책소개내용")
+                .summary("책소개내용")
                 .cover("이미지경로")
                 .publishDate(LocalDate.of(2022, 1, 1))
                 .build();

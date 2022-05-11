@@ -1,8 +1,8 @@
 package org.kenux.miraclelibrary.web.book.dto.request;
 
 import lombok.Data;
-import org.kenux.miraclelibrary.domain.book.domain.Book;
 import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
+import org.kenux.miraclelibrary.domain.book.domain.BookInfo;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -21,15 +21,14 @@ public class BookUpdateRequest {
     private String content;
     private String cover;
 
-    public Book toEntity() {
-        return Book.builder()
-                .id(id)
+    public BookInfo toEntity() {
+        return BookInfo.builder()
                 .title(title)
                 .author(author)
                 .isbn(isbn)
                 .publishDate(LocalDate.parse(publishDate))
                 .category(category)
-                .content(content)
+                .summary(content)
                 .cover(cover)
                 .build();
     }
