@@ -31,13 +31,13 @@ public class BookController {
     public String booksMainPage(Model model) {
         List<BookResponse> allBooks = bookService.getAllBooks();
         model.addAttribute("books", allBooks);
-        return "/views/books/books";
+        return "views/books/books";
     }
 
     @GetMapping("/add")
     public String bookAddForm(Model model) {
         model.addAttribute("book", new BookDetailResponse());
-        return "/views/books/book-add-form";
+        return "views/books/book-add-form";
     }
 
     @PostMapping("/add")
@@ -51,14 +51,14 @@ public class BookController {
     public String getBook(@PathVariable Long id, Model model) {
         final BookDetailResponse book = bookService.getBookDetail(id);
         model.addAttribute("book", book);
-        return "/views/books/book";
+        return "views/books/book";
     }
 
     @GetMapping("/{id}/edit")
     public String getEditBookForm(@PathVariable("id") Long bookId, Model model) {
         final BookDetailResponse book = bookService.getBookDetail(bookId);
         model.addAttribute("book", book);
-        return "/views/books/book-edit-form";
+        return "views/books/book-edit-form";
     }
 
     @PostMapping("/{id}/edit")
