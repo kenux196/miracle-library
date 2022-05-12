@@ -35,6 +35,7 @@ public class Book extends BaseTimeEntity {
             this.bookInfo.getBooks().remove(this);
         }
         this.bookInfo = bookInfo;
+        bookInfo.getBooks().add(this);
     }
 
     public boolean isHeldBook() {
@@ -45,9 +46,10 @@ public class Book extends BaseTimeEntity {
         this.status = status;
     }
 
-    public static Book createBook() {
+    public static Book createBook(BookInfo bookInfo) {
         Book book = new Book();
         book.changeBookStatus(RENTABLE);
+        book.setBookInfo(bookInfo);
         return book;
     }
 }

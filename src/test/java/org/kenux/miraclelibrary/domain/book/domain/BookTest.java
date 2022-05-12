@@ -10,49 +10,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 class BookTest {
 
     @Test
-    @DisplayName("BookInfo 생성")
-    void create() {
-
-        BookInfo bookInfo = createBook();
-        assertThat(bookInfo).isNotNull()
-                        .isInstanceOf(BookInfo.class);
-    }
-
-    @Test
-    @DisplayName("책 필수 정보: 제목, 작가, ISBN, 출판일은 필수")
-    void bookBasicInfo() throws Exception {
-        BookInfo book = createBook();
-
-        assertThat(book.getTitle()).isEqualTo("제목");
-        assertThat(book.getAuthor()).isEqualTo("저자");
-        assertThat(book.getIsbn()).isEqualTo("isbn");
-        assertThat(book.getPublishDate())
-                .isEqualTo(LocalDate.of(2022, 1,1));
-    }
-
-    @Test
-    @DisplayName("책 정보 변경")
-    void updateBookInfo() {
-        BookInfo bookInfo = createBook();
-
-        BookInfo newInfo = BookInfo.builder()
-                .title("new title")
-                .build();
-
-        bookInfo.update(newInfo);
-
-        assertThat(bookInfo.getTitle()).isEqualTo(newInfo.getTitle());
-    }
-
-
-    @Test
-    @DisplayName("책 필수정보 추가: 카테고리")
-    void hasCategory() {
-        BookInfo bookInfo = createBook();
-        assertThat(bookInfo.getCategory()).isEqualTo(BookCategory.FICTION);
-    }
-
-    @Test
     @DisplayName("상태 변경 : 보유, 대여중, 유실, 파기")
     void changeStatus() {
         Book book = new Book();
@@ -73,8 +30,14 @@ class BookTest {
     @DisplayName("보유책인지 확인")
     void heldBook() throws Exception {
         // given
-        Book book1 = Book.createBook();
-        Book book2 = Book.createBook();
+        BookInfo bookInfo = BookInfo.builder()
+                .title("제목")
+                .isbn("isbn")
+                .author("저자")
+                .publishDate(LocalDate.now())
+                .build();
+        Book book1 = Book.createBook(bookInfo);
+        Book book2 = Book.createBook(bookInfo);
 
         // when
         book1.changeBookStatus(BookStatus.RENTED);
@@ -85,16 +48,17 @@ class BookTest {
         assertThat(book2.isHeldBook()).isFalse();
     }
 
-    private BookInfo createBook() {
-        return BookInfo.builder()
+    @Test
+    @DisplayName("Book은 BookInfo 를 가진다")
+    void hasBookInfo() {
+        BookInfo bookInfo = BookInfo.builder()
                 .title("제목")
-                .author("저자")
                 .isbn("isbn")
-                .subTitle("부제목")
-                .publishDate(LocalDate.of(2022, 1,1))
-                .category(BookCategory.FICTION)
-                .summary("요약")
-                .cover("표지")
+                .author("저자")
+                .publishDate(LocalDate.now())
                 .build();
+
+        Book book = Book.createBook(bookInfo);
+        assertThat(book.getBookInfo()).isEqualTo(bookInfo);
     }
 }

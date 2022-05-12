@@ -21,22 +21,22 @@ public class BookInfo extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "isbn")
+    @Column(name = "isbn", nullable = false)
     private String isbn;
 
-    @Column(name = "title")
+    @Column(name = "title", nullable = false)
     private String title;
 
     @Column(name = "sub_title")
     private String subTitle;
 
-    @Column(name = "author")
+    @Column(name = "author", nullable = false)
     private String author;
 
     @Column(name = "cover")
     private String cover;
 
-    @Column(name = "publish_date")
+    @Column(name = "publish_date", nullable = false)
     private LocalDate publishDate;
 
     @Column(name = "summary")
@@ -60,13 +60,6 @@ public class BookInfo extends BaseTimeEntity {
         this.publishDate = publishDate;
         this.summary = summary;
         this.category = category;
-    }
-
-    public void addBook(Book book) {
-        books.add(book);
-        if (book.getBookInfo() != null) {
-            book.setBookInfo(this);
-        }
     }
 
     public void update(BookInfo bookInfo) {
