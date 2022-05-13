@@ -232,14 +232,9 @@ class BookRentServiceTest {
     }
 
     private Book getBook() {
-        return Book.builder()
-                .id(1L)
-//                .title("title")
-//                .author("author")
-//                .isbn("isbn")
-                .status(BookStatus.RENTABLE)
-//                .publishDate(LocalDate.of(2022, 1, 1))
-                .build();
+        Book newBook = Book.createNewBook();
+        ReflectionTestUtils.setField(newBook, "id", 1L);
+        return newBook;
     }
 
 }

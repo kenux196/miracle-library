@@ -1,10 +1,14 @@
-#server:
+server:
 #  port: 8090
-#  servlet:
-#    encoding:
-#      force-response: true
+  servlet:
+    encoding:
+      force-response: true
 spring:
   jpa:
+    hibernate:
+      ddl-auto: create-drop
+#    show-sql: true
+    database-platform: org.hibernate.dialect.H2Dialect
     properties:
       hibernate:
         format_sql: true

@@ -6,9 +6,9 @@ import org.kenux.miraclelibrary.web.book.dto.request.BookSearchFilter;
 import java.time.LocalDate;
 import java.util.List;
 
-public interface BookCustomRepository {
+public interface BookInfoCustomRepository {
 
     List<BookInfo> findBookByFilter(BookSearchFilter bookSearchFilter);
 
-    List<BookInfo> findNewBookWithinOneMonth(LocalDate time);
+    List<BookInfo> findNewBookPublishDateWithinOneMonth(LocalDate time);
 }

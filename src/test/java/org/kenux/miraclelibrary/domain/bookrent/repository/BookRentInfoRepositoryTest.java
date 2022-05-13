@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.kenux.miraclelibrary.domain.book.domain.Book;
-import org.kenux.miraclelibrary.domain.book.domain.BookStatus;
 import org.kenux.miraclelibrary.domain.book.repository.BookRepository;
 import org.kenux.miraclelibrary.domain.bookrent.domain.BookRentInfo;
 import org.kenux.miraclelibrary.domain.member.domain.Member;
@@ -142,13 +141,6 @@ class BookRentInfoRepositoryTest {
     }
 
     private Book getBook() {
-        Book book = Book.builder()
-//                .title("title")
-//                .author("author")
-//                .isbn("isbn")
-                .status(BookStatus.RENTABLE)
-//                .publishDate(LocalDate.of(2022, 1, 1))
-                .build();
-        return bookRepository.save(book);
+        return bookRepository.save(Book.createNewBook());
     }
 }

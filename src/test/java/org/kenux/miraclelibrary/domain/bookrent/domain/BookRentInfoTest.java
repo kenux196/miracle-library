@@ -84,9 +84,7 @@ class BookRentInfoTest {
         Member member = Member.builder()
                 .name("userA")
                 .build();
-        Book book = Book.builder()
-                .status(BookStatus.RENTABLE)
-                .build();
+        Book book = Book.createNewBook();
 
         // when
         BookRentInfo rentInfo = BookRentInfo.rent(member, book);
@@ -97,6 +95,6 @@ class BookRentInfoTest {
 
 
     private Book createBook() {
-        return Book.builder().build();
+        return Book.createNewBook();
     }
 }

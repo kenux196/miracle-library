@@ -1,7 +1,9 @@
 package org.kenux.miraclelibrary.domain.book.domain;
 
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.kenux.miraclelibrary.domain.base.BaseTimeEntity;
 
 import javax.persistence.*;
@@ -13,8 +15,6 @@ import static org.kenux.miraclelibrary.domain.book.domain.BookStatus.RENTED;
 @Entity
 @Table(name = "book")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
 @Getter
 public class Book extends BaseTimeEntity {
 
@@ -46,10 +46,9 @@ public class Book extends BaseTimeEntity {
         this.status = status;
     }
 
-    public static Book createBook(BookInfo bookInfo) {
+    public static Book createNewBook() {
         Book book = new Book();
         book.changeBookStatus(RENTABLE);
-        book.setBookInfo(bookInfo);
         return book;
     }
 }

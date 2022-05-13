@@ -15,7 +15,7 @@ import static org.kenux.miraclelibrary.domain.book.domain.QBookInfo.bookInfo;
 
 @Repository
 @RequiredArgsConstructor
-public class BookCustomRepositoryImpl implements BookCustomRepository {
+public class BookInfoCustomRepositoryImpl implements BookInfoCustomRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
@@ -28,7 +28,7 @@ public class BookCustomRepositoryImpl implements BookCustomRepository {
     }
 
     @Override
-    public List<BookInfo> findNewBookWithinOneMonth(LocalDate time) {
+    public List<BookInfo> findNewBookPublishDateWithinOneMonth(LocalDate time) {
         LocalDate findDate = time.minusMonths(1);
         return jpaQueryFactory.selectFrom(bookInfo)
                 .where(bookInfo.publishDate.after(findDate))
@@ -47,7 +47,6 @@ public class BookCustomRepositoryImpl implements BookCustomRepository {
         if (category == null) {
             return null;
         }
-
         return bookInfo.category.eq(category);
     }
 }

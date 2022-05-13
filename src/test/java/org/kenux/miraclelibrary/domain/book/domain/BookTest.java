@@ -10,11 +10,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 class BookTest {
 
     @Test
+    @DisplayName("신규 Book 생성 시, 기본 상태는 Rentable")
+    void createNewBook() {
+        Book newBook = Book.createNewBook();
+
+        assertThat(newBook.getStatus()).isEqualTo(BookStatus.RENTABLE);
+    }
+
+    @Test
     @DisplayName("상태 변경 : 보유, 대여중, 유실, 파기")
     void changeStatus() {
-        Book book = new Book();
-        book.changeBookStatus(BookStatus.RENTABLE);
-        assertThat(book.getStatus()).isEqualTo(BookStatus.RENTABLE);
+        Book book = Book.createNewBook();
 
         book.changeBookStatus(BookStatus.RENTED);
         assertThat(book.getStatus()).isEqualTo(BookStatus.RENTED);
@@ -30,14 +36,8 @@ class BookTest {
     @DisplayName("보유책인지 확인")
     void heldBook() throws Exception {
         // given
-        BookInfo bookInfo = BookInfo.builder()
-                .title("제목")
-                .isbn("isbn")
-                .author("저자")
-                .publishDate(LocalDate.now())
-                .build();
-        Book book1 = Book.createBook(bookInfo);
-        Book book2 = Book.createBook(bookInfo);
+        Book book1 = Book.createNewBook();
+        Book book2 = Book.createNewBook();
 
         // when
         book1.changeBookStatus(BookStatus.RENTED);
@@ -49,8 +49,9 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("Book은 BookInfo 를 가진다")
+    @DisplayName("책은 도서 정보를 가져야 한다.")
     void hasBookInfo() {
+        Book book = Book.createNewBook();
         BookInfo bookInfo = BookInfo.builder()
                 .title("제목")
                 .isbn("isbn")
@@ -58,7 +59,8 @@ class BookTest {
                 .publishDate(LocalDate.now())
                 .build();
 
-        Book book = Book.createBook(bookInfo);
+        book.setBookInfo(bookInfo);
+
         assertThat(book.getBookInfo()).isEqualTo(bookInfo);
     }
 }

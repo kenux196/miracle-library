@@ -3,6 +3,7 @@ package org.kenux.miraclelibrary.domain.book.service;
 import lombok.RequiredArgsConstructor;
 import org.kenux.miraclelibrary.domain.book.domain.Book;
 import org.kenux.miraclelibrary.domain.book.domain.BookInfo;
+import org.kenux.miraclelibrary.domain.book.repository.BookInfoRepository;
 import org.kenux.miraclelibrary.domain.book.repository.BookRepository;
 import org.kenux.miraclelibrary.global.exception.CustomException;
 import org.kenux.miraclelibrary.global.exception.ErrorCode;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 public class BookService {
 
     private final BookRepository bookRepository;
+    private final BookInfoRepository bookInfoRepository;
 
 //    // TODO : 테스트용 나중에 삭제할 것.   - sky 2022/03/01
 //    @PostConstruct
@@ -51,14 +53,14 @@ public class BookService {
     }
 
     public List<NewBookResponse> getNewBooks() {
-        final List<BookInfo> newBooks = bookRepository.findNewBookWithinOneMonth(LocalDate.now());
+        final List<BookInfo> newBooks = bookInfoRepository.findNewBookPublishDateWithinOneMonth(LocalDate.now());
         return newBooks.stream()
                 .map(NewBookResponse::from)
                 .collect(Collectors.toList());
     }
 
     public List<BookResponse> searchBookByFilter(BookSearchFilter filter) {
-        return bookRepository.findBookByFilter(filter).stream()
+        return bookInfoRepository.findBookByFilter(filter).stream()
                 .map(BookResponse::from)
                 .collect(Collectors.toList());
     }
