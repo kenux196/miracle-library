@@ -45,31 +45,43 @@ public class BookService {
 //        }
 //    }
 
-    public Long addNewBook(BookAddRequest bookAddRequest) {
+    public Long addNewBookOld(BookAddRequest bookAddRequest) {
         final BookInfo bookInfo = bookAddRequest.toEntity();
         return 1L;
         // TODO : need modify   - sky 2022/05/11
 //        return bookRepository.save(bookInfo).getId();
     }
 
-    public Long addNewBook2(BookInfo bookInfo) {
+    public Long addNewBook(BookInfo bookInfo) {
         return bookInfoRepository.save(bookInfo).getId();
     }
 
-    public List<NewBookResponse> getNewBooks() {
+    public List<NewBookResponse> getNewBooksOld() {
         final List<BookInfo> newBooks = bookInfoRepository.findNewBookPublishDateWithinOneMonth(LocalDate.now());
         return newBooks.stream()
                 .map(NewBookResponse::from)
                 .collect(Collectors.toList());
     }
 
-    public List<BookResponse> searchBookByFilter(BookSearchFilter filter) {
+    public List<BookInfo> getNewBooks() {
+        return bookInfoRepository.findNewBookPublishDateWithinOneMonth(LocalDate.now());
+    }
+
+    public List<BookInfo> searchBookByFilter(BookSearchFilter filter) {
+        return bookInfoRepository.findBookByFilter(filter);
+    }
+
+    public List<BookResponse> searchBookByFilterOld(BookSearchFilter filter) {
         return bookInfoRepository.findBookByFilter(filter).stream()
                 .map(BookResponse::from)
                 .collect(Collectors.toList());
     }
 
-    public List<BookResponse> getAllBooks() {
+    public List<BookInfo> getAllBooks() {
+        return bookInfoRepository.findAll();
+    }
+
+    public List<BookResponse> getAllBooksOld() {
         return Collections.emptyList();
         // TODO : modify   - sky 2022/05/12
 //        return bookRepository.findAll().stream()
@@ -77,18 +89,31 @@ public class BookService {
 //                .collect(Collectors.toList());
     }
 
-    public Long updateBook(BookUpdateRequest bookUpdateRequest) {
-        // TODO : need modify   - sky 2022/05/11
-//        final Book book = getBook(bookUpdateRequest.getId());
-//        book.update(bookUpdateRequest.toEntity());
-//        return book.getId();
-        return 1L;
+    public Long updateBookOld(BookUpdateRequest bookUpdateRequest) {
+        final BookInfo bookInfo = getBookInfo(bookUpdateRequest.getId());
+        bookInfo.update(bookUpdateRequest.toEntity());
+        return bookInfo.getId();
     }
 
-    public BookDetailResponse getBookDetail(Long id) {
+    public Long updateBook(BookInfo bookInfo) {
+        final BookInfo findBook = getBookInfo(bookInfo.getId());
+        findBook.update(bookInfo);
+        return findBook.getId();
+    }
+
+    public BookDetailResponse getBookDetailOld(Long id) {
 //        final BookInfo book = getBook(id);
 //        return BookDetailResponse.from(book);
         return null;
+    }
+
+    public BookInfo getBookDetail(Long id) {
+        return getBookInfo(id);
+    }
+
+    private BookInfo getBookInfo(Long id) {
+        return bookInfoRepository.findById(id)
+                .orElseThrow(() -> new CustomException((ErrorCode.BOOK_NOT_FOUND)));
     }
 
     private Book getBook(Long id) {

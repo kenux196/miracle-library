@@ -35,7 +35,7 @@ public class HomeController {
         }
         model.addAttribute("notices", notices);
 
-        List<NewBookResponse> newBooks = bookService.getNewBooks();
+        List<NewBookResponse> newBooks = bookService.getNewBooksOld();
         model.addAttribute("newBooks", newBooks);
         return "views/home/main";
     }

@@ -42,7 +42,7 @@ class HomeControllerTest {
     void homeMainPage() throws Exception {
         // given
         List<NewBookResponse> newBookResponses = new ArrayList<>();
-        given(bookService.getNewBooks()).willReturn(newBookResponses);
+        given(bookService.getNewBooksOld()).willReturn(newBookResponses);
 
         // when
         final ResultActions resultActions = mockMvc.perform(get("/"));

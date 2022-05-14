@@ -3,19 +3,20 @@ package org.kenux.miraclelibrary.web.book.controller;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.kenux.miraclelibrary.domain.book.domain.Book;
 import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
+import org.kenux.miraclelibrary.domain.book.domain.BookInfo;
 import org.kenux.miraclelibrary.domain.book.service.BookService;
-import org.kenux.miraclelibrary.web.book.dto.request.BookAddRequest;
-import org.kenux.miraclelibrary.web.book.dto.response.BookDetailResponse;
-import org.kenux.miraclelibrary.web.book.dto.response.BookResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.time.LocalDate;
 import java.util.Collections;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -45,13 +46,8 @@ class BookControllerTest {
     @DisplayName("/books 요청에 대해 /views/books/books 페이지로 이동")
     void GET_books() throws Exception {
         // given
-        BookResponse bookResponse = BookResponse.builder()
-                .bookId(1L)
-                .title("title")
-                .author("author")
-                .category(BookCategory.ESSAY)
-                .build();
-        given(bookService.getAllBooks()).willReturn(Collections.singletonList(bookResponse));
+        BookInfo bookInfo = createBookInfo(1L, 1);
+        given(bookService.getAllBooks()).willReturn(Collections.singletonList(bookInfo));
 
         // when
         ResultActions resultActions = mockMvc.perform(get("/books"));
@@ -77,13 +73,6 @@ class BookControllerTest {
     @DisplayName("POST /books/add 요청은 책을 등록하고 /books 로 리다이렉트한다.")
     void POST_books_add() throws Exception {
         // given
-        BookAddRequest bookAddRequest = BookAddRequest.builder()
-                .title("title")
-                .author("author")
-                .isbn("isbn")
-                .publishDate("2022-1-19")
-                .category(BookCategory.ESSAY)
-                .build();
         given(bookService.addNewBook(any())).willReturn(1L);
 
         // when
@@ -92,7 +81,8 @@ class BookControllerTest {
                 .param("author", "김작가")
                 .param("isbn", "1234123")
                 .param("publishDate", "2021-12-23")
-                .param("category", "ESSAY"));
+                .param("category", "ESSAY")
+                .param("count", "1"));
 
         // then
         resultActions.andExpect(status().is3xxRedirection())
@@ -103,21 +93,11 @@ class BookControllerTest {
     @DisplayName("GET /books/{id} 요청은 /views/books/book 상세 페이지로 이동")
     void test_getBookDetail() throws Exception {
         // given
-        final long bookId = 1L;
-
-        BookDetailResponse bookDetailResponse = BookDetailResponse.builder()
-                .id(1L)
-                .title("제목")
-                .author("작가")
-                .category(BookCategory.ESSAY)
-                .isbn("isbn-1234")
-                .publishDate("2022-1-19")
-                .build();
-
-        given(bookService.getBookDetail(any())).willReturn(bookDetailResponse);
+        BookInfo bookInfo = createBookInfo(1L, 1);
+        given(bookService.getBookDetail(any())).willReturn(bookInfo);
 
         // when
-        final ResultActions resultActions = mockMvc.perform(get("/books/" + bookId));
+        final ResultActions resultActions = mockMvc.perform(get("/books/" + bookInfo.getId()));
 
         // then
         resultActions.andExpect(status().isOk())
@@ -128,26 +108,31 @@ class BookControllerTest {
     @DisplayName("GET /books/{id}/edit 요청은 views/books/edit-book-form 으로 이동")
     void test_edit_book_form() throws Exception {
         // given
-        final long bookId = 1L;
-
-        BookDetailResponse bookDetailResponse = BookDetailResponse.builder()
-                .id(1L)
-                .title("제목")
-                .author("작가")
-                .category(BookCategory.ESSAY)
-                .isbn("isbn-1234")
-                .publishDate("2022-1-19")
-                .build();
-        given(bookService.getBookDetail(any())).willReturn(bookDetailResponse);
-        given(bookService.updateBook(any())).willReturn(bookId);
+        BookInfo bookInfo = createBookInfo(1L, 1);
+        given(bookService.getBookDetail(any())).willReturn(bookInfo);
+        given(bookService.updateBook(any())).willReturn(bookInfo.getId());
 
         // when
-        final ResultActions resultActions = mockMvc.perform(get("/books/" + bookId + "/edit"));
+        final ResultActions resultActions = mockMvc.perform(get("/books/" + bookInfo.getId() + "/edit"));
 
         // then
         resultActions.andExpect(status().isOk())
                 .andExpect(view().name("views/books/book-edit-form"));
     }
 
+    private BookInfo createBookInfo(Long id, int count) {
+        BookInfo bookInfo = BookInfo.builder()
+                .title("제목")
+                .isbn("isbn")
+                .author("저자")
+                .publishDate(LocalDate.of(2022, 1, 19))
+                .category(BookCategory.IT)
+                .build();
+        ReflectionTestUtils.setField(bookInfo, "id", id);
+        for (int i = 0; i < count; i++) {
+            bookInfo.addBook(Book.createNewBook());
+        }
+        return bookInfo;
+    }
 
 }

@@ -26,7 +26,6 @@ public class BookResponse {
                 .title(bookInfo.getTitle())
                 .author(bookInfo.getAuthor())
 //                .status(bookInfo.getStatus())
-                // TODO : modify   - sky 2022/05/12
                 .cover(bookInfo.getCover())
                 .category(bookInfo.getCategory())
                 .build();

@@ -3,6 +3,7 @@ package org.kenux.miraclelibrary.web.book.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
+import org.kenux.miraclelibrary.domain.book.domain.BookInfo;
 import org.kenux.miraclelibrary.domain.book.service.BookService;
 import org.kenux.miraclelibrary.web.book.dto.request.BookAddRequest;
 import org.kenux.miraclelibrary.web.book.dto.request.BookUpdateRequest;
@@ -13,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -29,7 +31,10 @@ public class BookController {
 
     @GetMapping
     public String booksMainPage(Model model) {
-        List<BookResponse> allBooks = bookService.getAllBooks();
+        List<BookInfo> bookInfoList = bookService.getAllBooks();
+        List<BookResponse> allBooks = bookInfoList.stream()
+                .map(BookResponse::from)
+                .collect(Collectors.toList());
         model.addAttribute("books", allBooks);
         return "views/books/books";
     }
@@ -43,27 +48,27 @@ public class BookController {
     @PostMapping("/add")
     public String addNewBook(BookAddRequest bookAddRequest) {
         log.info("will add book info = {}", bookAddRequest);
-        Long bookId = bookService.addNewBook(bookAddRequest);
+        Long bookId = bookService.addNewBook(bookAddRequest.toEntity());
         return "redirect:/books/" + bookId;
     }
 
     @GetMapping("/{id}")
     public String getBook(@PathVariable Long id, Model model) {
-        final BookDetailResponse book = bookService.getBookDetail(id);
-        model.addAttribute("book", book);
+        final BookInfo book = bookService.getBookDetail(id);
+        model.addAttribute("book", BookDetailResponse.from(book));
         return "views/books/book";
     }
 
     @GetMapping("/{id}/edit")
     public String getEditBookForm(@PathVariable("id") Long bookId, Model model) {
-        final BookDetailResponse book = bookService.getBookDetail(bookId);
-        model.addAttribute("book", book);
+        final BookInfo book = bookService.getBookDetail(bookId);
+        model.addAttribute("book", BookDetailResponse.from(book));
         return "views/books/book-edit-form";
     }
 
     @PostMapping("/{id}/edit")
     public String editBook(BookUpdateRequest bookUpdateRequest) {
-        Long bookId = bookService.updateBook(bookUpdateRequest);
+        Long bookId = bookService.updateBook(bookUpdateRequest.toEntity());
         return "redirect:/books/" + bookId;
     }
 }

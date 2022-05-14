@@ -108,7 +108,7 @@ class BookRestControllerTest {
                 .publishDate(LocalDate.of(2022, 1, 1))
                 .build();
         List<BookResponse> bookResponses = Collections.singletonList(BookResponse.from(book));
-        given(bookService.searchBookByFilter(any())).willReturn(bookResponses);
+        given(bookService.searchBookByFilterOld(any())).willReturn(bookResponses);
 
         // when
         final ResultActions resultActions = mockMvc.perform(get("/api/books"));
@@ -132,7 +132,7 @@ class BookRestControllerTest {
                 .publishDate(LocalDate.of(2022, 1, 1))
                 .build();
         List<BookResponse> bookResponses = Collections.singletonList(BookResponse.from(book));
-        given(bookService.searchBookByFilter(any())).willReturn(bookResponses);
+        given(bookService.searchBookByFilterOld(any())).willReturn(bookResponses);
 
         // when
         final ResultActions resultActions = mockMvc.perform(
@@ -158,7 +158,7 @@ class BookRestControllerTest {
                 .publishDate(LocalDate.of(2022, 1, 1))
                 .build();
         List<BookResponse> bookResponses = Collections.singletonList(BookResponse.from(book));
-        given(bookService.searchBookByFilter(any())).willReturn(bookResponses);
+        given(bookService.searchBookByFilterOld(any())).willReturn(bookResponses);
 
         // when
         final ResultActions resultActions = mockMvc.perform(
@@ -184,7 +184,7 @@ class BookRestControllerTest {
                 .publishDate(LocalDate.of(2022, 1, 1))
                 .build();
         List<BookResponse> bookResponses = Collections.singletonList(BookResponse.from(book));
-        given(bookService.searchBookByFilter(any())).willReturn(bookResponses);
+        given(bookService.searchBookByFilterOld(any())).willReturn(bookResponses);
 
         // when
         final ResultActions resultActions = mockMvc.perform(
@@ -214,7 +214,7 @@ class BookRestControllerTest {
                 .publishDate(LocalDate.of(2022, 1, 1))
                 .build();
         BookDetailResponse bookDetailResponse = BookDetailResponse.from(book);
-        given(bookService.getBookDetail(any())).willReturn(bookDetailResponse);
+        given(bookService.getBookDetailOld(any())).willReturn(bookDetailResponse);
         // when
         final ResultActions resultActions = mockMvc.perform(get("/api/books/detail/1"));
 
@@ -234,7 +234,7 @@ class BookRestControllerTest {
                 .build();
 
         List<NewBookResponse> bookResponses = Collections.singletonList(newBook);
-        given(bookService.getNewBooks()).willReturn(bookResponses);
+        given(bookService.getNewBooksOld()).willReturn(bookResponses);
 
         // when
         final ResultActions resultActions = mockMvc.perform(get("/api/books/new-book"));

@@ -22,7 +22,7 @@ public class BookRestController {
 
     @PostMapping(value = "/register")
     public ResponseEntity<Long> registerBook(@Valid @RequestBody BookAddRequest bookAddRequest) {
-        final Long bookId = bookService.addNewBook(bookAddRequest);
+        final Long bookId = bookService.addNewBookOld(bookAddRequest);
         return ResponseEntity.ok(bookId);
     }
 
@@ -34,18 +34,18 @@ public class BookRestController {
                 .keyword(keyword)
                 .category(category != null ? category : null)
                 .build();
-        final List<BookResponse> bookListResponse = bookService.searchBookByFilter(searchFilter);
+        final List<BookResponse> bookListResponse = bookService.searchBookByFilterOld(searchFilter);
         return ResponseEntity.ok(bookListResponse);
     }
 
     @GetMapping(value = "/detail/{id}")
     public ResponseEntity<?> getBookDetail(@PathVariable(value = "id") Long id) {
-        final BookDetailResponse bookDetail = bookService.getBookDetail(id);
+        final BookDetailResponse bookDetail = bookService.getBookDetailOld(id);
         return ResponseEntity.ok(bookDetail);
     }
 
     @GetMapping("/new-book")
     public ResponseEntity<?> getNewBooks() {
-        return ResponseEntity.ok(bookService.getNewBooks());
+        return ResponseEntity.ok(bookService.getNewBooksOld());
     }
 }
