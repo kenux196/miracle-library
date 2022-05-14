@@ -128,8 +128,7 @@ class BookInfoRepositoryTest {
     void searchBookInfoWithBookList_Test() {
         // given
         BookInfo bookInfo = createBookInfo();
-        Book book = Book.createNewBook();
-        book.setBookInfo(bookInfo);
+        bookInfo.addBook(Book.createNewBook());
         BookInfo save = bookInfoRepository.save(bookInfo);
 
         // when

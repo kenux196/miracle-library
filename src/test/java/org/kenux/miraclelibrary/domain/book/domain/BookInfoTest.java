@@ -51,4 +51,20 @@ class BookInfoTest {
         assertThat(book.getPublishDate()).isEqualTo(update.getPublishDate());
         assertThat(book.getSubTitle()).isEqualTo(update.getSubTitle());
     }
+
+    @Test
+    @DisplayName("도서 정보는 실제 책을 가진다.")
+    void hasBookInfo() {
+        BookInfo bookInfo = BookInfo.builder()
+                .title("제목")
+                .isbn("isbn")
+                .author("저자")
+                .publishDate(LocalDate.now())
+                .build();
+        Book book = Book.createNewBook();
+        bookInfo.addBook(book);
+
+        assertThat(book.getBookInfo()).isEqualTo(bookInfo);
+        assertThat(bookInfo.getBooks()).isNotEmpty();
+    }
 }

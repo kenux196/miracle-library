@@ -62,5 +62,6 @@ class BookTest {
         book.setBookInfo(bookInfo);
 
         assertThat(book.getBookInfo()).isEqualTo(bookInfo);
+        assertThat(bookInfo.getBooks()).isEmpty();
     }
 }

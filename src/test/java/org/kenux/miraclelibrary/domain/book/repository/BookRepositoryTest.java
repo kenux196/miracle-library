@@ -110,32 +110,22 @@ class BookRepositoryTest {
         assertThat(result).hasSize((int) count);
     }
 
-
     private List<Book> createBookList() {
         List<Book> books = new ArrayList<>();
-//        for (int i = 0; i < 10; i++) {
-//            final Book book = Book.builder()
-//                    .title("book" + i)
-//                    .author("author" + i)
-//                    .isbn("ABC" + i)
-//                    .category(BookCategory.ESSAY)
-//                    .build();
-//            if (i == 0) {
-//                book.changeStatus(BookStatus.REMOVED);
-//            } else if (i == 1) {
-//                book.changeStatus(BookStatus.LOST);
-//            } else if (i < 5) {
-//                book.changeStatus(BookStatus.RENTED);
-//            } else {
-//                book.changeStatus(BookStatus.RENTABLE);
-//            }
-//            books.add(book);
-//            bookRepository.save(book);
-//        }
+        for (int i = 0; i < 10; i++) {
+            final Book book = Book.createNewBook();
+            if (i == 0) {
+                book.changeBookStatus(BookStatus.REMOVED);
+            } else if (i == 1) {
+                book.changeBookStatus(BookStatus.LOST);
+            } else if (i < 5) {
+                book.changeBookStatus(BookStatus.RENTED);
+            } else {
+                book.changeBookStatus(BookStatus.RENTABLE);
+            }
+            bookRepository.save(book);
+            books.add(book);
+        }
         return books;
-    }
-
-    private Book createBook() {
-        return Book.createNewBook();
     }
 }

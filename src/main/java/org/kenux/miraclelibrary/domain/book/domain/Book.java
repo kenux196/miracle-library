@@ -31,11 +31,11 @@ public class Book extends BaseTimeEntity {
     private BookInfo bookInfo;
 
     public void setBookInfo(BookInfo bookInfo) {
-        if (this.bookInfo != null) {
-            this.bookInfo.getBooks().remove(this);
-        }
+//        if (this.bookInfo != null) {
+//            this.bookInfo.getBooks().remove(this);
+//        }
         this.bookInfo = bookInfo;
-        bookInfo.getBooks().add(this);
+//        bookInfo.getBooks().add(this);
     }
 
     public boolean isHeldBook() {

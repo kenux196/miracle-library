@@ -52,6 +52,10 @@ public class BookService {
 //        return bookRepository.save(bookInfo).getId();
     }
 
+    public Long addNewBook2(BookInfo bookInfo) {
+        return bookInfoRepository.save(bookInfo).getId();
+    }
+
     public List<NewBookResponse> getNewBooks() {
         final List<BookInfo> newBooks = bookInfoRepository.findNewBookPublishDateWithinOneMonth(LocalDate.now());
         return newBooks.stream()

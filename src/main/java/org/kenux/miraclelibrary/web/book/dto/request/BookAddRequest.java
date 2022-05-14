@@ -1,6 +1,10 @@
 package org.kenux.miraclelibrary.web.book.dto.request;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.kenux.miraclelibrary.domain.book.domain.Book;
 import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
 import org.kenux.miraclelibrary.domain.book.domain.BookInfo;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -13,7 +17,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Data
 @Builder
-@ToString
 public class BookAddRequest {
 
     @NotBlank
@@ -32,15 +35,21 @@ public class BookAddRequest {
     @NotNull
     private BookCategory category;
 
+    @NotNull
     private Integer count;
 
     public BookInfo toEntity() {
-        return BookInfo.builder()
+        BookInfo bookInfo = BookInfo.builder()
                 .title(title)
                 .author(author)
                 .isbn(isbn)
                 .publishDate(LocalDate.parse(publishDate))
                 .category(category)
                 .build();
+
+        for (int i = 0; i < count; i++) {
+            bookInfo.addBook(Book.createNewBook());
+        }
+        return bookInfo;
     }
 }

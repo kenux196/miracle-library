@@ -1,17 +1,59 @@
 package org.kenux.miraclelibrary.domain.book.service;
 
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
+import org.kenux.miraclelibrary.domain.book.domain.BookInfo;
+import org.kenux.miraclelibrary.domain.book.repository.BookInfoRepository;
+import org.kenux.miraclelibrary.domain.book.repository.BookRepository;
+import org.kenux.miraclelibrary.web.book.dto.request.BookAddRequest;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 class BookServiceTest {
 
-//    @Mock
-//    BookRepository bookRepository;
-//
-//    @InjectMocks
-//    BookService bookService;
-//
+    @Mock
+    BookRepository bookRepository;
+
+    @Mock
+    BookInfoRepository bookInfoRepository;
+
+    @InjectMocks
+    BookService bookService;
+
+    @Test
+    @DisplayName("신규 도서 등록 - 도서정보와 책 등록 성공")
+    void addNewBook() {
+        // given
+        BookAddRequest request = BookAddRequest.builder()
+                .title("title")
+                .author("author")
+                .isbn("isbn")
+                .publishDate("2020-10-10")
+                .category(BookCategory.ESSAY)
+                .count(1)
+                .build();
+
+        BookInfo bookInfo = request.toEntity();
+        ReflectionTestUtils.setField(bookInfo, "id", 1L);
+        given(bookInfoRepository.save(any())).willReturn(bookInfo);
+
+        // when
+        Long result = bookService.addNewBook2(request.toEntity());
+
+        // then
+        assertThat(result).isEqualTo(1L);
+    }
+
+
 //    @Test
 //    @DisplayName("전체 도서 목록 가져오기")
 //    void getAllBooks() throws Exception {
@@ -164,37 +206,4 @@ class BookServiceTest {
 //        verify(bookRepository).findById(any());
 //        assertThat(book.getTitle()).isEqualTo(bookUpdateRequest.getTitle());
 //    }
-//
-//    private List<Book> createBookListForTest(int count) {
-//        List<Book> bookList = new ArrayList<>();
-//        for (int i = 0; i < count; i++) {
-//            final Book book = Book.builder()
-//                    .id((long) i)
-//                    .title("book" + i)
-//                    .author("author" + i)
-//                    .isbn("ABC" + i)
-//                    .publishDate(LocalDate.of(2022, 1, 1))
-//                    .build();
-//            if (i % 2 == 1) {
-//                book.changeStatus(BookStatus.RENTED);
-//            } else {
-//                book.changeStatus(BookStatus.RENTABLE);
-//            }
-//            bookList.add(book);
-//        }
-//        return bookList;
-//    }
-//
-//    private Book createBookForTest() {
-//        return Book.builder()
-//                .id(1L)
-//                .title("title")
-//                .author("author")
-//                .isbn("isbn")
-//                .category(BookCategory.ESSAY)
-//                .status(BookStatus.RENTABLE)
-//                .publishDate(LocalDate.of(2022, 1, 1))
-//                .build();
-//    }
-
 }

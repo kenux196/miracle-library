@@ -71,4 +71,11 @@ public class BookInfo extends BaseTimeEntity {
         this.publishDate = bookInfo.getPublishDate();
         this.summary = bookInfo.getSummary();
     }
+
+    public void addBook(Book book) {
+        books.add(book);
+        if (book.getBookInfo() != this) {
+            book.setBookInfo(this);
+        }
+    }
 }
