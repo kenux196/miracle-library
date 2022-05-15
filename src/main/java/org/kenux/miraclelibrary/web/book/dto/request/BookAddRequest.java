@@ -47,9 +47,15 @@ public class BookAddRequest {
                 .category(category)
                 .build();
 
+        if (count != null) {
+            addBook(bookInfo, count);
+        }
+        return bookInfo;
+    }
+
+    private void addBook(BookInfo bookInfo, int count) {
         for (int i = 0; i < count; i++) {
             bookInfo.addBook(Book.createNewBook());
         }
-        return bookInfo;
     }
 }
