@@ -1,7 +1,11 @@
 <!DOCTYPE html>
-<html lagn="en" xmlns:th="http://www.thymeleaf.org">
+<html lagn="en" xmlns:th="http://www.thymeleaf.org"
+>
 
+<!-- 공통으로 쓰이는 script파일을넣는다.-->
 <th:block th:fragment="scriptFragment">
-
+  <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+  <script th:src="@{/js/bootstrap.esm.min.js}"></script>
+  <script th:src="@{/js/bootstrap.min.js}"></script>
 </th:block>
 </html>
