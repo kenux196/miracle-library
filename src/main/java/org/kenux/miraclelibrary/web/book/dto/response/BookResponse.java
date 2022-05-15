@@ -8,6 +8,8 @@ import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
 import org.kenux.miraclelibrary.domain.book.domain.BookInfo;
 import org.kenux.miraclelibrary.domain.book.domain.BookStatus;
 
+import java.time.LocalDate;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -19,15 +21,18 @@ public class BookResponse {
     private BookCategory category;
     private BookStatus status;
     private String cover;
+    private LocalDate publishDate;
+    private Integer amount;
 
     public static BookResponse from(BookInfo bookInfo) {
         return BookResponse.builder()
                 .bookId(bookInfo.getId())
                 .title(bookInfo.getTitle())
                 .author(bookInfo.getAuthor())
-//                .status(bookInfo.getStatus())
                 .cover(bookInfo.getCover())
                 .category(bookInfo.getCategory())
+                .publishDate(bookInfo.getPublishDate())
+                .amount(bookInfo.getBooks().size())
                 .build();
     }
 }
