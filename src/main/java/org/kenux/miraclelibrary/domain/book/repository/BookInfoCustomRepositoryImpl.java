@@ -8,7 +8,7 @@ import org.kenux.miraclelibrary.domain.book.domain.BookInfo;
 import org.kenux.miraclelibrary.web.book.dto.request.BookSearchFilter;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.kenux.miraclelibrary.domain.book.domain.QBookInfo.bookInfo;
@@ -28,10 +28,10 @@ public class BookInfoCustomRepositoryImpl implements BookInfoCustomRepository {
     }
 
     @Override
-    public List<BookInfo> findNewBookPublishDateWithinOneMonth(LocalDate time) {
-        LocalDate findDate = time.minusMonths(1);
+    public List<BookInfo> findNewAddedBookWithinOneMonth() {
+        LocalDateTime findDate = LocalDateTime.now().minusMonths(1);
         return jpaQueryFactory.selectFrom(bookInfo)
-                .where(bookInfo.publishDate.after(findDate))
+                .where(bookInfo.createDate.after(findDate))
                 .fetch();
     }
 

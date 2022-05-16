@@ -165,7 +165,7 @@ class BookInfoRepositoryTest {
 
         // when
         final List<BookInfo> newBookWithinOneMonth =
-                bookInfoRepository.findNewBookPublishDateWithinOneMonth(today);
+                bookInfoRepository.findNewAddedBookWithinOneMonth();
 
         // then
         assertThat(newBookWithinOneMonth).hasSize(1);

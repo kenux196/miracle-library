@@ -6,9 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
 import org.kenux.miraclelibrary.domain.book.domain.BookInfo;
-import org.kenux.miraclelibrary.domain.book.domain.BookStatus;
 
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -24,9 +25,14 @@ public class BookDetailResponse {
     private BookCategory category;
     private String content;
     private String cover;
-    private BookStatus status;
+    private List<BookStatusResponse> bookStatus;
 
     public static BookDetailResponse from(BookInfo bookInfo) {
+        List<BookStatusResponse> bookStatusResponses = bookInfo.getBooks().stream()
+                .map(book -> new BookStatusResponse(book.getId(), book.getStatus().name()))
+                .collect(Collectors.toList());
+
+
         return BookDetailResponse.builder()
                 .id(bookInfo.getId())
                 .title(bookInfo.getTitle())
@@ -37,6 +43,7 @@ public class BookDetailResponse {
                 .content(bookInfo.getSummary())
                 .cover(bookInfo.getCover())
                 .subTitle(bookInfo.getSubTitle())
+                .bookStatus(bookStatusResponses)
                 .build();
     }
 }

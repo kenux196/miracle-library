@@ -110,7 +110,7 @@ class BookControllerTest {
         // given
         BookInfo bookInfo = createBookInfo(1L, 1);
         given(bookService.getBookDetail(any())).willReturn(bookInfo);
-        given(bookService.updateBook(any())).willReturn(bookInfo.getId());
+        given(bookService.updateBook(any(), any())).willReturn(bookInfo.getId());
 
         // when
         final ResultActions resultActions = mockMvc.perform(get("/books/" + bookInfo.getId() + "/edit"));

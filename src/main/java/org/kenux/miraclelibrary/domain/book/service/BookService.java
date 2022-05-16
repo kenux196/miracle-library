@@ -16,7 +16,6 @@ import org.kenux.miraclelibrary.web.book.dto.response.NewBookResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -57,14 +56,14 @@ public class BookService {
     }
 
     public List<NewBookResponse> getNewBooksOld() {
-        final List<BookInfo> newBooks = bookInfoRepository.findNewBookPublishDateWithinOneMonth(LocalDate.now());
+        final List<BookInfo> newBooks = bookInfoRepository.findNewAddedBookWithinOneMonth();
         return newBooks.stream()
                 .map(NewBookResponse::from)
                 .collect(Collectors.toList());
     }
 
     public List<BookInfo> getNewBooks() {
-        return bookInfoRepository.findNewBookPublishDateWithinOneMonth(LocalDate.now());
+        return bookInfoRepository.findNewAddedBookWithinOneMonth();
     }
 
     public List<BookInfo> searchBookByFilter(BookSearchFilter filter) {
@@ -95,8 +94,8 @@ public class BookService {
         return bookInfo.getId();
     }
 
-    public Long updateBook(BookInfo bookInfo) {
-        final BookInfo findBook = getBookInfo(bookInfo.getId());
+    public Long updateBook(Long id, BookInfo bookInfo) {
+        final BookInfo findBook = getBookInfo(id);
         findBook.update(bookInfo);
         return findBook.getId();
     }

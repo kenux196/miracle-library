@@ -36,7 +36,7 @@ public class BookAddRequest {
     private BookCategory category;
 
     @NotNull
-    private Integer count;
+    private Integer amount;
 
     public BookInfo toEntity() {
         BookInfo bookInfo = BookInfo.builder()
@@ -47,8 +47,8 @@ public class BookAddRequest {
                 .category(category)
                 .build();
 
-        if (count != null) {
-            addBook(bookInfo, count);
+        if (amount != null) {
+            addBook(bookInfo, amount);
         }
         return bookInfo;
     }

@@ -129,14 +129,14 @@ class BookServiceTest {
     void getNewBooks() throws Exception {
         // given
         List<BookInfo> bookInfos = createBookListForTest();
-        given(bookInfoRepository.findNewBookPublishDateWithinOneMonth(any())).willReturn(bookInfos);
+        given(bookInfoRepository.findNewAddedBookWithinOneMonth()).willReturn(bookInfos);
 
         // when
         List<BookInfo> newBooks = bookService.getNewBooks();
 
         // then
         assertThat(newBooks).hasSize(3);
-        verify(bookInfoRepository).findNewBookPublishDateWithinOneMonth(any());
+        verify(bookInfoRepository).findNewAddedBookWithinOneMonth();
     }
 
     @Test
@@ -184,7 +184,7 @@ class BookServiceTest {
         given(bookInfoRepository.findById(any())).willReturn(Optional.of(bookInfo));
 
         // when
-        Long updateId = bookService.updateBook(bookUpdateRequest.toEntity());
+        Long updateId = bookService.updateBook(1L, bookUpdateRequest.toEntity());
 
         // then
         assertThat(updateId).isEqualTo(bookUpdateRequest.getId());

@@ -42,7 +42,7 @@ public class BookController {
 
     @GetMapping("/add")
     public String bookAddForm(Model model) {
-        model.addAttribute("book", new BookDetailResponse());
+        model.addAttribute("book", new BookAddRequest());
         return "views/books/book-add-form";
     }
 
@@ -55,8 +55,8 @@ public class BookController {
 
     @GetMapping("/{id}")
     public String getBook(@PathVariable Long id, Model model) {
-        final BookInfo book = bookService.getBookDetail(id);
-        model.addAttribute("book", BookDetailResponse.from(book));
+        final BookInfo bookInfo = bookService.getBookDetail(id);
+        model.addAttribute("bookInfo", BookDetailResponse.from(bookInfo));
         return "views/books/book";
     }
 
@@ -68,8 +68,9 @@ public class BookController {
     }
 
     @PostMapping("/{id}/edit")
-    public String editBook(BookUpdateRequest bookUpdateRequest) {
-        Long bookId = bookService.updateBook(bookUpdateRequest.toEntity());
+    public String editBook(@PathVariable("id") Long id,
+                           BookUpdateRequest bookUpdateRequest) {
+        Long bookId = bookService.updateBook(id, bookUpdateRequest.toEntity());
         return "redirect:/books/" + bookId;
     }
 }

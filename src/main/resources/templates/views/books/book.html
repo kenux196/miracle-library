@@ -5,7 +5,7 @@
       layout:decorate="~{layouts/layout}">
 
 <div layout:fragment="content">
-  <div class="container" th:object="${book}">
+  <div class="container" th:object="${bookInfo}">
     <div class="py-5 text-center">
       <h2>책 상세 페이지</h2>
     </div>
@@ -33,10 +33,25 @@
               th:text="${category.description}">에세이</option>
     </select>
     <hr class="my-4">
+    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+      <thead>
+      <tr>
+        <th>번호</th>
+        <th>상태</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="book : *{bookStatus}">
+        <td><a th:text="${book.bookId}">bookId</a></td>
+        <td><span th:text="${book.status}">상태</span></td>
+      </tr>
+      </tbody>
+    </table>
+    <hr class="my-4">
     <div class="row">
       <div class="col">
         <button type="button" class="w-100 btn btn-primary btn-lg"
-                th:onclick="|location.href='@{/books/{bookId}/edit(bookId=${book.id})}'|">수정하기</button>
+                th:onclick="|location.href='@{/books/{bookId}/edit(bookId=${bookInfo.id})}'|">수정하기</button>
       </div>
       <div class="col">
         <button type="button" class="w-100 btn btn-secondary btn-lg"

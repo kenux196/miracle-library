@@ -24,8 +24,6 @@ public class HomeController {
 
     @GetMapping
     public String home(Model model) {
-
-        // TODO : 임시 코드 삭제 예정   - sky 2022/03/01
         List<NoticeResponse> notices = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             long number = i + 1;
