@@ -82,7 +82,7 @@ class BookControllerTest {
                 .param("isbn", "1234123")
                 .param("publishDate", "2021-12-23")
                 .param("category", "ESSAY")
-                .param("count", "1"));
+                .param("amount", "1"));
 
         // then
         resultActions.andExpect(status().is3xxRedirection())

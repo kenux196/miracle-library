@@ -51,7 +51,7 @@ class BookServiceTest {
                 .isbn("isbn")
                 .publishDate("2020-10-10")
                 .category(BookCategory.ESSAY)
-                .count(1)
+                .amount(1)
                 .build();
 
         BookInfo bookInfo = request.toEntity();
