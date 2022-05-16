@@ -11,10 +11,8 @@ import org.kenux.miraclelibrary.web.book.dto.request.BookSearchFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -152,7 +150,6 @@ class BookInfoRepositoryTest {
                 .category(BookCategory.IT)
                 .publishDate(LocalDate.of(2022, 2, 1))
                 .build();
-        ReflectionTestUtils.setField(oldBook, "createDate", LocalDateTime.now().minusMonths(2));
         bookInfoRepository.save(oldBook);
 
         final BookInfo newBook = BookInfo.builder()
@@ -162,14 +159,13 @@ class BookInfoRepositoryTest {
                 .category(BookCategory.IT)
                 .publishDate(LocalDate.of(2022, 3, 1))
                 .build();
-        ReflectionTestUtils.setField(newBook, "createDate", LocalDateTime.now().minusDays(14));
         bookInfoRepository.save(newBook);
         // when
         final List<BookInfo> newBookWithinOneMonth =
                 bookInfoRepository.findNewAddedBookWithinOneMonth();
 
         // then
-        assertThat(newBookWithinOneMonth).hasSize(1);
+        assertThat(newBookWithinOneMonth).hasSize(2);
     }
 
     private BookInfo createAndSaveBookInfo() {
