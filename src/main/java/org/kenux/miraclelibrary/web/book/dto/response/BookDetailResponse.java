@@ -25,11 +25,11 @@ public class BookDetailResponse {
     private BookCategory category;
     private String content;
     private String cover;
-    private List<BookStatusResponse> bookStatus;
+    private List<BookItemResponse> bookStatus;
 
     public static BookDetailResponse from(Book book) {
-        List<BookStatusResponse> bookStatusResponses = book.getBookItems().stream()
-                .map(bookItem -> new BookStatusResponse(bookItem.getId(), bookItem.getStatus().name()))
+        List<BookItemResponse> bookItemResponseList = book.getBookItems().stream()
+                .map(bookItem -> new BookItemResponse(bookItem.getId(), bookItem.getStatus().name()))
                 .collect(Collectors.toList());
 
 
@@ -43,7 +43,7 @@ public class BookDetailResponse {
                 .content(book.getSummary())
                 .cover(book.getCover())
                 .subTitle(book.getSubTitle())
-                .bookStatus(bookStatusResponses)
+                .bookStatus(bookItemResponseList)
                 .build();
     }
 }

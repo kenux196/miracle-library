@@ -33,9 +33,9 @@
             </thead>
             <tbody>
             <tr th:each="book : ${books}">
-              <td><a th:href="@{/book/{bookId}(bookId=${book.bookId})}" th:text="${book.bookId}">bookId</a></td>
+              <td><a th:href="@{/books/{bookId}(bookId=${book.bookId})}" th:text="${book.bookId}">bookId</a></td>
               <td><span th:text="${book.category}">카테고리</span></td>
-              <td><a th:href="@{/book/{bookId}(bookId=${book.bookId})}" th:text="${book.title}">title</a></td>
+              <td><a th:href="@{/books/{bookId}(bookId=${book.bookId})}" th:text="${book.title}">title</a></td>
               <td><span th:text="${book.author}">author</span></td>
               <td><span th:text="${#temporals.format(book.publishDate, 'yyyy-MM-dd')}">출판일</span></td>
               <td><span th:text="${book.amount}">보유권수</span></td>
@@ -47,8 +47,8 @@
       </div>
       <div class="card-footer py-3">
         <button type="button" class="btn btn-primary btn-sm"
-                th:onclick="|location.href='@{/bookItems/add}'|"
-                onclick="location.href='./bookItem-add-form.html'">도서 추가
+                th:onclick="|location.href='@{/books/add}'|"
+                onclick="location.href='./book-add-form.html'">도서 추가
         </button>
       </div>
     </div>

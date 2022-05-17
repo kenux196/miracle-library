@@ -51,18 +51,18 @@
     <div class="row">
       <div class="col">
         <button type="button" class="w-100 btn btn-primary btn-lg"
-                th:onclick="|location.href='@{/bookItems/{bookId}/edit(bookId=${book.id})}'|">수정하기</button>
+                th:onclick="|location.href='@{/books/{bookId}/edit(bookId=${book.id})}'|">수정하기</button>
       </div>
       <div class="col">
         <button type="button" class="w-100 btn btn-secondary btn-lg"
-                th:onclick="|location.href='@{/bookItems}'|"
+                th:onclick="|location.href='@{/books}'|"
                 onclick="location.href='/bookItems'">대출하기
         </button>
       </div>
       <div class="col">
         <button type="button" class="w-100 btn btn-secondary btn-lg"
-                th:onclick="|location.href='@{/bookItems}'|"
-                onclick="location.href='/bookItems'">목록으로
+                th:onclick="|location.href='@{/books}'|"
+                onclick="location.href='/books'">목록으로
         </button>
       </div>
     </div>
