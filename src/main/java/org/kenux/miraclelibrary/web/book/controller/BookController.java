@@ -2,8 +2,8 @@ package org.kenux.miraclelibrary.web.book.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.kenux.miraclelibrary.domain.book.domain.Book;
 import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
-import org.kenux.miraclelibrary.domain.book.domain.BookInfo;
 import org.kenux.miraclelibrary.domain.book.service.BookService;
 import org.kenux.miraclelibrary.web.book.dto.request.BookAddRequest;
 import org.kenux.miraclelibrary.web.book.dto.request.BookUpdateRequest;
@@ -32,8 +32,8 @@ public class BookController {
 
     @GetMapping
     public String booksMainPage(Model model) {
-        List<BookInfo> bookInfoList = bookService.getAllBooks();
-        List<BookResponse> allBooks = bookInfoList.stream()
+        List<Book> bookList = bookService.getAllBooks();
+        List<BookResponse> allBooks = bookList.stream()
                 .map(BookResponse::from)
                 .collect(Collectors.toList());
         model.addAttribute("books", allBooks);
@@ -55,14 +55,14 @@ public class BookController {
 
     @GetMapping("/{id}")
     public String getBook(@PathVariable Long id, Model model) {
-        final BookInfo bookInfo = bookService.getBookDetail(id);
-        model.addAttribute("bookInfo", BookDetailResponse.from(bookInfo));
+        final Book book = bookService.getBookDetail(id);
+        model.addAttribute("book", BookDetailResponse.from(book));
         return "views/books/book";
     }
 
     @GetMapping("/{id}/edit")
     public String getEditBookForm(@PathVariable("id") Long bookId, Model model) {
-        final BookInfo book = bookService.getBookDetail(bookId);
+        final Book book = bookService.getBookDetail(bookId);
         model.addAttribute("book", BookDetailResponse.from(book));
         return "views/books/book-edit-form";
     }

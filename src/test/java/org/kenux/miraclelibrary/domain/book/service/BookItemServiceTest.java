@@ -3,8 +3,8 @@ package org.kenux.miraclelibrary.domain.book.service;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.kenux.miraclelibrary.domain.book.domain.Book;
 import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
-import org.kenux.miraclelibrary.domain.book.domain.BookInfo;
 import org.kenux.miraclelibrary.domain.book.domain.BookItem;
 import org.kenux.miraclelibrary.domain.book.repository.BookInfoRepository;
 import org.kenux.miraclelibrary.domain.book.repository.BookRepository;
@@ -54,9 +54,9 @@ class BookItemServiceTest {
                 .amount(1)
                 .build();
 
-        BookInfo bookInfo = request.toEntity();
-        ReflectionTestUtils.setField(bookInfo, "id", 1L);
-        given(bookInfoRepository.save(any())).willReturn(bookInfo);
+        Book book = request.toEntity();
+        ReflectionTestUtils.setField(book, "id", 1L);
+        given(bookInfoRepository.save(any())).willReturn(book);
 
         // when
         Long result = bookService.addNewBook(request.toEntity());
@@ -69,14 +69,14 @@ class BookItemServiceTest {
     @DisplayName("전체 도서 목록 가져오기")
     void getAllBooks() throws Exception {
         // given
-        List<BookInfo> bookInfoList = createBookListForTest();
-        given(bookInfoRepository.findAll()).willReturn(bookInfoList);
+        List<Book> bookList = createBookListForTest();
+        given(bookInfoRepository.findAll()).willReturn(bookList);
 
         // when
-        List<BookInfo> allBooks = bookService.getAllBooks();
+        List<Book> allBooks = bookService.getAllBooks();
 
         // then
-        assertThat(allBooks).hasSize(bookInfoList.size());
+        assertThat(allBooks).hasSize(bookList.size());
     }
 
     @Test
@@ -87,11 +87,11 @@ class BookItemServiceTest {
                 .keyword("title")
                 .build();
 
-        List<BookInfo> bookInfoList = createBookListForTest();
-        given(bookInfoRepository.findBookByFilter(any())).willReturn(bookInfoList);
+        List<Book> bookList = createBookListForTest();
+        given(bookInfoRepository.findBookByFilter(any())).willReturn(bookList);
 
         // when
-        List<BookInfo> books = bookService.searchBookByFilter(bookSearchFilter);
+        List<Book> books = bookService.searchBookByFilter(bookSearchFilter);
 
         // then
         assertThat(books).isNotEmpty();
@@ -128,11 +128,11 @@ class BookItemServiceTest {
     @DisplayName("신간 서적 목록 조회")
     void getNewBooks() throws Exception {
         // given
-        List<BookInfo> bookInfos = createBookListForTest();
-        given(bookInfoRepository.findNewBookWithinOneMonth()).willReturn(bookInfos);
+        List<Book> books = createBookListForTest();
+        given(bookInfoRepository.findNewBookWithinOneMonth()).willReturn(books);
 
         // when
-        List<BookInfo> newBooks = bookService.getNewBooks();
+        List<Book> newBooks = bookService.getNewBooks();
 
         // then
         assertThat(newBooks).hasSize(3);
@@ -155,11 +155,11 @@ class BookItemServiceTest {
     @DisplayName("getBookDetail: 정상")
     void getBookDetail_정상처리() throws Exception {
         // given
-        final BookInfo bookInfo = createBookInfo(1L, "제목3", 3, LocalDate.now());
-        given(bookInfoRepository.findById(any())).willReturn(Optional.ofNullable(bookInfo));
+        final Book book = createBookInfo(1L, "제목3", 3, LocalDate.now());
+        given(bookInfoRepository.findById(any())).willReturn(Optional.ofNullable(book));
 
         // when
-        final BookInfo result = bookService.getBookDetail(1L);
+        final Book result = bookService.getBookDetail(1L);
 
         // then
         assertThat(result).isNotNull();
@@ -180,37 +180,37 @@ class BookItemServiceTest {
         bookUpdateRequest.setPublishDate("2022-01-19");
         bookUpdateRequest.setCover(null);
 
-        final BookInfo bookInfo = createBookInfo(1L, "제목3", 3, LocalDate.now());
-        given(bookInfoRepository.findById(any())).willReturn(Optional.of(bookInfo));
+        final Book book = createBookInfo(1L, "제목3", 3, LocalDate.now());
+        given(bookInfoRepository.findById(any())).willReturn(Optional.of(book));
 
         // when
         Long updateId = bookService.updateBook(1L, bookUpdateRequest.toEntity());
 
         // then
         assertThat(updateId).isEqualTo(bookUpdateRequest.getId());
-        assertThat(bookInfo.getTitle()).isEqualTo(bookUpdateRequest.getTitle());
+        assertThat(book.getTitle()).isEqualTo(bookUpdateRequest.getTitle());
     }
 
-    private List<BookInfo> createBookListForTest() {
-        List<BookInfo> bookInfoList = new ArrayList<>();
-        bookInfoList.add(createBookInfo(1L,"제목1", 1, LocalDate.of(2022, 1, 1)));
-        bookInfoList.add(createBookInfo(2L, "제목2", 2, LocalDate.of(2022, 2, 1)));
-        bookInfoList.add(createBookInfo(3L, "제목3", 3, LocalDate.now().minusDays(10)));
-        return bookInfoList;
+    private List<Book> createBookListForTest() {
+        List<Book> bookList = new ArrayList<>();
+        bookList.add(createBookInfo(1L,"제목1", 1, LocalDate.of(2022, 1, 1)));
+        bookList.add(createBookInfo(2L, "제목2", 2, LocalDate.of(2022, 2, 1)));
+        bookList.add(createBookInfo(3L, "제목3", 3, LocalDate.now().minusDays(10)));
+        return bookList;
     }
 
-    private BookInfo createBookInfo(Long id, String title, int count, LocalDate publishDate) {
-        BookInfo bookInfo = BookInfo.builder()
+    private Book createBookInfo(Long id, String title, int count, LocalDate publishDate) {
+        Book book = Book.builder()
                 .title(title)
                 .isbn("isbn")
                 .author("저자")
                 .publishDate(publishDate)
                 .category(BookCategory.IT)
                 .build();
-        ReflectionTestUtils.setField(bookInfo, "id", id);
+        ReflectionTestUtils.setField(book, "id", id);
         for (int i = 0; i < count; i++) {
-            bookInfo.addBook(BookItem.createNewBook());
+            book.addBook(BookItem.createNewBook());
         }
-        return bookInfo;
+        return book;
     }
 }

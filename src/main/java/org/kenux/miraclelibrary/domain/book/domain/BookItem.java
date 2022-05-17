@@ -13,7 +13,7 @@ import static org.kenux.miraclelibrary.domain.book.domain.BookStatus.RENTED;
 
 
 @Entity
-@Table(name = "book")
+@Table(name = "book_item")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class BookItem extends BaseTimeEntity {
@@ -28,13 +28,13 @@ public class BookItem extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_info_id")
-    private BookInfo bookInfo;
+    private Book book;
 
-    public void setBookInfo(BookInfo bookInfo) {
+    public void setBook(Book book) {
 //        if (this.bookInfo != null) {
 //            this.bookInfo.getBooks().remove(this);
 //        }
-        this.bookInfo = bookInfo;
+        this.book = book;
 //        bookInfo.getBooks().add(this);
     }
 

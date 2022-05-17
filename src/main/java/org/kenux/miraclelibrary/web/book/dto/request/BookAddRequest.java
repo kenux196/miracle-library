@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.kenux.miraclelibrary.domain.book.domain.Book;
 import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
-import org.kenux.miraclelibrary.domain.book.domain.BookInfo;
 import org.kenux.miraclelibrary.domain.book.domain.BookItem;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -38,8 +38,8 @@ public class BookAddRequest {
     @NotNull
     private Integer amount;
 
-    public BookInfo toEntity() {
-        BookInfo bookInfo = BookInfo.builder()
+    public Book toEntity() {
+        Book book = Book.builder()
                 .title(title)
                 .author(author)
                 .isbn(isbn)
@@ -48,14 +48,14 @@ public class BookAddRequest {
                 .build();
 
         if (amount != null) {
-            addBook(bookInfo, amount);
+            addBook(book, amount);
         }
-        return bookInfo;
+        return book;
     }
 
-    private void addBook(BookInfo bookInfo, int count) {
+    private void addBook(Book book, int count) {
         for (int i = 0; i < count; i++) {
-            bookInfo.addBook(BookItem.createNewBook());
+            book.addBook(BookItem.createNewBook());
         }
     }
 }

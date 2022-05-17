@@ -3,8 +3,8 @@ package org.kenux.miraclelibrary.web.book.controller;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.kenux.miraclelibrary.domain.book.domain.Book;
 import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
-import org.kenux.miraclelibrary.domain.book.domain.BookInfo;
 import org.kenux.miraclelibrary.domain.book.domain.BookItem;
 import org.kenux.miraclelibrary.domain.book.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,8 +46,8 @@ class BookItemControllerTest {
     @DisplayName("/books 요청에 대해 /views/books/books 페이지로 이동")
     void GET_books() throws Exception {
         // given
-        BookInfo bookInfo = createBookInfo(1L, 1);
-        given(bookService.getAllBooks()).willReturn(Collections.singletonList(bookInfo));
+        Book book = createBookInfo(1L, 1);
+        given(bookService.getAllBooks()).willReturn(Collections.singletonList(book));
 
         // when
         ResultActions resultActions = mockMvc.perform(get("/books"));
@@ -93,11 +93,11 @@ class BookItemControllerTest {
     @DisplayName("GET /books/{id} 요청은 /views/books/book 상세 페이지로 이동")
     void test_getBookDetail() throws Exception {
         // given
-        BookInfo bookInfo = createBookInfo(1L, 1);
-        given(bookService.getBookDetail(any())).willReturn(bookInfo);
+        Book book = createBookInfo(1L, 1);
+        given(bookService.getBookDetail(any())).willReturn(book);
 
         // when
-        final ResultActions resultActions = mockMvc.perform(get("/books/" + bookInfo.getId()));
+        final ResultActions resultActions = mockMvc.perform(get("/books/" + book.getId()));
 
         // then
         resultActions.andExpect(status().isOk())
@@ -108,31 +108,31 @@ class BookItemControllerTest {
     @DisplayName("GET /books/{id}/edit 요청은 views/books/edit-book-form 으로 이동")
     void test_edit_book_form() throws Exception {
         // given
-        BookInfo bookInfo = createBookInfo(1L, 1);
-        given(bookService.getBookDetail(any())).willReturn(bookInfo);
-        given(bookService.updateBook(any(), any())).willReturn(bookInfo.getId());
+        Book book = createBookInfo(1L, 1);
+        given(bookService.getBookDetail(any())).willReturn(book);
+        given(bookService.updateBook(any(), any())).willReturn(book.getId());
 
         // when
-        final ResultActions resultActions = mockMvc.perform(get("/books/" + bookInfo.getId() + "/edit"));
+        final ResultActions resultActions = mockMvc.perform(get("/books/" + book.getId() + "/edit"));
 
         // then
         resultActions.andExpect(status().isOk())
                 .andExpect(view().name("views/books/book-edit-form"));
     }
 
-    private BookInfo createBookInfo(Long id, int count) {
-        BookInfo bookInfo = BookInfo.builder()
+    private Book createBookInfo(Long id, int count) {
+        Book book = Book.builder()
                 .title("제목")
                 .isbn("isbn")
                 .author("저자")
                 .publishDate(LocalDate.of(2022, 1, 19))
                 .category(BookCategory.IT)
                 .build();
-        ReflectionTestUtils.setField(bookInfo, "id", id);
+        ReflectionTestUtils.setField(book, "id", id);
         for (int i = 0; i < count; i++) {
-            bookInfo.addBook(BookItem.createNewBook());
+            book.addBook(BookItem.createNewBook());
         }
-        return bookInfo;
+        return book;
     }
 
 }

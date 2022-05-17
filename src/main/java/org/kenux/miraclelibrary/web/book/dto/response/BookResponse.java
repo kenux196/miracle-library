@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.kenux.miraclelibrary.domain.book.domain.Book;
 import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
-import org.kenux.miraclelibrary.domain.book.domain.BookInfo;
 import org.kenux.miraclelibrary.domain.book.domain.BookStatus;
 
 import java.time.LocalDate;
@@ -24,15 +24,15 @@ public class BookResponse {
     private LocalDate publishDate;
     private Integer amount;
 
-    public static BookResponse from(BookInfo bookInfo) {
+    public static BookResponse from(Book book) {
         return BookResponse.builder()
-                .bookId(bookInfo.getId())
-                .title(bookInfo.getTitle())
-                .author(bookInfo.getAuthor())
-                .cover(bookInfo.getCover())
-                .category(bookInfo.getCategory())
-                .publishDate(bookInfo.getPublishDate())
-                .amount(bookInfo.getBookItems().size())
+                .bookId(book.getId())
+                .title(book.getTitle())
+                .author(book.getAuthor())
+                .cover(book.getCover())
+                .category(book.getCategory())
+                .publishDate(book.getPublishDate())
+                .amount(book.getBookItems().size())
                 .build();
     }
 }

@@ -12,7 +12,7 @@ class BookItemInfoTest {
     @Test
     @DisplayName("BookInfo 생성 : 제목, isbn, 저자, 출판일은 필수로 있어야 한다.")
     void createBookInfo() {
-        BookInfo book = BookInfo.builder()
+        Book book = Book.builder()
                 .title("제목")
                 .isbn("isbn")
                 .author("저자")
@@ -28,14 +28,14 @@ class BookItemInfoTest {
     @Test
     @DisplayName("BookInfo 내용 변경")
     void updateBookInfo() {
-        BookInfo book = BookInfo.builder()
+        Book book = Book.builder()
                 .title("제목")
                 .isbn("isbn")
                 .author("저자")
                 .publishDate(LocalDate.now())
                 .build();
 
-        BookInfo update = BookInfo.builder()
+        Book update = Book.builder()
                 .title("제목1")
                 .isbn("isbn1")
                 .author("저자1")
@@ -55,16 +55,16 @@ class BookItemInfoTest {
     @Test
     @DisplayName("도서 정보는 실제 책을 가진다.")
     void hasBookInfo() {
-        BookInfo bookInfo = BookInfo.builder()
+        Book book = Book.builder()
                 .title("제목")
                 .isbn("isbn")
                 .author("저자")
                 .publishDate(LocalDate.now())
                 .build();
         BookItem bookItem = BookItem.createNewBook();
-        bookInfo.addBook(bookItem);
+        book.addBook(bookItem);
 
-        assertThat(bookItem.getBookInfo()).isEqualTo(bookInfo);
-        assertThat(bookInfo.getBookItems()).isNotEmpty();
+        assertThat(bookItem.getBook()).isEqualTo(book);
+        assertThat(book.getBookItems()).isNotEmpty();
     }
 }

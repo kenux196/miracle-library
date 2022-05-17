@@ -3,8 +3,8 @@ package org.kenux.miraclelibrary.domain.book.repository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.kenux.miraclelibrary.domain.book.domain.Book;
 import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
-import org.kenux.miraclelibrary.domain.book.domain.BookInfo;
 import org.kenux.miraclelibrary.domain.book.domain.BookItem;
 import org.kenux.miraclelibrary.global.config.QueryDslConfig;
 import org.kenux.miraclelibrary.web.book.dto.request.BookSearchFilter;
@@ -34,10 +34,10 @@ class BookItemInfoRepositoryTest {
     @DisplayName("BookInfo 저장")
     void save() {
         // given
-        BookInfo save = createAndSaveBookInfo();
+        Book save = createAndSaveBookInfo();
 
         // when
-        Optional<BookInfo> result = bookInfoRepository.findById(save.getId());
+        Optional<Book> result = bookInfoRepository.findById(save.getId());
 
         // then
         assertThat(result).isNotEmpty().contains(save);
@@ -53,7 +53,7 @@ class BookItemInfoRepositoryTest {
                 .build();
 
         // when
-        List<BookInfo> result = bookInfoRepository.findBookByFilter(filter);
+        List<Book> result = bookInfoRepository.findBookByFilter(filter);
 
         // then
         assertThat(result).hasSize(1);
@@ -69,7 +69,7 @@ class BookItemInfoRepositoryTest {
                 .build();
 
         // when
-        List<BookInfo> result = bookInfoRepository.findBookByFilter(filter);
+        List<Book> result = bookInfoRepository.findBookByFilter(filter);
 
         // then
         assertThat(result).hasSize(1);
@@ -85,7 +85,7 @@ class BookItemInfoRepositoryTest {
                 .build();
 
         // when
-        List<BookInfo> result = bookInfoRepository.findBookByFilter(filter);
+        List<Book> result = bookInfoRepository.findBookByFilter(filter);
 
         // then
         assertThat(result).isEmpty();
@@ -101,7 +101,7 @@ class BookItemInfoRepositoryTest {
                 .build();
 
         // when
-        List<BookInfo> result = bookInfoRepository.findBookByFilter(filter);
+        List<Book> result = bookInfoRepository.findBookByFilter(filter);
 
         // then
         assertThat(result).hasSize(1);
@@ -117,7 +117,7 @@ class BookItemInfoRepositoryTest {
                 .build();
 
         // when
-        List<BookInfo> result = bookInfoRepository.findBookByFilter(filter);
+        List<Book> result = bookInfoRepository.findBookByFilter(filter);
 
         // then
         assertThat(result).isEmpty();
@@ -127,12 +127,12 @@ class BookItemInfoRepositoryTest {
     @DisplayName("도서 검색 시, 보유 도서 목록도 조회 가능")
     void searchBookInfoWithBookList_Test() {
         // given
-        BookInfo bookInfo = createBookInfo();
-        bookInfo.addBook(BookItem.createNewBook());
-        BookInfo save = bookInfoRepository.save(bookInfo);
+        Book book = createBook();
+        book.addBook(BookItem.createNewBook());
+        Book save = bookInfoRepository.save(book);
 
         // when
-        Optional<BookInfo> result = bookInfoRepository.findById(save.getId());
+        Optional<Book> result = bookInfoRepository.findById(save.getId());
 
         // then
         assertThat(result).isNotEmpty();
@@ -143,7 +143,7 @@ class BookItemInfoRepositoryTest {
     @DisplayName("도서 검색: 한달 이내에 등록된 신규 도서 조회")
     void findNewBookWithinOneMonth() throws Exception {
         // given
-        final BookInfo oldBook = BookInfo.builder()
+        final Book oldBook = Book.builder()
                 .title("book1")
                 .author("author1")
                 .isbn("123")
@@ -152,7 +152,7 @@ class BookItemInfoRepositoryTest {
                 .build();
         bookInfoRepository.save(oldBook);
 
-        final BookInfo newBook = BookInfo.builder()
+        final Book newBook = Book.builder()
                 .title("book2")
                 .author("author2")
                 .isbn("123")
@@ -161,20 +161,20 @@ class BookItemInfoRepositoryTest {
                 .build();
         bookInfoRepository.save(newBook);
         // when
-        final List<BookInfo> newBookWithinOneMonth =
+        final List<Book> newBookWithinOneMonth =
                 bookInfoRepository.findNewBookWithinOneMonth();
 
         // then
         assertThat(newBookWithinOneMonth).hasSize(1);
     }
 
-    private BookInfo createAndSaveBookInfo() {
-        BookInfo bookInfo = createBookInfo();
-        return bookInfoRepository.save(bookInfo);
+    private Book createAndSaveBookInfo() {
+        Book book = createBook();
+        return bookInfoRepository.save(book);
     }
 
-    private BookInfo createBookInfo() {
-        return BookInfo.builder()
+    private Book createBook() {
+        return Book.builder()
                 .title("제목")
                 .isbn("isbn")
                 .author("저자")

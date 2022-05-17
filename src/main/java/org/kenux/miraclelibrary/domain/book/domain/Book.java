@@ -12,10 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "book_info")
+@Table(name = "book")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class BookInfo extends BaseTimeEntity {
+public class Book extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,12 +46,12 @@ public class BookInfo extends BaseTimeEntity {
 //    @Enumerated(EnumType.STRING)
     private BookCategory category;
 
-    @OneToMany(mappedBy = "bookInfo", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
     private final List<BookItem> bookItems = new ArrayList<>();
 
     @Builder
-    public BookInfo(String isbn, String title, String subTitle,
-                    String author, String cover, LocalDate publishDate, String summary, BookCategory category) {
+    public Book(String isbn, String title, String subTitle,
+                String author, String cover, LocalDate publishDate, String summary, BookCategory category) {
         this.isbn = isbn;
         this.title = title;
         this.subTitle = subTitle;
@@ -62,20 +62,20 @@ public class BookInfo extends BaseTimeEntity {
         this.category = category;
     }
 
-    public void update(BookInfo bookInfo) {
-        this.isbn = bookInfo.getIsbn();
-        this.title = bookInfo.getTitle();
-        this.subTitle = bookInfo.getSubTitle();
-        this.author = bookInfo.getAuthor();
-        this.cover = bookInfo.getCover();
-        this.publishDate = bookInfo.getPublishDate();
-        this.summary = bookInfo.getSummary();
+    public void update(Book book) {
+        this.isbn = book.getIsbn();
+        this.title = book.getTitle();
+        this.subTitle = book.getSubTitle();
+        this.author = book.getAuthor();
+        this.cover = book.getCover();
+        this.publishDate = book.getPublishDate();
+        this.summary = book.getSummary();
     }
 
     public void addBook(BookItem bookItem) {
         bookItems.add(bookItem);
-        if (bookItem.getBookInfo() != this) {
-            bookItem.setBookInfo(this);
+        if (bookItem.getBook() != this) {
+            bookItem.setBook(this);
         }
     }
 }

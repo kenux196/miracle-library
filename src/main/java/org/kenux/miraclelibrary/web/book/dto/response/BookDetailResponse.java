@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.kenux.miraclelibrary.domain.book.domain.Book;
 import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
-import org.kenux.miraclelibrary.domain.book.domain.BookInfo;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -27,22 +27,22 @@ public class BookDetailResponse {
     private String cover;
     private List<BookStatusResponse> bookStatus;
 
-    public static BookDetailResponse from(BookInfo bookInfo) {
-        List<BookStatusResponse> bookStatusResponses = bookInfo.getBookItems().stream()
-                .map(book -> new BookStatusResponse(book.getId(), book.getStatus().name()))
+    public static BookDetailResponse from(Book book) {
+        List<BookStatusResponse> bookStatusResponses = book.getBookItems().stream()
+                .map(bookItem -> new BookStatusResponse(bookItem.getId(), bookItem.getStatus().name()))
                 .collect(Collectors.toList());
 
 
         return BookDetailResponse.builder()
-                .id(bookInfo.getId())
-                .title(bookInfo.getTitle())
-                .author(bookInfo.getAuthor())
-                .isbn(bookInfo.getIsbn())
-                .publishDate(bookInfo.getPublishDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-                .category(bookInfo.getCategory())
-                .content(bookInfo.getSummary())
-                .cover(bookInfo.getCover())
-                .subTitle(bookInfo.getSubTitle())
+                .id(book.getId())
+                .title(book.getTitle())
+                .author(book.getAuthor())
+                .isbn(book.getIsbn())
+                .publishDate(book.getPublishDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                .category(book.getCategory())
+                .content(book.getSummary())
+                .cover(book.getCover())
+                .subTitle(book.getSubTitle())
                 .bookStatus(bookStatusResponses)
                 .build();
     }

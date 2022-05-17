@@ -52,16 +52,16 @@ class BookItemTest {
     @DisplayName("책은 도서 정보를 가져야 한다.")
     void hasBookInfo() {
         BookItem bookItem = BookItem.createNewBook();
-        BookInfo bookInfo = BookInfo.builder()
+        Book book = Book.builder()
                 .title("제목")
                 .isbn("isbn")
                 .author("저자")
                 .publishDate(LocalDate.now())
                 .build();
 
-        bookItem.setBookInfo(bookInfo);
+        bookItem.setBook(book);
 
-        assertThat(bookItem.getBookInfo()).isEqualTo(bookInfo);
-        assertThat(bookInfo.getBookItems()).isEmpty();
+        assertThat(bookItem.getBook()).isEqualTo(book);
+        assertThat(book.getBookItems()).isEmpty();
     }
 }

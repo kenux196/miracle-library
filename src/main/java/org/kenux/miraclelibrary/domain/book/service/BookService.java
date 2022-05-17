@@ -1,7 +1,7 @@
 package org.kenux.miraclelibrary.domain.book.service;
 
 import lombok.RequiredArgsConstructor;
-import org.kenux.miraclelibrary.domain.book.domain.BookInfo;
+import org.kenux.miraclelibrary.domain.book.domain.Book;
 import org.kenux.miraclelibrary.domain.book.domain.BookItem;
 import org.kenux.miraclelibrary.domain.book.repository.BookInfoRepository;
 import org.kenux.miraclelibrary.domain.book.repository.BookRepository;
@@ -45,28 +45,28 @@ public class BookService {
 //    }
 
     public Long addNewBookOld(BookAddRequest bookAddRequest) {
-        final BookInfo bookInfo = bookAddRequest.toEntity();
+        final Book book = bookAddRequest.toEntity();
         return 1L;
         // TODO : need modify   - sky 2022/05/11
 //        return bookRepository.save(bookInfo).getId();
     }
 
-    public Long addNewBook(BookInfo bookInfo) {
-        return bookInfoRepository.save(bookInfo).getId();
+    public Long addNewBook(Book book) {
+        return bookInfoRepository.save(book).getId();
     }
 
     public List<NewBookResponse> getNewBooksOld() {
-        final List<BookInfo> newBooks = bookInfoRepository.findNewBookWithinOneMonth();
+        final List<Book> newBooks = bookInfoRepository.findNewBookWithinOneMonth();
         return newBooks.stream()
                 .map(NewBookResponse::from)
                 .collect(Collectors.toList());
     }
 
-    public List<BookInfo> getNewBooks() {
+    public List<Book> getNewBooks() {
         return bookInfoRepository.findNewBookWithinOneMonth();
     }
 
-    public List<BookInfo> searchBookByFilter(BookSearchFilter filter) {
+    public List<Book> searchBookByFilter(BookSearchFilter filter) {
         return bookInfoRepository.findBookByFilter(filter);
     }
 
@@ -76,7 +76,7 @@ public class BookService {
                 .collect(Collectors.toList());
     }
 
-    public List<BookInfo> getAllBooks() {
+    public List<Book> getAllBooks() {
         return bookInfoRepository.findAll();
     }
 
@@ -89,14 +89,14 @@ public class BookService {
     }
 
     public Long updateBookOld(BookUpdateRequest bookUpdateRequest) {
-        final BookInfo bookInfo = getBookInfo(bookUpdateRequest.getId());
-        bookInfo.update(bookUpdateRequest.toEntity());
-        return bookInfo.getId();
+        final Book book = getBookInfo(bookUpdateRequest.getId());
+        book.update(bookUpdateRequest.toEntity());
+        return book.getId();
     }
 
-    public Long updateBook(Long id, BookInfo bookInfo) {
-        final BookInfo findBook = getBookInfo(id);
-        findBook.update(bookInfo);
+    public Long updateBook(Long id, Book book) {
+        final Book findBook = getBookInfo(id);
+        findBook.update(book);
         return findBook.getId();
     }
 
@@ -106,11 +106,11 @@ public class BookService {
         return null;
     }
 
-    public BookInfo getBookDetail(Long id) {
+    public Book getBookDetail(Long id) {
         return getBookInfo(id);
     }
 
-    private BookInfo getBookInfo(Long id) {
+    private Book getBookInfo(Long id) {
         return bookInfoRepository.findById(id)
                 .orElseThrow(() -> new CustomException((ErrorCode.BOOK_NOT_FOUND)));
     }

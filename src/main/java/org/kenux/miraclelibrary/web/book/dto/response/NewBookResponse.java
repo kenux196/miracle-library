@@ -3,8 +3,8 @@ package org.kenux.miraclelibrary.web.book.dto.response;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import org.kenux.miraclelibrary.domain.book.domain.Book;
 import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
-import org.kenux.miraclelibrary.domain.book.domain.BookInfo;
 
 @Data
 @Builder
@@ -16,7 +16,7 @@ public class NewBookResponse {
     private BookCategory category;
     private String cover;
 
-    public static NewBookResponse from(BookInfo book) {
+    public static NewBookResponse from(Book book) {
         return NewBookResponse.builder()
                 .bookId(book.getId())
                 .title(book.getTitle())
