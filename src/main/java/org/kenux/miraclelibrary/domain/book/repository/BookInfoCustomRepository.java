@@ -9,5 +9,5 @@ public interface BookInfoCustomRepository {
 
     List<BookInfo> findBookByFilter(BookSearchFilter bookSearchFilter);
 
-    List<BookInfo> findNewAddedBookWithinOneMonth();
+    List<BookInfo> findNewBookWithinOneMonth();
 }

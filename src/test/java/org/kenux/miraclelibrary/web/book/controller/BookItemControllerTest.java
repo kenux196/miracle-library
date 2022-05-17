@@ -3,9 +3,9 @@ package org.kenux.miraclelibrary.web.book.controller;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.kenux.miraclelibrary.domain.book.domain.Book;
 import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
 import org.kenux.miraclelibrary.domain.book.domain.BookInfo;
+import org.kenux.miraclelibrary.domain.book.domain.BookItem;
 import org.kenux.miraclelibrary.domain.book.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = {BookController.class})
-class BookControllerTest {
+class BookItemControllerTest {
 
     @Autowired
     private WebApplicationContext ctx;
@@ -130,7 +130,7 @@ class BookControllerTest {
                 .build();
         ReflectionTestUtils.setField(bookInfo, "id", id);
         for (int i = 0; i < count; i++) {
-            bookInfo.addBook(Book.createNewBook());
+            bookInfo.addBook(BookItem.createNewBook());
         }
         return bookInfo;
     }

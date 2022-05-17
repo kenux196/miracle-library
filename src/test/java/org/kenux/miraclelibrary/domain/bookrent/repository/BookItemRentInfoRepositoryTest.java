@@ -3,7 +3,7 @@ package org.kenux.miraclelibrary.domain.bookrent.repository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.kenux.miraclelibrary.domain.book.domain.Book;
+import org.kenux.miraclelibrary.domain.book.domain.BookItem;
 import org.kenux.miraclelibrary.domain.book.repository.BookRepository;
 import org.kenux.miraclelibrary.domain.bookrent.domain.BookRentInfo;
 import org.kenux.miraclelibrary.domain.member.domain.Member;
@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @Import(QueryDslConfig.class)
-class BookRentInfoRepositoryTest {
+class BookItemRentInfoRepositoryTest {
 
     @Autowired
     BookRentInfoRepository bookRentInfoRepository;
@@ -32,13 +32,13 @@ class BookRentInfoRepositoryTest {
     BookRepository bookRepository;
 
     private Member member;
-    private Book book;
+    private BookItem bookItem;
     private LocalDateTime rentalDate;
 
     @BeforeEach
     void setup() {
         member = getMember();
-        book = getBook();
+        bookItem = getBook();
         rentalDate = LocalDateTime.of(2021, 1, 1, 13, 0, 0);
     }
 
@@ -46,15 +46,15 @@ class BookRentInfoRepositoryTest {
     @DisplayName("책 대여 정보 저장")
     void test_saveBookRental() throws Exception {
         // given
-        BookRentInfo bookRentInfo = new BookRentInfo(member, book, rentalDate);
+        BookRentInfo bookRentInfo = new BookRentInfo(member, bookItem, rentalDate);
 
         // when
         BookRentInfo save = bookRentInfoRepository.save(bookRentInfo);
 
         // then
         assertThat(save.getId()).isNotNull();
-        assertThat(save.getBook()).isNotNull();
-        assertThat(save.getBook().getId()).isEqualTo(book.getId());
+        assertThat(save.getBookItem()).isNotNull();
+        assertThat(save.getBookItem().getId()).isEqualTo(bookItem.getId());
         assertThat(save.getMember().getId()).isEqualTo(member.getId());
         assertThat(save.getStartDate()).isEqualTo(rentalDate);
         assertThat(save.getReturnDate()).isNull();
@@ -85,13 +85,13 @@ class BookRentInfoRepositoryTest {
         // given
         BookRentInfo bookRentInfo = BookRentInfo.builder()
                 .member(member)
-                .book(book)
+                .bookItem(bookItem)
                 .startDate(rentalDate)
                 .build();
         bookRentInfoRepository.save(bookRentInfo);
 
         // when
-        List<BookRentInfo> bookRentInfos = bookRentInfoRepository.findAllByBookId(book.getId());
+        List<BookRentInfo> bookRentInfos = bookRentInfoRepository.findAllByBookItemId(bookItem.getId());
 
         // then
         assertThat(bookRentInfos).isNotEmpty();
@@ -140,7 +140,7 @@ class BookRentInfoRepositoryTest {
         return memberRepository.save(member);
     }
 
-    private Book getBook() {
-        return bookRepository.save(Book.createNewBook());
+    private BookItem getBook() {
+        return bookRepository.save(BookItem.createNewBook());
     }
 }

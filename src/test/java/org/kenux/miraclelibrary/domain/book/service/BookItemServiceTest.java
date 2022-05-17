@@ -3,9 +3,9 @@ package org.kenux.miraclelibrary.domain.book.service;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.kenux.miraclelibrary.domain.book.domain.Book;
 import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
 import org.kenux.miraclelibrary.domain.book.domain.BookInfo;
+import org.kenux.miraclelibrary.domain.book.domain.BookItem;
 import org.kenux.miraclelibrary.domain.book.repository.BookInfoRepository;
 import org.kenux.miraclelibrary.domain.book.repository.BookRepository;
 import org.kenux.miraclelibrary.global.exception.CustomException;
@@ -30,7 +30,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class BookServiceTest {
+class BookItemServiceTest {
 
     @Mock
     BookRepository bookRepository;
@@ -129,14 +129,14 @@ class BookServiceTest {
     void getNewBooks() throws Exception {
         // given
         List<BookInfo> bookInfos = createBookListForTest();
-        given(bookInfoRepository.findNewAddedBookWithinOneMonth()).willReturn(bookInfos);
+        given(bookInfoRepository.findNewBookWithinOneMonth()).willReturn(bookInfos);
 
         // when
         List<BookInfo> newBooks = bookService.getNewBooks();
 
         // then
         assertThat(newBooks).hasSize(3);
-        verify(bookInfoRepository).findNewAddedBookWithinOneMonth();
+        verify(bookInfoRepository).findNewBookWithinOneMonth();
     }
 
     @Test
@@ -209,7 +209,7 @@ class BookServiceTest {
                 .build();
         ReflectionTestUtils.setField(bookInfo, "id", id);
         for (int i = 0; i < count; i++) {
-            bookInfo.addBook(Book.createNewBook());
+            bookInfo.addBook(BookItem.createNewBook());
         }
         return bookInfo;
     }

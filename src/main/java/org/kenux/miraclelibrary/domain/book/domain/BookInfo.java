@@ -47,7 +47,7 @@ public class BookInfo extends BaseTimeEntity {
     private BookCategory category;
 
     @OneToMany(mappedBy = "bookInfo", cascade = CascadeType.ALL)
-    private final List<Book> books = new ArrayList<>();
+    private final List<BookItem> bookItems = new ArrayList<>();
 
     @Builder
     public BookInfo(String isbn, String title, String subTitle,
@@ -72,10 +72,10 @@ public class BookInfo extends BaseTimeEntity {
         this.summary = bookInfo.getSummary();
     }
 
-    public void addBook(Book book) {
-        books.add(book);
-        if (book.getBookInfo() != this) {
-            book.setBookInfo(this);
+    public void addBook(BookItem bookItem) {
+        bookItems.add(bookItem);
+        if (bookItem.getBookInfo() != this) {
+            bookItem.setBookInfo(this);
         }
     }
 }

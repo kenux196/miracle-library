@@ -28,7 +28,7 @@ public class BookDetailResponse {
     private List<BookStatusResponse> bookStatus;
 
     public static BookDetailResponse from(BookInfo bookInfo) {
-        List<BookStatusResponse> bookStatusResponses = bookInfo.getBooks().stream()
+        List<BookStatusResponse> bookStatusResponses = bookInfo.getBookItems().stream()
                 .map(book -> new BookStatusResponse(book.getId(), book.getStatus().name()))
                 .collect(Collectors.toList());
 

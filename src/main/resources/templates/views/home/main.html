@@ -22,9 +22,9 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="newBook : ${newBooks}">
-              <td><span th:text="${newBook.title}"></span></td>
-              <td><span th:text="${newBook.author}"></span></td>
+            <tr th:each="book : ${newBooks}">
+              <td><span th:text="${book.title}"></span></td>
+              <td><span th:text="${book.author}"></span></td>
             </tr>
             </tbody>
           </table>
@@ -46,10 +46,10 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="newBook, num : ${newBooks}">
+            <tr th:each="book, num : ${newBooks}">
               <td><span th:text="${num.count}"></span></td>
-              <td><span th:text="${newBook.title}"></span></td>
-              <td><span th:text="${newBook.author}"></span></td>
+              <td><span th:text="${book.title}"></span></td>
+              <td><span th:text="${book.author}"></span></td>
             </tr>
             </tbody>
           </table>

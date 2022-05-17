@@ -36,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(controllers = {BookRestController.class})
 @Import(HttpEncodingAutoConfiguration.class)
-class BookRestControllerTest {
+class BookItemRestControllerTest {
 
     @Autowired
     MockMvc mockMvc;

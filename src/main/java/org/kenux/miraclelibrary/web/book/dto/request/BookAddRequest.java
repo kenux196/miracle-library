@@ -4,9 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.kenux.miraclelibrary.domain.book.domain.Book;
 import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
 import org.kenux.miraclelibrary.domain.book.domain.BookInfo;
+import org.kenux.miraclelibrary.domain.book.domain.BookItem;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
@@ -55,7 +55,7 @@ public class BookAddRequest {
 
     private void addBook(BookInfo bookInfo, int count) {
         for (int i = 0; i < count; i++) {
-            bookInfo.addBook(Book.createNewBook());
+            bookInfo.addBook(BookItem.createNewBook());
         }
     }
 }

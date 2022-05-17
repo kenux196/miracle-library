@@ -1,8 +1,8 @@
 package org.kenux.miraclelibrary.domain.book.service;
 
 import lombok.RequiredArgsConstructor;
-import org.kenux.miraclelibrary.domain.book.domain.Book;
 import org.kenux.miraclelibrary.domain.book.domain.BookInfo;
+import org.kenux.miraclelibrary.domain.book.domain.BookItem;
 import org.kenux.miraclelibrary.domain.book.repository.BookInfoRepository;
 import org.kenux.miraclelibrary.domain.book.repository.BookRepository;
 import org.kenux.miraclelibrary.global.exception.CustomException;
@@ -56,14 +56,14 @@ public class BookService {
     }
 
     public List<NewBookResponse> getNewBooksOld() {
-        final List<BookInfo> newBooks = bookInfoRepository.findNewAddedBookWithinOneMonth();
+        final List<BookInfo> newBooks = bookInfoRepository.findNewBookWithinOneMonth();
         return newBooks.stream()
                 .map(NewBookResponse::from)
                 .collect(Collectors.toList());
     }
 
     public List<BookInfo> getNewBooks() {
-        return bookInfoRepository.findNewAddedBookWithinOneMonth();
+        return bookInfoRepository.findNewBookWithinOneMonth();
     }
 
     public List<BookInfo> searchBookByFilter(BookSearchFilter filter) {
@@ -115,7 +115,7 @@ public class BookService {
                 .orElseThrow(() -> new CustomException((ErrorCode.BOOK_NOT_FOUND)));
     }
 
-    private Book getBook(Long id) {
+    private BookItem getBook(Long id) {
         return bookRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.BOOK_NOT_FOUND));
     }

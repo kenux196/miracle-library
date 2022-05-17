@@ -32,7 +32,7 @@ public class BookResponse {
                 .cover(bookInfo.getCover())
                 .category(bookInfo.getCategory())
                 .publishDate(bookInfo.getPublishDate())
-                .amount(bookInfo.getBooks().size())
+                .amount(bookInfo.getBookItems().size())
                 .build();
     }
 }

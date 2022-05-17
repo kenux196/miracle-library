@@ -2,7 +2,7 @@ package org.kenux.miraclelibrary.domain.bookrent.domain;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.kenux.miraclelibrary.domain.book.domain.Book;
+import org.kenux.miraclelibrary.domain.book.domain.BookItem;
 import org.kenux.miraclelibrary.domain.book.domain.BookStatus;
 import org.kenux.miraclelibrary.domain.member.domain.Member;
 
@@ -11,19 +11,19 @@ import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class BookRentInfoTest {
+class BookItemRentInfoTest {
 
     @Test
     @DisplayName("도서 대출 정보가 생성되면 책, 회원, 대출시작일, 대출 종료일을 가져야 한다.")
     void test_create_bookRentInfo() throws Exception {
         Member member = Member.builder().build();
         BookRentInfo bookRentInfo = BookRentInfo.builder()
-                .book(createBook())
+                .bookItem(createBook())
                 .member(member)
                 .startDate(LocalDateTime.now())
                 .build();
 
-        assertThat(bookRentInfo.getBook()).isNotNull();
+        assertThat(bookRentInfo.getBookItem()).isNotNull();
         assertThat(bookRentInfo.getMember()).isNotNull();
         assertThat(bookRentInfo.getStartDate()).isNotNull();
     }
@@ -34,7 +34,7 @@ class BookRentInfoTest {
         // given
         LocalDateTime startDate = LocalDateTime.of(2021, 1, 1, 13, 0, 0);
         BookRentInfo bookRentInfo = BookRentInfo.builder()
-                .book(createBook())
+                .bookItem(createBook())
                 .startDate(startDate)
                 .build();
 
@@ -52,7 +52,7 @@ class BookRentInfoTest {
         LocalDateTime returnDate = LocalDateTime.of(2021, 1, 10, 11, 0, 0);
         BookRentInfo bookRentInfo = BookRentInfo.builder()
                 .startDate(LocalDateTime.now())
-                .book(createBook())
+                .bookItem(createBook())
                 .build();
 
         // when
@@ -69,7 +69,7 @@ class BookRentInfoTest {
         LocalDateTime rentalStartDate = LocalDateTime.of(2021, 1, 10, 11, 0, 0);
         BookRentInfo bookRentInfo = BookRentInfo.builder()
                 .startDate(rentalStartDate)
-                .book(createBook())
+                .bookItem(createBook())
                 .build();
 
         assertThat(bookRentInfo.isOverDue(rentalStartDate.plusWeeks(1).toLocalDate())).isFalse();
@@ -84,17 +84,17 @@ class BookRentInfoTest {
         Member member = Member.builder()
                 .name("userA")
                 .build();
-        Book book = Book.createNewBook();
+        BookItem bookItem = BookItem.createNewBook();
 
         // when
-        BookRentInfo rentInfo = BookRentInfo.rent(member, book);
+        BookRentInfo rentInfo = BookRentInfo.rent(member, bookItem);
 
         // then
-        assertThat(rentInfo.getBook().getStatus()).isEqualTo(BookStatus.RENTED);
+        assertThat(rentInfo.getBookItem().getStatus()).isEqualTo(BookStatus.RENTED);
     }
 
 
-    private Book createBook() {
-        return Book.createNewBook();
+    private BookItem createBook() {
+        return BookItem.createNewBook();
     }
 }

@@ -16,7 +16,7 @@ import static org.kenux.miraclelibrary.domain.book.domain.BookStatus.RENTED;
 @Table(name = "book")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Book extends BaseTimeEntity {
+public class BookItem extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,9 +46,9 @@ public class Book extends BaseTimeEntity {
         this.status = status;
     }
 
-    public static Book createNewBook() {
-        Book book = new Book();
-        book.changeBookStatus(RENTABLE);
-        return book;
+    public static BookItem createNewBook() {
+        BookItem bookItem = new BookItem();
+        bookItem.changeBookStatus(RENTABLE);
+        return bookItem;
     }
 }

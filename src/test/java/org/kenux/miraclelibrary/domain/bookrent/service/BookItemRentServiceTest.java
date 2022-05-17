@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.kenux.miraclelibrary.domain.book.domain.Book;
+import org.kenux.miraclelibrary.domain.book.domain.BookItem;
 import org.kenux.miraclelibrary.domain.book.domain.BookStatus;
 import org.kenux.miraclelibrary.domain.book.repository.BookRepository;
 import org.kenux.miraclelibrary.domain.bookrent.domain.BookRentInfo;
@@ -32,7 +32,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class BookRentServiceTest {
+class BookItemRentServiceTest {
 
     @Mock
     MemberRepository memberRepository;
@@ -47,12 +47,12 @@ class BookRentServiceTest {
     BookRentService bookRentService;
 
     private Member member;
-    private Book book;
+    private BookItem bookItem;
 
     @BeforeEach
     void setup() {
         member = getMember();
-        book = getBook();
+        bookItem = getBook();
     }
 
     @Test
@@ -62,7 +62,7 @@ class BookRentServiceTest {
         Long memberId = 1L;
         BookRentInfo bookRentInfo = BookRentInfo.builder()
                 .member(member)
-                .book(book)
+                .bookItem(bookItem)
                 .startDate(LocalDateTime.of(2021, 12, 25, 13, 0, 0))
                 .build();
 
@@ -84,17 +84,17 @@ class BookRentServiceTest {
         // given
         BookRentInfo bookRentInfo = BookRentInfo.builder()
                 .member(member)
-                .book(book)
+                .bookItem(bookItem)
                 .startDate(LocalDateTime.of(2021, 12, 25, 13, 0, 0))
                 .build();
         ReflectionTestUtils.setField(bookRentInfo, "id", 1L);
 
         given(memberRepository.findById(any())).willReturn(Optional.of(member));
-        given(bookRepository.findById(any())).willReturn(Optional.of(book));
+        given(bookRepository.findById(any())).willReturn(Optional.of(bookItem));
         given(bookRentInfoRepository.save(any())).willReturn(bookRentInfo);
 
         // when
-        BookRentRequest bookRentRequest = new BookRentRequest(member.getId(), Collections.singletonList(book.getId()));
+        BookRentRequest bookRentRequest = new BookRentRequest(member.getId(), Collections.singletonList(bookItem.getId()));
         List<BookRentInfo> saved = bookRentService.rentBooks(bookRentRequest);
 
         // then
@@ -135,9 +135,9 @@ class BookRentServiceTest {
     @DisplayName("이미 대출된 책은 예외 발생해야 한다.")
     void test_exceptionForRentedBook_whenRentBook() throws Exception {
         // given
-        book.changeBookStatus(BookStatus.RENTED);
+        bookItem.changeBookStatus(BookStatus.RENTED);
         given(memberRepository.findById(any())).willReturn(Optional.of(member));
-        given(bookRepository.findById(any())).willReturn(Optional.of(book));
+        given(bookRepository.findById(any())).willReturn(Optional.of(bookItem));
 
         BookRentRequest bookRentRequest = new BookRentRequest(1L, Collections.singletonList(1L));
 
@@ -172,11 +172,11 @@ class BookRentServiceTest {
 
         BookRentInfo bookRentInfo = BookRentInfo.builder()
                 .member(member)
-                .book(book)
+                .bookItem(bookItem)
                 .startDate(LocalDateTime.of(2021, 1, 1, 13, 0, 0))
                 .build();
         given(bookRentInfoRepository.save(any())).willReturn(bookRentInfo);
-        given(bookRentInfoRepository.findAllByBookIds(any())).willReturn(List.of(bookRentInfo));
+        given(bookRentInfoRepository.findAllByBookItemIds(any())).willReturn(List.of(bookRentInfo));
 
         // when
         BookReturnRequest bookReturnRequest = new BookReturnRequest(memberId, books);
@@ -231,10 +231,10 @@ class BookRentServiceTest {
         return member;
     }
 
-    private Book getBook() {
-        Book newBook = Book.createNewBook();
-        ReflectionTestUtils.setField(newBook, "id", 1L);
-        return newBook;
+    private BookItem getBook() {
+        BookItem newBookItem = BookItem.createNewBook();
+        ReflectionTestUtils.setField(newBookItem, "id", 1L);
+        return newBookItem;
     }
 
 }

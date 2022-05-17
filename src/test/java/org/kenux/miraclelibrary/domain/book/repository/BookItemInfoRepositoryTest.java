@@ -3,9 +3,9 @@ package org.kenux.miraclelibrary.domain.book.repository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.kenux.miraclelibrary.domain.book.domain.Book;
 import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
 import org.kenux.miraclelibrary.domain.book.domain.BookInfo;
+import org.kenux.miraclelibrary.domain.book.domain.BookItem;
 import org.kenux.miraclelibrary.global.config.QueryDslConfig;
 import org.kenux.miraclelibrary.web.book.dto.request.BookSearchFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @Import(QueryDslConfig.class)
-class BookInfoRepositoryTest {
+class BookItemInfoRepositoryTest {
 
     @Autowired
     BookInfoRepository bookInfoRepository;
@@ -128,7 +128,7 @@ class BookInfoRepositoryTest {
     void searchBookInfoWithBookList_Test() {
         // given
         BookInfo bookInfo = createBookInfo();
-        bookInfo.addBook(Book.createNewBook());
+        bookInfo.addBook(BookItem.createNewBook());
         BookInfo save = bookInfoRepository.save(bookInfo);
 
         // when
@@ -136,7 +136,7 @@ class BookInfoRepositoryTest {
 
         // then
         assertThat(result).isNotEmpty();
-        assertThat(result.get().getBooks()).hasSize(1);
+        assertThat(result.get().getBookItems()).hasSize(1);
     }
 
     @Test
@@ -148,7 +148,7 @@ class BookInfoRepositoryTest {
                 .author("author1")
                 .isbn("123")
                 .category(BookCategory.IT)
-                .publishDate(LocalDate.of(2022, 2, 1))
+                .publishDate(LocalDate.now().minusMonths(2))
                 .build();
         bookInfoRepository.save(oldBook);
 
@@ -157,15 +157,15 @@ class BookInfoRepositoryTest {
                 .author("author2")
                 .isbn("123")
                 .category(BookCategory.IT)
-                .publishDate(LocalDate.of(2022, 3, 1))
+                .publishDate(LocalDate.now().minusDays(10))
                 .build();
         bookInfoRepository.save(newBook);
         // when
         final List<BookInfo> newBookWithinOneMonth =
-                bookInfoRepository.findNewAddedBookWithinOneMonth();
+                bookInfoRepository.findNewBookWithinOneMonth();
 
         // then
-        assertThat(newBookWithinOneMonth).hasSize(2);
+        assertThat(newBookWithinOneMonth).hasSize(1);
     }
 
     private BookInfo createAndSaveBookInfo() {

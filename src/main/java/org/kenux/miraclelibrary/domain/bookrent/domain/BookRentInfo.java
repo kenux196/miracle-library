@@ -1,7 +1,7 @@
 package org.kenux.miraclelibrary.domain.bookrent.domain;
 
 import lombok.*;
-import org.kenux.miraclelibrary.domain.book.domain.Book;
+import org.kenux.miraclelibrary.domain.book.domain.BookItem;
 import org.kenux.miraclelibrary.domain.book.domain.BookStatus;
 import org.kenux.miraclelibrary.domain.member.domain.Member;
 
@@ -24,8 +24,8 @@ public class BookRentInfo {
     private Member member;
 
     @ManyToOne
-    @JoinColumn(name = "book_id", nullable = false)
-    private Book book;
+    @JoinColumn(name = "book_item_id", nullable = false)
+    private BookItem bookItem;
 
     @Column(name = "start_date", nullable = false)
     private LocalDateTime startDate;
@@ -37,9 +37,9 @@ public class BookRentInfo {
     private LocalDateTime returnDate;
 
     @Builder
-    public BookRentInfo(Member member, Book book, LocalDateTime startDate) {
+    public BookRentInfo(Member member, BookItem bookItem, LocalDateTime startDate) {
         this.member = member;
-        this.book = book;
+        this.bookItem = bookItem;
         this.startDate = startDate;
         this.endDate = startDate.plusWeeks(2);
     }
@@ -52,11 +52,11 @@ public class BookRentInfo {
         return today.isAfter(getEndDate());
     }
 
-    public static BookRentInfo rent(Member member, Book book) {
-        book.changeBookStatus(BookStatus.RENTED);
+    public static BookRentInfo rent(Member member, BookItem bookItem) {
+        bookItem.changeBookStatus(BookStatus.RENTED);
         return BookRentInfo.builder()
                 .member(member)
-                .book(book)
+                .bookItem(bookItem)
                 .startDate(LocalDateTime.now())
                 .build();
     }

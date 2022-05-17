@@ -1,7 +1,7 @@
 package org.kenux.miraclelibrary.domain.bookrent.service;
 
 import lombok.RequiredArgsConstructor;
-import org.kenux.miraclelibrary.domain.book.domain.Book;
+import org.kenux.miraclelibrary.domain.book.domain.BookItem;
 import org.kenux.miraclelibrary.domain.book.domain.BookStatus;
 import org.kenux.miraclelibrary.domain.book.repository.BookRepository;
 import org.kenux.miraclelibrary.domain.bookrent.domain.BookRentInfo;
@@ -34,13 +34,13 @@ public class BookRentService {
 
         List<BookRentInfo> bookRentInfos = new ArrayList<>();
         bookRentRequest.getBookIds().forEach(id -> {
-            Book book = getBookNotRented(id);
-            book.changeBookStatus(BookStatus.RENTED);
-            bookRepository.save(book);
+            BookItem bookItem = getBookNotRented(id);
+            bookItem.changeBookStatus(BookStatus.RENTED);
+            bookRepository.save(bookItem);
 
             BookRentInfo bookRentInfo = BookRentInfo.builder()
                     .member(member)
-                    .book(book)
+                    .bookItem(bookItem)
                     .startDate(LocalDateTime.now())
                     .build();
             BookRentInfo save = bookRentInfoRepository.save(bookRentInfo);
@@ -55,15 +55,15 @@ public class BookRentService {
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
     }
 
-    private Book getBookNotRented(Long id) {
-        Book book = getBook(id);
-        if (book.getStatus().equals(BookStatus.RENTED)) {
+    private BookItem getBookNotRented(Long id) {
+        BookItem bookItem = getBook(id);
+        if (bookItem.getStatus().equals(BookStatus.RENTED)) {
             throw new CustomException(ErrorCode.BOOK_WAS_RENTED);
         }
-        return book;
+        return bookItem;
     }
 
-    private Book getBook(Long id) {
+    private BookItem getBook(Long id) {
         return bookRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.BOOK_NOT_FOUND));
     }
@@ -74,14 +74,14 @@ public class BookRentService {
 
         for (BookRentInfo bookRentInfo : bookRentInfoList) {
             bookRentInfo.setReturnDate(LocalDateTime.now());
-            bookRentInfo.getBook().changeBookStatus(BookStatus.RENTABLE);
+            bookRentInfo.getBookItem().changeBookStatus(BookStatus.RENTABLE);
             bookRentInfoRepository.save(bookRentInfo);
         }
     }
 
     private List<BookRentInfo> getBookRentInfos(BookReturnRequest bookReturnRequest) {
         List<BookRentInfo> bookRentInfoList =
-                bookRentInfoRepository.findAllByBookIds(bookReturnRequest.getBooks()).stream()
+                bookRentInfoRepository.findAllByBookItemIds(bookReturnRequest.getBooks()).stream()
                         .filter(bookRental -> bookRental.getReturnDate() == null)
                         .collect(Collectors.toList());
 

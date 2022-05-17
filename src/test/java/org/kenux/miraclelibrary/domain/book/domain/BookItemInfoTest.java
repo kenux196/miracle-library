@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class BookInfoTest {
+class BookItemInfoTest {
 
     @Test
     @DisplayName("BookInfo 생성 : 제목, isbn, 저자, 출판일은 필수로 있어야 한다.")
@@ -61,10 +61,10 @@ class BookInfoTest {
                 .author("저자")
                 .publishDate(LocalDate.now())
                 .build();
-        Book book = Book.createNewBook();
-        bookInfo.addBook(book);
+        BookItem bookItem = BookItem.createNewBook();
+        bookInfo.addBook(bookItem);
 
-        assertThat(book.getBookInfo()).isEqualTo(bookInfo);
-        assertThat(bookInfo.getBooks()).isNotEmpty();
+        assertThat(bookItem.getBookInfo()).isEqualTo(bookInfo);
+        assertThat(bookInfo.getBookItems()).isNotEmpty();
     }
 }

@@ -119,7 +119,10 @@ jacocoTestCoverageVerification {
 			//	minimum = 0.80
 			//}
 
-			excludes = ["**/config/*"] + Qdomains
+			excludes = ["**/config/*",
+						"**/dto/*",
+						"MiracleLibraryApplication"
+			] + Qdomains
 		}
 	}
 }
