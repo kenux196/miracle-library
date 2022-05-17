@@ -34,7 +34,7 @@
             <tbody>
             <tr th:each="book : ${books}">
               <td><a th:href="@{/books/{bookId}(bookId=${book.bookId})}" th:text="${book.bookId}">bookId</a></td>
-              <td><span th:text="${book.category}">카테고리</span></td>
+              <td><span th:text="${book.category.description}">카테고리</span></td>
               <td><a th:href="@{/books/{bookId}(bookId=${book.bookId})}" th:text="${book.title}">title</a></td>
               <td><span th:text="${book.author}">author</span></td>
               <td><span th:text="${#temporals.format(book.publishDate, 'yyyy-MM-dd')}">출판일</span></td>

@@ -43,7 +43,7 @@
       <tbody>
       <tr th:each="bookItem : *{bookStatus}">
         <td><a th:text="${bookItem.bookId}">bookId</a></td>
-        <td><span th:text="${bookItem.status}">상태</span></td>
+        <td><span th:text="${bookItem.status.value}">상태</span></td>
       </tr>
       </tbody>
     </table>

@@ -29,7 +29,7 @@ public class BookDetailResponse {
 
     public static BookDetailResponse from(Book book) {
         List<BookItemResponse> bookItemResponseList = book.getBookItems().stream()
-                .map(bookItem -> new BookItemResponse(bookItem.getId(), bookItem.getStatus().name()))
+                .map(bookItem -> new BookItemResponse(bookItem.getId(), bookItem.getStatus()))
                 .collect(Collectors.toList());
 
 
