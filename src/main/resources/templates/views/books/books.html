@@ -12,13 +12,13 @@
       <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">도서 목록</h6>
       </div>
-      <div class="container">
-        <form class="d-flex">
-          <input class="form-control me-2" type="text" placeholder="Search">
-          <button class="btn btn-primary" type="button">Search</button>
-        </form>
-      </div>
       <div class="card-body">
+        <form class="d-flex" action="/books" th:action method="get" id="searchForm">
+          <!--            <label for="keyword">검색</label>-->
+          <input class="form-control me-auto" type="text" id="keyword" name="keyword" placeholder="제목을 입력하세요"/>
+          <button class="btn btn-primary btn-sm" type="submit">검색</button>
+        </form>
+        <br/>
         <div class="table-responsive">
           <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
             <thead>

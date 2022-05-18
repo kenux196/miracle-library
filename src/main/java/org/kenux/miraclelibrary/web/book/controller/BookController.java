@@ -33,7 +33,7 @@ public class BookController {
     }
 
     @GetMapping
-    public String booksMainPage(@RequestParam String keyword, Model model) {
+    public String booksMainPage(@RequestParam(value = "keyword", required = false) String keyword, Model model) {
         List<Book> bookList = new ArrayList<>();
         if (keyword != null) {
             BookSearchFilter filter = new BookSearchFilter();
