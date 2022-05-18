@@ -50,7 +50,7 @@ class BookItemControllerTest {
         given(bookService.getAllBooks()).willReturn(Collections.singletonList(book));
 
         // when
-        ResultActions resultActions = mockMvc.perform(get("/books"));
+        ResultActions resultActions = mockMvc.perform(get("/books").param("keyword", ""));
 
         // then
         resultActions.andExpect(status().isOk())

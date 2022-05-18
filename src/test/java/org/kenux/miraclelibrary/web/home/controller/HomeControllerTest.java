@@ -3,6 +3,7 @@ package org.kenux.miraclelibrary.web.home.controller;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.kenux.miraclelibrary.domain.book.domain.Book;
 import org.kenux.miraclelibrary.domain.book.service.BookService;
 import org.kenux.miraclelibrary.web.book.dto.response.NewBookResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.BDDMockito.given;
@@ -42,7 +44,7 @@ class HomeControllerTest {
     void homeMainPage() throws Exception {
         // given
         List<NewBookResponse> newBookResponses = new ArrayList<>();
-        given(bookService.getNewBooksOld()).willReturn(newBookResponses);
+        given(bookService.getNewBooks()).willReturn(Collections.singletonList(Book.builder().build()));
 
         // when
         final ResultActions resultActions = mockMvc.perform(get("/"));

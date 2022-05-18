@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
@@ -33,7 +34,9 @@ public class HomeController {
         }
         model.addAttribute("notices", notices);
 
-        List<NewBookResponse> newBooks = bookService.getNewBooksOld();
+        List<NewBookResponse> newBooks = bookService.getNewBooks().stream()
+                .map(NewBookResponse::from)
+                .collect(Collectors.toList());
         model.addAttribute("newBooks", newBooks);
         return "views/home/main";
     }

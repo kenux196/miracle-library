@@ -6,6 +6,7 @@ import org.kenux.miraclelibrary.domain.book.domain.Book;
 import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
 import org.kenux.miraclelibrary.domain.book.service.BookService;
 import org.kenux.miraclelibrary.web.book.dto.request.BookAddRequest;
+import org.kenux.miraclelibrary.web.book.dto.request.BookSearchFilter;
 import org.kenux.miraclelibrary.web.book.dto.request.BookUpdateRequest;
 import org.kenux.miraclelibrary.web.book.dto.response.BookDetailResponse;
 import org.kenux.miraclelibrary.web.book.dto.response.BookResponse;
@@ -14,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,8 +33,17 @@ public class BookController {
     }
 
     @GetMapping
-    public String booksMainPage(Model model) {
-        List<Book> bookList = bookService.getAllBooks();
+    public String booksMainPage(@RequestParam String keyword, Model model) {
+        List<Book> bookList = new ArrayList<>();
+        if (keyword != null) {
+            BookSearchFilter filter = new BookSearchFilter();
+            filter.setKeyword(keyword);
+            List<Book> books = bookService.searchBookByFilter(filter);
+            bookList.addAll(books);
+        } else {
+            List<Book> books = bookService.getAllBooks();
+            bookList.addAll(books);
+        }
         List<BookResponse> allBooks = bookList.stream()
                 .map(BookResponse::from)
                 .collect(Collectors.toList());

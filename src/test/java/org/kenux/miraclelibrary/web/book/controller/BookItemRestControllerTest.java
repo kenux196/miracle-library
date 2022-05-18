@@ -18,6 +18,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.ResultActions;
@@ -108,7 +109,7 @@ class BookItemRestControllerTest {
                 .publishDate(LocalDate.of(2022, 1, 1))
                 .build();
         List<BookResponse> bookResponses = Collections.singletonList(BookResponse.from(book));
-        given(bookService.searchBookByFilterOld(any())).willReturn(bookResponses);
+        given(bookService.searchBookByFilter(any())).willReturn(Collections.singletonList(book));
 
         // when
         final ResultActions resultActions = mockMvc.perform(get("/api/books"));
@@ -132,7 +133,7 @@ class BookItemRestControllerTest {
                 .publishDate(LocalDate.of(2022, 1, 1))
                 .build();
         List<BookResponse> bookResponses = Collections.singletonList(BookResponse.from(book));
-        given(bookService.searchBookByFilterOld(any())).willReturn(bookResponses);
+        given(bookService.searchBookByFilter(any())).willReturn(Collections.singletonList(book));
 
         // when
         final ResultActions resultActions = mockMvc.perform(
@@ -158,7 +159,7 @@ class BookItemRestControllerTest {
                 .publishDate(LocalDate.of(2022, 1, 1))
                 .build();
         List<BookResponse> bookResponses = Collections.singletonList(BookResponse.from(book));
-        given(bookService.searchBookByFilterOld(any())).willReturn(bookResponses);
+        given(bookService.searchBookByFilter(any())).willReturn(Collections.singletonList(book));
 
         // when
         final ResultActions resultActions = mockMvc.perform(
@@ -184,7 +185,7 @@ class BookItemRestControllerTest {
                 .publishDate(LocalDate.of(2022, 1, 1))
                 .build();
         List<BookResponse> bookResponses = Collections.singletonList(BookResponse.from(book));
-        given(bookService.searchBookByFilterOld(any())).willReturn(bookResponses);
+        given(bookService.searchBookByFilter(any())).willReturn(Collections.singletonList(book));
 
         // when
         final ResultActions resultActions = mockMvc.perform(
@@ -214,7 +215,7 @@ class BookItemRestControllerTest {
                 .publishDate(LocalDate.of(2022, 1, 1))
                 .build();
         BookDetailResponse bookDetailResponse = BookDetailResponse.from(book);
-        given(bookService.getBookDetailOld(any())).willReturn(bookDetailResponse);
+        given(bookService.getBookDetail(any())).willReturn(book);
         // when
         final ResultActions resultActions = mockMvc.perform(get("/api/books/detail/1"));
 
@@ -227,14 +228,21 @@ class BookItemRestControllerTest {
     @Test
     @DisplayName("GET /api/books/new-book : 신간 서적 리스트 조회 요청처리")
     void getNewBooks() throws Exception {
-        NewBookResponse newBook = NewBookResponse.builder()
-                .bookId(1L)
+        Book book = Book.builder()
                 .title("title")
                 .author("author")
+                .isbn("isbn")
+                .category(BookCategory.ESSAY)
+                .summary("책소개내용")
+                .cover("이미지경로")
+                .publishDate(LocalDate.of(2022, 1, 1))
                 .build();
+        ReflectionTestUtils.setField(book, "id", 1L);
 
-        List<NewBookResponse> bookResponses = Collections.singletonList(newBook);
-        given(bookService.getNewBooksOld()).willReturn(bookResponses);
+        NewBookResponse newBookResponse = NewBookResponse.from(book);
+
+        List<NewBookResponse> bookResponses = Collections.singletonList(newBookResponse);
+        given(bookService.getNewBooks()).willReturn(Collections.singletonList(book));
 
         // when
         final ResultActions resultActions = mockMvc.perform(get("/api/books/new-book"));
