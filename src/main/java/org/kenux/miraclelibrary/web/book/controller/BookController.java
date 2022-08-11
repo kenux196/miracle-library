@@ -2,17 +2,22 @@ package org.kenux.miraclelibrary.web.book.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.kenux.miraclelibrary.web.book.controller.dto.request.BookAddRequest;
-import org.kenux.miraclelibrary.web.book.controller.dto.request.BookUpdateRequest;
-import org.kenux.miraclelibrary.web.book.controller.dto.response.BookDetailResponse;
-import org.kenux.miraclelibrary.web.book.controller.dto.response.BookResponse;
+import org.kenux.miraclelibrary.domain.book.domain.Book;
 import org.kenux.miraclelibrary.domain.book.domain.BookCategory;
 import org.kenux.miraclelibrary.domain.book.service.BookService;
+import org.kenux.miraclelibrary.web.book.dto.request.BookAddRequest;
+import org.kenux.miraclelibrary.web.book.dto.request.BookSearchFilter;
+import org.kenux.miraclelibrary.web.book.dto.request.BookUpdateRequest;
+import org.kenux.miraclelibrary.web.book.dto.response.BookDetailResponse;
+import org.kenux.miraclelibrary.web.book.dto.response.BookResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -28,42 +33,55 @@ public class BookController {
     }
 
     @GetMapping
-    public String booksMainPage(Model model) {
-        List<BookResponse> allBooks = bookService.getAllBooks();
+    public String booksMainPage(@RequestParam(value = "keyword", required = false) String keyword, Model model) {
+        List<Book> bookList = new ArrayList<>();
+        if (keyword != null) {
+            BookSearchFilter filter = new BookSearchFilter();
+            filter.setKeyword(keyword);
+            List<Book> books = bookService.searchBookByFilter(filter);
+            bookList.addAll(books);
+        } else {
+            List<Book> books = bookService.getAllBooks();
+            bookList.addAll(books);
+        }
+        List<BookResponse> allBooks = bookList.stream()
+                .map(BookResponse::from)
+                .collect(Collectors.toList());
         model.addAttribute("books", allBooks);
         return "views/books/books";
     }
 
     @GetMapping("/add")
     public String bookAddForm(Model model) {
-        model.addAttribute("book", new BookDetailResponse());
+        model.addAttribute("book", new BookAddRequest());
         return "views/books/book-add-form";
     }
 
     @PostMapping("/add")
-    public String addNewBook(BookAddRequest bookAddRequest) {
+    public String addNewBook(@Valid BookAddRequest bookAddRequest) {
         log.info("will add book info = {}", bookAddRequest);
-        Long bookId = bookService.addNewBook(bookAddRequest);
+        Long bookId = bookService.addNewBook(bookAddRequest.toEntity());
         return "redirect:/books/" + bookId;
     }
 
     @GetMapping("/{id}")
     public String getBook(@PathVariable Long id, Model model) {
-        final BookDetailResponse book = bookService.getBookDetail(id);
-        model.addAttribute("book", book);
+        final Book book = bookService.getBookDetail(id);
+        model.addAttribute("book", BookDetailResponse.from(book));
         return "views/books/book";
     }
 
     @GetMapping("/{id}/edit")
     public String getEditBookForm(@PathVariable("id") Long bookId, Model model) {
-        final BookDetailResponse book = bookService.getBookDetail(bookId);
-        model.addAttribute("book", book);
+        final Book book = bookService.getBookDetail(bookId);
+        model.addAttribute("book", BookDetailResponse.from(book));
         return "views/books/book-edit-form";
     }
 
     @PostMapping("/{id}/edit")
-    public String editBook(BookUpdateRequest bookUpdateRequest) {
-        Long bookId = bookService.updateBook(bookUpdateRequest);
+    public String editBook(@PathVariable("id") Long id,
+                           BookUpdateRequest bookUpdateRequest) {
+        Long bookId = bookService.updateBook(id, bookUpdateRequest.toEntity());
         return "redirect:/books/" + bookId;
     }
 }

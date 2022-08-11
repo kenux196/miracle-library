@@ -10,7 +10,7 @@
       <h2>도석 등록 폼</h2>
     </div>
     <h4 class="mb-3">책 정보 입력</h4>
-    <form action="books.html" th:action th:object="${book}" method="post" id="bookAddForm">
+    <form action="book.html" th:action th:object="${book}" method="post" id="bookAddForm">
       <div>
         <label for="title">책 제목</label>
         <input type="text" id="title" th:field="*{title}" class="form-control" placeholder="첵 제목을 입력하세요"/>
@@ -36,6 +36,10 @@
                   th:text="${category.description}">에세이</option>
         </select>
       </div>
+      <div>
+        <label for="amount">수량</label>
+        <input type="text" id="amount" th:field="*{amount}" class="form-control" placeholder="수량을 입력하세요" />
+      </div>
       <hr class="my-4">
       <div class="row">
         <div class="col">
@@ -43,8 +47,8 @@
         </div>
         <div class="col">
           <button type="button" class="w-100 btn btn-secondary btn-lg"
-                  th:onclick="|location.href='@{/books}'|"
-                  onclick="location.href='books.html'">취소</button>
+                  th:onclick="|location.href='@{/bookItems}'|"
+                  onclick="location.href='bookItems.html'">취소</button>
         </div>
       </div>
     </form>

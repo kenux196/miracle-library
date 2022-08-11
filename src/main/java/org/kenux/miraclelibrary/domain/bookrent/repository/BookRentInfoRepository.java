@@ -11,9 +11,9 @@ public interface BookRentInfoRepository extends JpaRepository<BookRentInfo, Long
 
     List<BookRentInfo> findAllByMemberId(Long memberId);
 
-    List<BookRentInfo> findAllByBookId(Long bookId);
+    List<BookRentInfo> findAllByBookItemId(Long bookId);
 
     @Query("select bri from BookRentInfo bri " +
-            "where bri.book.id in :bookIds")
-    List<BookRentInfo> findAllByBookIds(@Param("bookIds") List<Long> bookIds);
+            "where bri.bookItem.id in :bookIds")
+    List<BookRentInfo> findAllByBookItemIds(@Param("bookIds") List<Long> bookIds);
 }

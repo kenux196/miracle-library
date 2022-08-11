@@ -90,7 +90,8 @@ jacocoTestReport {
 	afterEvaluate {
 		classDirectories.setFrom(files(classDirectories.files.collect {
 			fileTree(dir: it, exclude: [
-					"**/config/*"
+					"**/config/*",
+					"**/dto/*"
 			] + Qdomains)
 		}))
 	}
@@ -118,7 +119,10 @@ jacocoTestCoverageVerification {
 			//	minimum = 0.80
 			//}
 
-			excludes = ["**/config/*"] + Qdomains
+			excludes = ["**/config/*",
+						"**/dto/*",
+						"MiracleLibraryApplication"
+			] + Qdomains
 		}
 	}
 }

@@ -33,10 +33,31 @@
               th:text="${category.description}">에세이</option>
     </select>
     <hr class="my-4">
+    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+      <thead>
+      <tr>
+        <th>번호</th>
+        <th>상태</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="bookItem : *{bookStatus}">
+        <td><a th:text="${bookItem.bookId}">bookId</a></td>
+        <td><span th:text="${bookItem.status.value}">상태</span></td>
+      </tr>
+      </tbody>
+    </table>
+    <hr class="my-4">
     <div class="row">
       <div class="col">
         <button type="button" class="w-100 btn btn-primary btn-lg"
                 th:onclick="|location.href='@{/books/{bookId}/edit(bookId=${book.id})}'|">수정하기</button>
+      </div>
+      <div class="col">
+        <button type="button" class="w-100 btn btn-secondary btn-lg"
+                th:onclick="|location.href='@{/books}'|"
+                onclick="location.href='/bookItems'">대출하기
+        </button>
       </div>
       <div class="col">
         <button type="button" class="w-100 btn btn-secondary btn-lg"

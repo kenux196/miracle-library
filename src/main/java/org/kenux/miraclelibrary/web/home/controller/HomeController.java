@@ -1,8 +1,8 @@
 package org.kenux.miraclelibrary.web.home.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.kenux.miraclelibrary.web.book.controller.dto.response.NewBookResponse;
 import org.kenux.miraclelibrary.domain.book.service.BookService;
+import org.kenux.miraclelibrary.web.book.dto.response.NewBookResponse;
 import org.kenux.miraclelibrary.web.notice.response.NoticeResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
@@ -24,8 +25,6 @@ public class HomeController {
 
     @GetMapping
     public String home(Model model) {
-
-        // TODO : 임시 코드 삭제 예정   - sky 2022/03/01
         List<NoticeResponse> notices = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             long number = i + 1;
@@ -35,7 +34,9 @@ public class HomeController {
         }
         model.addAttribute("notices", notices);
 
-        List<NewBookResponse> newBooks = bookService.getNewBooks();
+        List<NewBookResponse> newBooks = bookService.getNewBooks().stream()
+                .map(NewBookResponse::from)
+                .collect(Collectors.toList());
         model.addAttribute("newBooks", newBooks);
         return "views/home/main";
     }

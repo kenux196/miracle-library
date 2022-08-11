@@ -1,21 +1,19 @@
 package org.kenux.miraclelibrary.domain.book.domain;
 
-
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.kenux.miraclelibrary.domain.base.BaseTimeEntity;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-
-import static org.kenux.miraclelibrary.domain.book.domain.BookStatus.RENTABLE;
-import static org.kenux.miraclelibrary.domain.book.domain.BookStatus.RENTED;
-
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "book")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
 @Getter
 public class Book extends BaseTimeEntity {
 
@@ -23,111 +21,61 @@ public class Book extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "isbn", nullable = false)
+    private String isbn;
+
     @Column(name = "title", nullable = false)
     private String title;
+
+    @Column(name = "sub_title")
+    private String subTitle;
 
     @Column(name = "author", nullable = false)
     private String author;
 
-    @Column(name = "isbn", nullable = false)
-    private String isbn;
+    @Column(name = "cover")
+    private String cover;
 
+    @Column(name = "publish_date", nullable = false)
     private LocalDate publishDate;
 
-//    @Column(name = "category", nullable = false)
+    @Column(name = "summary")
+    private String summary;
+
+    @Column(name = "category", nullable = false)
 //    @Enumerated(EnumType.STRING)
     private BookCategory category;
 
-    private String content;
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+    private final List<BookItem> bookItems = new ArrayList<>();
 
-    // TODO : cover 이미지 추가 관련 처리 필요.   - sky 2022/01/17
-    private String cover;
-
-    @Column(name = "status", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private BookStatus status;
-
-    public void changeTitle(String title) {
-        this.title = title;
-    }
-
-    public void changeAuthor(String author) {
-        this.author = author;
-    }
-
-    public void changeIsbn(String isbn) {
+    @Builder
+    public Book(String isbn, String title, String subTitle,
+                String author, String cover, LocalDate publishDate, String summary, BookCategory category) {
         this.isbn = isbn;
-    }
-
-    public void changePublicationDate(LocalDate publicationDate) {
-        this.publishDate = publicationDate;
-    }
-
-    public void changeStatus(BookStatus status) {
-        this.status = status;
-    }
-
-    public void changeContent(String content) {
-        this.content = content;
-    }
-
-    public void changeCover(String cover) {
+        this.title = title;
+        this.subTitle = subTitle;
+        this.author = author;
         this.cover = cover;
-    }
-
-    public void changeCategory(BookCategory category) {
+        this.publishDate = publishDate;
+        this.summary = summary;
         this.category = category;
     }
 
-    public boolean isHeldBook() {
-        return status.equals(RENTABLE) || status.equals(RENTED);
+    public void update(Book book) {
+        this.isbn = book.getIsbn();
+        this.title = book.getTitle();
+        this.subTitle = book.getSubTitle();
+        this.author = book.getAuthor();
+        this.cover = book.getCover();
+        this.publishDate = book.getPublishDate();
+        this.summary = book.getSummary();
     }
 
-    public void update(Book updateBook) {
-
-        if (updateBook.getTitle() != null) {
-            changeTitle(updateBook.getTitle());
-        }
-        if (updateBook.getAuthor() != null) {
-            changeAuthor(updateBook.getAuthor());
-        }
-        if (updateBook.getIsbn() != null) {
-            changeIsbn(updateBook.getIsbn());
-        }
-        if (updateBook.getCategory() != null) {
-            changeCategory(updateBook.getCategory());
-        }
-        if (updateBook.getContent() != null) {
-            changeContent(updateBook.getContent());
-        }
-        if (updateBook.getCover() != null) {
-            changeCover(updateBook.getCover());
-        }
-        if (updateBook.getPublishDate() != null) {
-            changePublicationDate(updateBook.getPublishDate());
+    public void addBook(BookItem bookItem) {
+        bookItems.add(bookItem);
+        if (bookItem.getBook() != this) {
+            bookItem.setBook(this);
         }
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Book book = (Book) o;
-
-        if (!id.equals(book.id)) return false;
-        if (!title.equals(book.title)) return false;
-        if (!author.equals(book.author)) return false;
-        return isbn.equals(book.isbn);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + title.hashCode();
-        result = 31 * result + author.hashCode();
-        result = 31 * result + isbn.hashCode();
-        return result;
-    }
-
 }

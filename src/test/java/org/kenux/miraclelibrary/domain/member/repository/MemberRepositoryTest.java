@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.kenux.miraclelibrary.domain.member.domain.Member;
 import org.kenux.miraclelibrary.domain.member.domain.MemberRole;
 import org.kenux.miraclelibrary.domain.member.domain.MemberStatus;
-import org.kenux.miraclelibrary.web.member.dto.MemberFindFilter;
+import org.kenux.miraclelibrary.domain.member.repository.filter.MemberFindFilter;
 import org.kenux.miraclelibrary.global.config.JpaAuditingConfig;
 import org.kenux.miraclelibrary.global.config.QueryDslConfig;
 import org.springframework.beans.factory.annotation.Autowired;

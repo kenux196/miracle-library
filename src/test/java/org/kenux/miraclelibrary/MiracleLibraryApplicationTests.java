@@ -7,12 +7,4 @@ class MiracleLibraryApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
-	@Test
-	void applicationRunTest() {
-		MiracleLibraryApplication.main(new String[] {
-
-		});
-	}
-
 }
